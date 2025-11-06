@@ -1,6 +1,6 @@
 ﻿namespace last_project
 {
-    partial class Form1
+    partial class main
     {
         /// <summary>
         ///  Required designer variable.
@@ -36,11 +36,11 @@
             System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             splitContainer1 = new SplitContainer();
-            button4 = new Button();
+            button1 = new Button();
+            btnSetting = new Button();
             button3 = new Button();
             lblClock = new Label();
             button2 = new Button();
-            button1 = new Button();
             button6 = new Button();
             tb_search = new TextBox();
             button5 = new Button();
@@ -84,12 +84,15 @@
             // 
             // splitContainer1.Panel1
             // 
-            splitContainer1.Panel1.BackColor = Color.Black;
-            splitContainer1.Panel1.Controls.Add(button4);
+            splitContainer1.Panel1.BackColor = Color.Gray;
+            splitContainer1.Panel1.Controls.Add(button1);
+            splitContainer1.Panel1.Controls.Add(btnSetting);
             splitContainer1.Panel1.Controls.Add(button3);
             splitContainer1.Panel1.Controls.Add(lblClock);
             splitContainer1.Panel1.Controls.Add(button2);
-            splitContainer1.Panel1.Controls.Add(button1);
+            splitContainer1.Panel1.ForeColor = SystemColors.ActiveCaptionText;
+            splitContainer1.Panel1.Paint += splitContainer1_Panel1_Paint;
+            splitContainer1.Panel1.DoubleClick += splitContainer1_Panel1_DoubleClick;
             // 
             // splitContainer1.Panel2
             // 
@@ -105,28 +108,44 @@
             splitContainer1.SplitterDistance = 167;
             splitContainer1.TabIndex = 0;
             // 
-            // button4
+            // button1
             // 
-            button4.AutoEllipsis = true;
-            button4.BackColor = SystemColors.AppWorkspace;
-            button4.FlatStyle = FlatStyle.Flat;
-            button4.Location = new Point(3, 356);
-            button4.Name = "button4";
-            button4.Size = new Size(165, 87);
-            button4.TabIndex = 4;
-            button4.Text = "통계";
-            button4.UseVisualStyleBackColor = false;
+            button1.AutoEllipsis = true;
+            button1.BackColor = SystemColors.AppWorkspace;
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.Location = new Point(3, 81);
+            button1.Name = "button1";
+            button1.Size = new Size(165, 87);
+            button1.TabIndex = 5;
+            button1.TabStop = false;
+            button1.Text = "발주";
+            button1.UseVisualStyleBackColor = false;
+            // 
+            // btnSetting
+            // 
+            btnSetting.AutoEllipsis = true;
+            btnSetting.BackColor = SystemColors.AppWorkspace;
+            btnSetting.FlatStyle = FlatStyle.Flat;
+            btnSetting.Location = new Point(3, 354);
+            btnSetting.Name = "btnSetting";
+            btnSetting.Size = new Size(165, 87);
+            btnSetting.TabIndex = 4;
+            btnSetting.TabStop = false;
+            btnSetting.Text = "Setting";
+            btnSetting.UseVisualStyleBackColor = false;
+            btnSetting.Click += btnSetting_Click;
             // 
             // button3
             // 
             button3.AutoEllipsis = true;
             button3.BackColor = SystemColors.AppWorkspace;
             button3.FlatStyle = FlatStyle.Flat;
-            button3.Location = new Point(3, 265);
+            button3.Location = new Point(3, 263);
             button3.Name = "button3";
             button3.Size = new Size(165, 87);
             button3.TabIndex = 3;
-            button3.Text = "통계";
+            button3.TabStop = false;
+            button3.Text = "picture Log";
             button3.UseVisualStyleBackColor = false;
             // 
             // lblClock
@@ -152,51 +171,43 @@
             button2.Name = "button2";
             button2.Size = new Size(165, 87);
             button2.TabIndex = 1;
+            button2.TabStop = false;
             button2.Text = "통계";
             button2.UseVisualStyleBackColor = false;
             // 
-            // button1
-            // 
-            button1.BackColor = SystemColors.AppWorkspace;
-            button1.FlatStyle = FlatStyle.Flat;
-            button1.Location = new Point(3, 79);
-            button1.Name = "button1";
-            button1.Size = new Size(165, 87);
-            button1.TabIndex = 0;
-            button1.Text = "발주";
-            button1.UseVisualStyleBackColor = false;
-            // 
             // button6
             // 
+            button6.BackColor = SystemColors.ButtonHighlight;
             button6.FlatStyle = FlatStyle.Flat;
-            button6.Location = new Point(181, 353);
+            button6.Location = new Point(183, 353);
             button6.Name = "button6";
             button6.Size = new Size(75, 23);
             button6.TabIndex = 10;
             button6.Text = "새로고침";
-            button6.UseVisualStyleBackColor = true;
+            button6.UseVisualStyleBackColor = false;
             // 
             // tb_search
             // 
-            tb_search.Location = new Point(5, 353);
+            tb_search.Location = new Point(-1, 353);
             tb_search.Name = "tb_search";
-            tb_search.Size = new Size(100, 23);
+            tb_search.Size = new Size(107, 23);
             tb_search.TabIndex = 9;
             // 
             // button5
             // 
+            button5.BackColor = SystemColors.ControlLightLight;
             button5.FlatStyle = FlatStyle.Flat;
-            button5.Location = new Point(106, 353);
+            button5.Location = new Point(107, 353);
             button5.Name = "button5";
-            button5.Size = new Size(75, 23);
+            button5.Size = new Size(79, 23);
             button5.TabIndex = 7;
             button5.Text = "검색";
-            button5.UseVisualStyleBackColor = true;
+            button5.UseVisualStyleBackColor = false;
             // 
             // dataGridView2
             // 
             dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView2.Location = new Point(3, 354);
+            dataGridView2.Location = new Point(0, 354);
             dataGridView2.Name = "dataGridView2";
             dataGridView2.RowTemplate.Height = 25;
             dataGridView2.Size = new Size(754, 22);
@@ -207,10 +218,10 @@
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Column1, Column2, Column3, Column4, Column5, Column6, Column7 });
-            dataGridView1.Location = new Point(3, 376);
+            dataGridView1.Location = new Point(-3, 376);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.Size = new Size(751, 290);
+            dataGridView1.Size = new Size(759, 290);
             dataGridView1.TabIndex = 6;
             dataGridView1.CellContentClick += dataGridView1_CellContentClick;
             // 
@@ -255,14 +266,14 @@
             chart2.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
             chart2.Legends.Add(legend1);
-            chart2.Location = new Point(545, 195);
+            chart2.Location = new Point(525, 188);
             chart2.Name = "chart2";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Doughnut;
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             chart2.Series.Add(series1);
-            chart2.Size = new Size(195, 155);
+            chart2.Size = new Size(216, 165);
             chart2.TabIndex = 5;
             chart2.Text = "chart2";
             // 
@@ -272,15 +283,15 @@
             chart1.ChartAreas.Add(chartArea2);
             legend2.Name = "Legend1";
             chart1.Legends.Add(legend2);
-            chart1.Location = new Point(545, 47);
+            chart1.Location = new Point(525, 24);
             chart1.Name = "chart1";
-            chart1.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Excel;
+            chart1.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright;
             series2.ChartArea = "ChartArea1";
             series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Doughnut;
             series2.Legend = "Legend1";
             series2.Name = "Series1";
             chart1.Series.Add(series2);
-            chart1.Size = new Size(195, 159);
+            chart1.Size = new Size(216, 162);
             chart1.TabIndex = 4;
             chart1.Text = "chart1";
             // 
@@ -291,7 +302,7 @@
             tabControl1.Controls.Add(tabPage3);
             tabControl1.Controls.Add(tabPage4);
             tabControl1.Controls.Add(tabPage5);
-            tabControl1.Location = new Point(3, 3);
+            tabControl1.Location = new Point(-9, 2);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
             tabControl1.Size = new Size(533, 351);
@@ -299,6 +310,7 @@
             // 
             // tabPage1
             // 
+            tabPage1.ForeColor = SystemColors.ControlDarkDark;
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
@@ -306,6 +318,7 @@
             tabPage1.TabIndex = 0;
             tabPage1.Text = "CAM1";
             tabPage1.UseVisualStyleBackColor = true;
+            tabPage1.Click += tabPage1_Click_1;
             // 
             // tabPage2
             // 
@@ -348,14 +361,14 @@
             // 
             timer1.Tick += timer1_Tick;
             // 
-            // Form1
+            // main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.ButtonHighlight;
+            BackColor = SystemColors.ControlDarkDark;
             ClientSize = new Size(915, 649);
             Controls.Add(splitContainer1);
-            Name = "Form1";
+            Name = "main";
             Text = "        ";
             Load += Form1_Load;
             splitContainer1.Panel1.ResumeLayout(false);
@@ -382,7 +395,6 @@
         private TabPage tabPage3;
         private TabPage tabPage4;
         private TabPage tabPage5;
-        private Button button1;
         private Button button2;
         private Label lblClock;
         private System.Windows.Forms.Timer timer1;
@@ -390,7 +402,7 @@
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
-        private Button button4;
+        private Button btnSetting;
         private Button button3;
         private DataGridView dataGridView1;
         private DataGridViewTextBoxColumn Column1;
@@ -404,5 +416,6 @@
         private TextBox tb_search;
         private DataGridView dataGridView2;
         private Button button6;
+        private Button button1;
     }
 }
