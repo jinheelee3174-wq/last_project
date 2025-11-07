@@ -53,30 +53,29 @@
             label2 = new Label();
             label1 = new Label();
             tabPage2 = new TabPage();
-            tabPage3 = new TabPage();
-            groupBox2 = new GroupBox();
-            label6 = new Label();
-            label7 = new Label();
-            label8 = new Label();
-            label9 = new Label();
-            label10 = new Label();
-            label11 = new Label();
-            textBox6 = new TextBox();
-            textBox7 = new TextBox();
-            textBox8 = new TextBox();
-            textBox9 = new TextBox();
-            textBox10 = new TextBox();
-            textBox11 = new TextBox();
-            button2 = new Button();
-            button3 = new Button();
-            button4 = new Button();
-            button5 = new Button();
             dataGridView2 = new DataGridView();
-            Column7 = new DataGridViewTextBoxColumn();
+            Column13 = new DataGridViewTextBoxColumn();
             Column8 = new DataGridViewTextBoxColumn();
             Column9 = new DataGridViewTextBoxColumn();
             Column10 = new DataGridViewTextBoxColumn();
             Column11 = new DataGridViewTextBoxColumn();
+            Column12 = new DataGridViewTextBoxColumn();
+            button5 = new Button();
+            button4 = new Button();
+            button3 = new Button();
+            button2 = new Button();
+            groupBox2 = new GroupBox();
+            textBox11 = new TextBox();
+            textBox10 = new TextBox();
+            textBox9 = new TextBox();
+            textBox8 = new TextBox();
+            label11 = new Label();
+            label10 = new Label();
+            label9 = new Label();
+            label8 = new Label();
+            label6 = new Label();
+            tabPage3 = new TabPage();
+            textBox6 = new TextBox();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -86,8 +85,8 @@
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             groupBox1.SuspendLayout();
             tabPage2.SuspendLayout();
-            groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
+            groupBox2.SuspendLayout();
             SuspendLayout();
             // 
             // tabControl1
@@ -325,158 +324,59 @@
             tabPage2.Text = "제품 품목 설정";
             tabPage2.UseVisualStyleBackColor = true;
             // 
-            // tabPage3
+            // dataGridView2
             // 
-            tabPage3.Location = new Point(4, 24);
-            tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(1034, 630);
-            tabPage3.TabIndex = 2;
-            tabPage3.Text = "수동 제어";
-            tabPage3.UseVisualStyleBackColor = true;
+            dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView2.Columns.AddRange(new DataGridViewColumn[] { Column13, Column8, Column9, Column10, Column11, Column12 });
+            dataGridView2.Location = new Point(8, 277);
+            dataGridView2.Name = "dataGridView2";
+            dataGridView2.RowTemplate.Height = 25;
+            dataGridView2.Size = new Size(435, 238);
+            dataGridView2.TabIndex = 3;
+            dataGridView2.CellClick += dataGridView2_CellClick_1;
+            dataGridView2.DataBindingComplete += dataGridView2_DataBindingComplete_1;
             // 
-            // groupBox2
+            // Column13
             // 
-            groupBox2.Controls.Add(textBox11);
-            groupBox2.Controls.Add(textBox10);
-            groupBox2.Controls.Add(textBox9);
-            groupBox2.Controls.Add(textBox8);
-            groupBox2.Controls.Add(textBox7);
-            groupBox2.Controls.Add(textBox6);
-            groupBox2.Controls.Add(label11);
-            groupBox2.Controls.Add(label10);
-            groupBox2.Controls.Add(label9);
-            groupBox2.Controls.Add(label8);
-            groupBox2.Controls.Add(label7);
-            groupBox2.Controls.Add(label6);
-            groupBox2.Location = new Point(6, 6);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(369, 226);
-            groupBox2.TabIndex = 0;
-            groupBox2.TabStop = false;
-            groupBox2.Text = "품목 정보 입력";
+            Column13.DataPropertyName = "item_code";
+            Column13.HeaderText = "품목번호";
+            Column13.Name = "Column13";
+            Column13.Width = 65;
             // 
-            // label6
+            // Column8
             // 
-            label6.AutoSize = true;
-            label6.Location = new Point(23, 34);
-            label6.Name = "label6";
-            label6.Size = new Size(62, 15);
-            label6.TabIndex = 0;
-            label6.Text = "품목번호 :";
+            Column8.DataPropertyName = "brand";
+            Column8.HeaderText = "브랜드";
+            Column8.Name = "Column8";
+            Column8.Width = 65;
             // 
-            // label7
+            // Column9
             // 
-            label7.AutoSize = true;
-            label7.Location = new Point(23, 69);
-            label7.Name = "label7";
-            label7.Size = new Size(50, 15);
-            label7.TabIndex = 0;
-            label7.Text = "품목명 :";
+            Column9.DataPropertyName = "color";
+            Column9.HeaderText = "색상";
+            Column9.Name = "Column9";
+            Column9.Width = 65;
             // 
-            // label8
+            // Column10
             // 
-            label8.AutoSize = true;
-            label8.Location = new Point(23, 102);
-            label8.Name = "label8";
-            label8.Size = new Size(50, 15);
-            label8.TabIndex = 0;
-            label8.Text = "브랜드 :";
+            Column10.DataPropertyName = "size";
+            Column10.HeaderText = "사이즈";
+            Column10.Name = "Column10";
+            Column10.Width = 65;
             // 
-            // label9
+            // Column11
             // 
-            label9.AutoSize = true;
-            label9.Location = new Point(23, 135);
-            label9.Name = "label9";
-            label9.Size = new Size(38, 15);
-            label9.TabIndex = 0;
-            label9.Text = "색상 :";
+            Column11.DataPropertyName = "category";
+            Column11.HeaderText = "카테고리";
+            Column11.Name = "Column11";
+            Column11.Width = 65;
             // 
-            // label10
+            // Column12
             // 
-            label10.AutoSize = true;
-            label10.Location = new Point(23, 165);
-            label10.Name = "label10";
-            label10.Size = new Size(50, 15);
-            label10.TabIndex = 0;
-            label10.Text = "사이즈 :";
-            // 
-            // label11
-            // 
-            label11.AutoSize = true;
-            label11.Location = new Point(23, 197);
-            label11.Name = "label11";
-            label11.Size = new Size(55, 15);
-            label11.TabIndex = 0;
-            label11.Text = "카테고리";
-            // 
-            // textBox6
-            // 
-            textBox6.Location = new Point(87, 31);
-            textBox6.Name = "textBox6";
-            textBox6.Size = new Size(100, 23);
-            textBox6.TabIndex = 1;
-            // 
-            // textBox7
-            // 
-            textBox7.Location = new Point(87, 66);
-            textBox7.Name = "textBox7";
-            textBox7.Size = new Size(100, 23);
-            textBox7.TabIndex = 1;
-            // 
-            // textBox8
-            // 
-            textBox8.Location = new Point(87, 99);
-            textBox8.Name = "textBox8";
-            textBox8.Size = new Size(100, 23);
-            textBox8.TabIndex = 1;
-            // 
-            // textBox9
-            // 
-            textBox9.Location = new Point(87, 132);
-            textBox9.Name = "textBox9";
-            textBox9.Size = new Size(100, 23);
-            textBox9.TabIndex = 1;
-            // 
-            // textBox10
-            // 
-            textBox10.Location = new Point(87, 162);
-            textBox10.Name = "textBox10";
-            textBox10.Size = new Size(100, 23);
-            textBox10.TabIndex = 1;
-            // 
-            // textBox11
-            // 
-            textBox11.Location = new Point(87, 193);
-            textBox11.Name = "textBox11";
-            textBox11.Size = new Size(100, 23);
-            textBox11.TabIndex = 1;
-            // 
-            // button2
-            // 
-            button2.Location = new Point(9, 248);
-            button2.Name = "button2";
-            button2.Size = new Size(75, 23);
-            button2.TabIndex = 2;
-            button2.Text = "신규등록";
-            button2.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            button3.Location = new Point(103, 248);
-            button3.Name = "button3";
-            button3.Size = new Size(75, 23);
-            button3.TabIndex = 2;
-            button3.Text = "수정";
-            button3.UseVisualStyleBackColor = true;
-            // 
-            // button4
-            // 
-            button4.Location = new Point(203, 248);
-            button4.Name = "button4";
-            button4.Size = new Size(75, 23);
-            button4.TabIndex = 2;
-            button4.Text = "삭제";
-            button4.UseVisualStyleBackColor = true;
+            Column12.DataPropertyName = "stock";
+            Column12.HeaderText = "재고";
+            Column12.Name = "Column12";
+            Column12.Width = 65;
             // 
             // button5
             // 
@@ -487,45 +387,141 @@
             button5.Text = "새로고침";
             button5.UseVisualStyleBackColor = true;
             // 
-            // dataGridView2
+            // button4
             // 
-            dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView2.Columns.AddRange(new DataGridViewColumn[] { Column7, Column8, Column9, Column10, Column11 });
-            dataGridView2.Location = new Point(8, 277);
-            dataGridView2.Name = "dataGridView2";
-            dataGridView2.RowTemplate.Height = 25;
-            dataGridView2.Size = new Size(367, 238);
-            dataGridView2.TabIndex = 3;
+            button4.Location = new Point(203, 248);
+            button4.Name = "button4";
+            button4.Size = new Size(75, 23);
+            button4.TabIndex = 2;
+            button4.Text = "삭제";
+            button4.UseVisualStyleBackColor = true;
             // 
-            // Column7
+            // button3
             // 
-            Column7.HeaderText = "품목명";
-            Column7.Name = "Column7";
-            Column7.Width = 65;
+            button3.Location = new Point(103, 248);
+            button3.Name = "button3";
+            button3.Size = new Size(75, 23);
+            button3.TabIndex = 2;
+            button3.Text = "수정";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
             // 
-            // Column8
+            // button2
             // 
-            Column8.HeaderText = "브랜드";
-            Column8.Name = "Column8";
-            Column8.Width = 65;
+            button2.Location = new Point(9, 248);
+            button2.Name = "button2";
+            button2.Size = new Size(75, 23);
+            button2.TabIndex = 2;
+            button2.Text = "신규등록";
+            button2.UseVisualStyleBackColor = true;
             // 
-            // Column9
+            // groupBox2
             // 
-            Column9.HeaderText = "색상";
-            Column9.Name = "Column9";
-            Column9.Width = 65;
+            groupBox2.Controls.Add(textBox11);
+            groupBox2.Controls.Add(textBox10);
+            groupBox2.Controls.Add(textBox9);
+            groupBox2.Controls.Add(textBox8);
+            groupBox2.Controls.Add(textBox6);
+            groupBox2.Controls.Add(label11);
+            groupBox2.Controls.Add(label10);
+            groupBox2.Controls.Add(label9);
+            groupBox2.Controls.Add(label8);
+            groupBox2.Controls.Add(label6);
+            groupBox2.Location = new Point(6, 6);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new Size(437, 226);
+            groupBox2.TabIndex = 0;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "품목 정보 입력";
             // 
-            // Column10
+            // textBox11
             // 
-            Column10.HeaderText = "사이즈";
-            Column10.Name = "Column10";
-            Column10.Width = 65;
+            textBox11.Location = new Point(87, 191);
+            textBox11.Name = "textBox11";
+            textBox11.Size = new Size(100, 23);
+            textBox11.TabIndex = 1;
             // 
-            // Column11
+            // textBox10
             // 
-            Column11.HeaderText = "카테고리";
-            Column11.Name = "Column11";
-            Column11.Width = 65;
+            textBox10.Location = new Point(87, 156);
+            textBox10.Name = "textBox10";
+            textBox10.Size = new Size(100, 23);
+            textBox10.TabIndex = 1;
+            // 
+            // textBox9
+            // 
+            textBox9.Location = new Point(87, 114);
+            textBox9.Name = "textBox9";
+            textBox9.Size = new Size(100, 23);
+            textBox9.TabIndex = 1;
+            // 
+            // textBox8
+            // 
+            textBox8.Location = new Point(87, 73);
+            textBox8.Name = "textBox8";
+            textBox8.Size = new Size(100, 23);
+            textBox8.TabIndex = 1;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(23, 196);
+            label11.Name = "label11";
+            label11.Size = new Size(55, 15);
+            label11.TabIndex = 0;
+            label11.Text = "카테고리";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(23, 158);
+            label10.Name = "label10";
+            label10.Size = new Size(50, 15);
+            label10.TabIndex = 0;
+            label10.Text = "사이즈 :";
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(23, 118);
+            label9.Name = "label9";
+            label9.Size = new Size(38, 15);
+            label9.TabIndex = 0;
+            label9.Text = "색상 :";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(23, 77);
+            label8.Name = "label8";
+            label8.Size = new Size(50, 15);
+            label8.TabIndex = 0;
+            label8.Text = "브랜드 :";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(23, 34);
+            label6.Name = "label6";
+            label6.Size = new Size(62, 15);
+            label6.TabIndex = 0;
+            label6.Text = "품목번호 :";
+            // 
+            // tabPage3
+            // 
+            tabPage3.Location = new Point(4, 24);
+            tabPage3.Name = "tabPage3";
+            tabPage3.Size = new Size(1035, 630);
+            tabPage3.TabIndex = 2;
+            tabPage3.Text = "수동 제어";
+            tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // textBox6
+            // 
+            textBox6.Location = new Point(87, 31);
+            textBox6.Name = "textBox6";
+            textBox6.Size = new Size(100, 23);
+            textBox6.TabIndex = 1;
             // 
             // setting
             // 
@@ -545,9 +541,9 @@
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             tabPage2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
             ResumeLayout(false);
         }
 
@@ -584,23 +580,22 @@
         private TextBox textBox10;
         private TextBox textBox9;
         private TextBox textBox8;
-        private TextBox textBox7;
-        private TextBox textBox6;
         private Label label11;
         private Label label10;
         private Label label9;
         private Label label8;
-        private Label label7;
         private Label label6;
         private DataGridView dataGridView2;
         private Button button5;
         private Button button4;
         private Button button3;
         private Button button2;
-        private DataGridViewTextBoxColumn Column7;
+        private DataGridViewTextBoxColumn Column13;
         private DataGridViewTextBoxColumn Column8;
         private DataGridViewTextBoxColumn Column9;
         private DataGridViewTextBoxColumn Column10;
         private DataGridViewTextBoxColumn Column11;
+        private DataGridViewTextBoxColumn Column12;
+        private TextBox textBox6;
     }
 }

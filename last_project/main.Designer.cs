@@ -1,4 +1,5 @@
-﻿namespace last_project
+﻿using SysColor = System.Drawing.Color;
+namespace last_project
 {
     partial class main
     {
@@ -84,7 +85,6 @@
             // 
             // splitContainer1.Panel1
             // 
-            splitContainer1.Panel1.BackColor = Color.Gray;
             splitContainer1.Panel1.Controls.Add(button1);
             splitContainer1.Panel1.Controls.Add(btnSetting);
             splitContainer1.Panel1.Controls.Add(button3);
@@ -185,6 +185,7 @@
             button6.TabIndex = 10;
             button6.Text = "새로고침";
             button6.UseVisualStyleBackColor = false;
+            button6.Click += button6_Click;
             // 
             // tb_search
             // 
@@ -224,6 +225,7 @@
             dataGridView1.Size = new Size(759, 290);
             dataGridView1.TabIndex = 6;
             dataGridView1.CellContentClick += dataGridView1_CellContentClick;
+            dataGridView1.DataBindingComplete += dataGridView1_DataBindingComplete;
             // 
             // Column1
             // 
@@ -232,31 +234,37 @@
             // 
             // Column2
             // 
+            Column2.DataPropertyName = "item_code";
             Column2.HeaderText = "품목번호";
             Column2.Name = "Column2";
             // 
             // Column3
             // 
+            Column3.DataPropertyName = "brand";
             Column3.HeaderText = "브랜드";
             Column3.Name = "Column3";
             // 
             // Column4
             // 
+            Column4.DataPropertyName = "color";
             Column4.HeaderText = "색상";
             Column4.Name = "Column4";
             // 
             // Column5
             // 
+            Column5.DataPropertyName = "size";
             Column5.HeaderText = "사이즈";
             Column5.Name = "Column5";
             // 
             // Column6
             // 
+            Column6.DataPropertyName = "category";
             Column6.HeaderText = "카테고리";
             Column6.Name = "Column6";
             // 
             // Column7
             // 
+            Column7.DataPropertyName = "stock";
             Column7.HeaderText = "재고";
             Column7.Name = "Column7";
             // 
@@ -370,7 +378,7 @@
             Controls.Add(splitContainer1);
             Name = "main";
             Text = "        ";
-            Load += Form1_Load;
+            Load += main_Load;
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);
@@ -405,6 +413,11 @@
         private Button btnSetting;
         private Button button3;
         private DataGridView dataGridView1;
+        private Button button5;
+        private TextBox tb_search;
+        private DataGridView dataGridView2;
+        private Button button6;
+        private Button button1;
         private DataGridViewTextBoxColumn Column1;
         private DataGridViewTextBoxColumn Column2;
         private DataGridViewTextBoxColumn Column3;
@@ -412,10 +425,5 @@
         private DataGridViewTextBoxColumn Column5;
         private DataGridViewTextBoxColumn Column6;
         private DataGridViewTextBoxColumn Column7;
-        private Button button5;
-        private TextBox tb_search;
-        private DataGridView dataGridView2;
-        private Button button6;
-        private Button button1;
     }
 }
