@@ -60,22 +60,24 @@
             Column10 = new DataGridViewTextBoxColumn();
             Column11 = new DataGridViewTextBoxColumn();
             Column12 = new DataGridViewTextBoxColumn();
-            button5 = new Button();
-            button4 = new Button();
+            btnRefresh = new Button();
+            btnDelete = new Button();
             button3 = new Button();
-            button2 = new Button();
+            btnRegister = new Button();
             groupBox2 = new GroupBox();
-            textBox11 = new TextBox();
-            textBox10 = new TextBox();
-            textBox9 = new TextBox();
-            textBox8 = new TextBox();
+            txtStock = new TextBox();
+            txtCategory = new TextBox();
+            txtSize = new TextBox();
+            txtColor = new TextBox();
+            txtBrand = new TextBox();
+            txtItemCode = new TextBox();
+            label7 = new Label();
             label11 = new Label();
             label10 = new Label();
             label9 = new Label();
             label8 = new Label();
             label6 = new Label();
             tabPage3 = new TabPage();
-            textBox6 = new TextBox();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -311,10 +313,10 @@
             // tabPage2
             // 
             tabPage2.Controls.Add(dataGridView2);
-            tabPage2.Controls.Add(button5);
-            tabPage2.Controls.Add(button4);
+            tabPage2.Controls.Add(btnRefresh);
+            tabPage2.Controls.Add(btnDelete);
             tabPage2.Controls.Add(button3);
-            tabPage2.Controls.Add(button2);
+            tabPage2.Controls.Add(btnRegister);
             tabPage2.Controls.Add(groupBox2);
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
@@ -334,6 +336,7 @@
             dataGridView2.Size = new Size(435, 238);
             dataGridView2.TabIndex = 3;
             dataGridView2.CellClick += dataGridView2_CellClick_1;
+            dataGridView2.CellContentClick += dataGridView2_CellContentClick;
             dataGridView2.DataBindingComplete += dataGridView2_DataBindingComplete_1;
             // 
             // Column13
@@ -378,23 +381,25 @@
             Column12.Name = "Column12";
             Column12.Width = 65;
             // 
-            // button5
+            // btnRefresh
             // 
-            button5.Location = new Point(300, 248);
-            button5.Name = "button5";
-            button5.Size = new Size(75, 23);
-            button5.TabIndex = 2;
-            button5.Text = "새로고침";
-            button5.UseVisualStyleBackColor = true;
+            btnRefresh.Location = new Point(300, 248);
+            btnRefresh.Name = "btnRefresh";
+            btnRefresh.Size = new Size(75, 23);
+            btnRefresh.TabIndex = 2;
+            btnRefresh.Text = "새로고침";
+            btnRefresh.UseVisualStyleBackColor = true;
+            btnRefresh.Click += btnRefresh_Click;
             // 
-            // button4
+            // btnDelete
             // 
-            button4.Location = new Point(203, 248);
-            button4.Name = "button4";
-            button4.Size = new Size(75, 23);
-            button4.TabIndex = 2;
-            button4.Text = "삭제";
-            button4.UseVisualStyleBackColor = true;
+            btnDelete.Location = new Point(203, 248);
+            btnDelete.Name = "btnDelete";
+            btnDelete.Size = new Size(75, 23);
+            btnDelete.TabIndex = 2;
+            btnDelete.Text = "삭제";
+            btnDelete.UseVisualStyleBackColor = true;
+            btnDelete.Click += btnDelete_Click;
             // 
             // button3
             // 
@@ -406,22 +411,25 @@
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click;
             // 
-            // button2
+            // btnRegister
             // 
-            button2.Location = new Point(9, 248);
-            button2.Name = "button2";
-            button2.Size = new Size(75, 23);
-            button2.TabIndex = 2;
-            button2.Text = "신규등록";
-            button2.UseVisualStyleBackColor = true;
+            btnRegister.Location = new Point(9, 248);
+            btnRegister.Name = "btnRegister";
+            btnRegister.Size = new Size(75, 23);
+            btnRegister.TabIndex = 2;
+            btnRegister.Text = "신규등록";
+            btnRegister.UseVisualStyleBackColor = true;
+            btnRegister.Click += btnRegister_Click;
             // 
             // groupBox2
             // 
-            groupBox2.Controls.Add(textBox11);
-            groupBox2.Controls.Add(textBox10);
-            groupBox2.Controls.Add(textBox9);
-            groupBox2.Controls.Add(textBox8);
-            groupBox2.Controls.Add(textBox6);
+            groupBox2.Controls.Add(txtStock);
+            groupBox2.Controls.Add(txtCategory);
+            groupBox2.Controls.Add(txtSize);
+            groupBox2.Controls.Add(txtColor);
+            groupBox2.Controls.Add(txtBrand);
+            groupBox2.Controls.Add(txtItemCode);
+            groupBox2.Controls.Add(label7);
             groupBox2.Controls.Add(label11);
             groupBox2.Controls.Add(label10);
             groupBox2.Controls.Add(label9);
@@ -434,47 +442,70 @@
             groupBox2.TabStop = false;
             groupBox2.Text = "품목 정보 입력";
             // 
-            // textBox11
+            // txtStock
             // 
-            textBox11.Location = new Point(87, 191);
-            textBox11.Name = "textBox11";
-            textBox11.Size = new Size(100, 23);
-            textBox11.TabIndex = 1;
+            txtStock.Location = new Point(87, 199);
+            txtStock.Name = "txtStock";
+            txtStock.Size = new Size(100, 23);
+            txtStock.TabIndex = 1;
             // 
-            // textBox10
+            // txtCategory
             // 
-            textBox10.Location = new Point(87, 156);
-            textBox10.Name = "textBox10";
-            textBox10.Size = new Size(100, 23);
-            textBox10.TabIndex = 1;
+            txtCategory.Location = new Point(87, 167);
+            txtCategory.Name = "txtCategory";
+            txtCategory.Size = new Size(100, 23);
+            txtCategory.TabIndex = 1;
             // 
-            // textBox9
+            // txtSize
             // 
-            textBox9.Location = new Point(87, 114);
-            textBox9.Name = "textBox9";
-            textBox9.Size = new Size(100, 23);
-            textBox9.TabIndex = 1;
+            txtSize.Location = new Point(87, 131);
+            txtSize.Name = "txtSize";
+            txtSize.Size = new Size(100, 23);
+            txtSize.TabIndex = 1;
             // 
-            // textBox8
+            // txtColor
             // 
-            textBox8.Location = new Point(87, 73);
-            textBox8.Name = "textBox8";
-            textBox8.Size = new Size(100, 23);
-            textBox8.TabIndex = 1;
+            txtColor.Location = new Point(87, 96);
+            txtColor.Name = "txtColor";
+            txtColor.Size = new Size(100, 23);
+            txtColor.TabIndex = 1;
+            // 
+            // txtBrand
+            // 
+            txtBrand.Location = new Point(87, 62);
+            txtBrand.Name = "txtBrand";
+            txtBrand.Size = new Size(100, 23);
+            txtBrand.TabIndex = 1;
+            // 
+            // txtItemCode
+            // 
+            txtItemCode.Location = new Point(87, 31);
+            txtItemCode.Name = "txtItemCode";
+            txtItemCode.Size = new Size(100, 23);
+            txtItemCode.TabIndex = 1;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(21, 205);
+            label7.Name = "label7";
+            label7.Size = new Size(38, 15);
+            label7.TabIndex = 0;
+            label7.Text = "재고 :";
             // 
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(23, 196);
+            label11.Location = new Point(21, 172);
             label11.Name = "label11";
-            label11.Size = new Size(55, 15);
+            label11.Size = new Size(62, 15);
             label11.TabIndex = 0;
-            label11.Text = "카테고리";
+            label11.Text = "카테고리 :";
             // 
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(23, 158);
+            label10.Location = new Point(23, 135);
             label10.Name = "label10";
             label10.Size = new Size(50, 15);
             label10.TabIndex = 0;
@@ -483,7 +514,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(23, 118);
+            label9.Location = new Point(23, 100);
             label9.Name = "label9";
             label9.Size = new Size(38, 15);
             label9.TabIndex = 0;
@@ -492,7 +523,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(23, 77);
+            label8.Location = new Point(23, 66);
             label8.Name = "label8";
             label8.Size = new Size(50, 15);
             label8.TabIndex = 0;
@@ -515,13 +546,6 @@
             tabPage3.TabIndex = 2;
             tabPage3.Text = "수동 제어";
             tabPage3.UseVisualStyleBackColor = true;
-            // 
-            // textBox6
-            // 
-            textBox6.Location = new Point(87, 31);
-            textBox6.Name = "textBox6";
-            textBox6.Size = new Size(100, 23);
-            textBox6.TabIndex = 1;
             // 
             // setting
             // 
@@ -576,26 +600,28 @@
         private DataGridViewTextBoxColumn Column6;
         private ComboBox comboBox1;
         private GroupBox groupBox2;
-        private TextBox textBox11;
-        private TextBox textBox10;
-        private TextBox textBox9;
-        private TextBox textBox8;
+        private TextBox txtCategory;
+        private TextBox txtSize;
+        private TextBox txtColor;
+        private TextBox txtBrand;
         private Label label11;
         private Label label10;
         private Label label9;
         private Label label8;
         private Label label6;
         private DataGridView dataGridView2;
-        private Button button5;
-        private Button button4;
+        private Button btnRefresh;
+        private Button btnDelete;
         private Button button3;
-        private Button button2;
+        private Button btnRegister;
         private DataGridViewTextBoxColumn Column13;
         private DataGridViewTextBoxColumn Column8;
         private DataGridViewTextBoxColumn Column9;
         private DataGridViewTextBoxColumn Column10;
         private DataGridViewTextBoxColumn Column11;
         private DataGridViewTextBoxColumn Column12;
-        private TextBox textBox6;
+        private TextBox txtItemCode;
+        private TextBox txtStock;
+        private Label label7;
     }
 }

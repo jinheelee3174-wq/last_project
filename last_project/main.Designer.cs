@@ -58,6 +58,7 @@ namespace last_project
             chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
+            webViewCam1 = new Microsoft.Web.WebView2.WinForms.WebView2();
             tabPage2 = new TabPage();
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
@@ -74,6 +75,8 @@ namespace last_project
             ((System.ComponentModel.ISupportInitialize)chart2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)chart1).BeginInit();
             tabControl1.SuspendLayout();
+            tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)webViewCam1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
             SuspendLayout();
             // 
@@ -318,6 +321,7 @@ namespace last_project
             // 
             // tabPage1
             // 
+            tabPage1.Controls.Add(webViewCam1);
             tabPage1.ForeColor = SystemColors.ControlDarkDark;
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
@@ -327,6 +331,17 @@ namespace last_project
             tabPage1.Text = "CAM1";
             tabPage1.UseVisualStyleBackColor = true;
             tabPage1.Click += tabPage1_Click_1;
+            // 
+            // webViewCam1
+            // 
+            webViewCam1.AllowExternalDrop = true;
+            webViewCam1.CreationProperties = null;
+            webViewCam1.DefaultBackgroundColor = SysColor.White;
+            webViewCam1.Location = new Point(8, 3);
+            webViewCam1.Name = "webViewCam1";
+            webViewCam1.Size = new Size(514, 318);
+            webViewCam1.TabIndex = 0;
+            webViewCam1.ZoomFactor = 1D;
             // 
             // tabPage2
             // 
@@ -390,6 +405,8 @@ namespace last_project
             ((System.ComponentModel.ISupportInitialize)chart2).EndInit();
             ((System.ComponentModel.ISupportInitialize)chart1).EndInit();
             tabControl1.ResumeLayout(false);
+            tabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)webViewCam1).EndInit();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).EndInit();
             ResumeLayout(false);
         }
@@ -425,5 +442,6 @@ namespace last_project
         private DataGridViewTextBoxColumn Column5;
         private DataGridViewTextBoxColumn Column6;
         private DataGridViewTextBoxColumn Column7;
+        private Microsoft.Web.WebView2.WinForms.WebView2 webViewCam1;
     }
 }

@@ -39,5 +39,15 @@ namespace last_project
                 reg.ShowDialog(this); // 닫히면 다시 second로 포커스 복귀
             }
         }
+
+        private void txtId_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
