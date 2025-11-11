@@ -37,15 +37,8 @@ namespace last_project
             System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             splitContainer1 = new SplitContainer();
-            button1 = new Button();
-            btnSetting = new Button();
-            button3 = new Button();
             lblClock = new Label();
-            button2 = new Button();
-            button6 = new Button();
-            tb_search = new TextBox();
-            button5 = new Button();
-            dataGridView2 = new DataGridView();
+            elementHost1 = new System.Windows.Forms.Integration.ElementHost();
             dataGridView1 = new DataGridView();
             Column1 = new DataGridViewTextBoxColumn();
             Column2 = new DataGridViewTextBoxColumn();
@@ -63,6 +56,7 @@ namespace last_project
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
             tabPage5 = new TabPage();
+            elementHost2 = new System.Windows.Forms.Integration.ElementHost();
             timer1 = new System.Windows.Forms.Timer(components);
             bindingSource1 = new BindingSource(components);
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
@@ -70,7 +64,6 @@ namespace last_project
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)chart2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)chart1).BeginInit();
@@ -88,68 +81,24 @@ namespace last_project
             // 
             // splitContainer1.Panel1
             // 
-            splitContainer1.Panel1.Controls.Add(button1);
-            splitContainer1.Panel1.Controls.Add(btnSetting);
-            splitContainer1.Panel1.Controls.Add(button3);
+            splitContainer1.Panel1.BackColor = SysColor.Black;
             splitContainer1.Panel1.Controls.Add(lblClock);
-            splitContainer1.Panel1.Controls.Add(button2);
+            splitContainer1.Panel1.Controls.Add(elementHost1);
             splitContainer1.Panel1.ForeColor = SystemColors.ActiveCaptionText;
             splitContainer1.Panel1.Paint += splitContainer1_Panel1_Paint;
             splitContainer1.Panel1.DoubleClick += splitContainer1_Panel1_DoubleClick;
             // 
             // splitContainer1.Panel2
             // 
-            splitContainer1.Panel2.Controls.Add(button6);
-            splitContainer1.Panel2.Controls.Add(tb_search);
-            splitContainer1.Panel2.Controls.Add(button5);
-            splitContainer1.Panel2.Controls.Add(dataGridView2);
+            splitContainer1.Panel2.BackColor = SysColor.Black;
             splitContainer1.Panel2.Controls.Add(dataGridView1);
             splitContainer1.Panel2.Controls.Add(chart2);
             splitContainer1.Panel2.Controls.Add(chart1);
             splitContainer1.Panel2.Controls.Add(tabControl1);
+            splitContainer1.Panel2.Controls.Add(elementHost2);
             splitContainer1.Size = new Size(915, 649);
-            splitContainer1.SplitterDistance = 167;
+            splitContainer1.SplitterDistance = 162;
             splitContainer1.TabIndex = 0;
-            // 
-            // button1
-            // 
-            button1.AutoEllipsis = true;
-            button1.BackColor = SystemColors.AppWorkspace;
-            button1.FlatStyle = FlatStyle.Flat;
-            button1.Location = new Point(3, 81);
-            button1.Name = "button1";
-            button1.Size = new Size(165, 87);
-            button1.TabIndex = 5;
-            button1.TabStop = false;
-            button1.Text = "발주";
-            button1.UseVisualStyleBackColor = false;
-            // 
-            // btnSetting
-            // 
-            btnSetting.AutoEllipsis = true;
-            btnSetting.BackColor = SystemColors.AppWorkspace;
-            btnSetting.FlatStyle = FlatStyle.Flat;
-            btnSetting.Location = new Point(3, 354);
-            btnSetting.Name = "btnSetting";
-            btnSetting.Size = new Size(165, 87);
-            btnSetting.TabIndex = 4;
-            btnSetting.TabStop = false;
-            btnSetting.Text = "Setting";
-            btnSetting.UseVisualStyleBackColor = false;
-            btnSetting.Click += btnSetting_Click;
-            // 
-            // button3
-            // 
-            button3.AutoEllipsis = true;
-            button3.BackColor = SystemColors.AppWorkspace;
-            button3.FlatStyle = FlatStyle.Flat;
-            button3.Location = new Point(3, 263);
-            button3.Name = "button3";
-            button3.Size = new Size(165, 87);
-            button3.TabIndex = 3;
-            button3.TabStop = false;
-            button3.Text = "picture Log";
-            button3.UseVisualStyleBackColor = false;
             // 
             // lblClock
             // 
@@ -165,67 +114,26 @@ namespace last_project
             lblClock.TextAlign = ContentAlignment.MiddleCenter;
             lblClock.Click += lblClock_Click;
             // 
-            // button2
+            // elementHost1
             // 
-            button2.AutoEllipsis = true;
-            button2.BackColor = SystemColors.AppWorkspace;
-            button2.FlatStyle = FlatStyle.Flat;
-            button2.Location = new Point(3, 172);
-            button2.Name = "button2";
-            button2.Size = new Size(165, 87);
-            button2.TabIndex = 1;
-            button2.TabStop = false;
-            button2.Text = "통계";
-            button2.UseVisualStyleBackColor = false;
-            // 
-            // button6
-            // 
-            button6.BackColor = SystemColors.ButtonHighlight;
-            button6.FlatStyle = FlatStyle.Flat;
-            button6.Location = new Point(183, 353);
-            button6.Name = "button6";
-            button6.Size = new Size(75, 23);
-            button6.TabIndex = 10;
-            button6.Text = "새로고침";
-            button6.UseVisualStyleBackColor = false;
-            button6.Click += button6_Click;
-            // 
-            // tb_search
-            // 
-            tb_search.Location = new Point(-1, 353);
-            tb_search.Name = "tb_search";
-            tb_search.Size = new Size(107, 23);
-            tb_search.TabIndex = 9;
-            // 
-            // button5
-            // 
-            button5.BackColor = SystemColors.ControlLightLight;
-            button5.FlatStyle = FlatStyle.Flat;
-            button5.Location = new Point(107, 353);
-            button5.Name = "button5";
-            button5.Size = new Size(79, 23);
-            button5.TabIndex = 7;
-            button5.Text = "검색";
-            button5.UseVisualStyleBackColor = false;
-            // 
-            // dataGridView2
-            // 
-            dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView2.Location = new Point(0, 354);
-            dataGridView2.Name = "dataGridView2";
-            dataGridView2.RowTemplate.Height = 25;
-            dataGridView2.Size = new Size(754, 22);
-            dataGridView2.TabIndex = 8;
+            elementHost1.Dock = DockStyle.Fill;
+            elementHost1.Location = new Point(0, 0);
+            elementHost1.Name = "elementHost1";
+            elementHost1.Size = new Size(162, 649);
+            elementHost1.TabIndex = 3;
             // 
             // dataGridView1
             // 
             dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dataGridView1.BackgroundColor = SysColor.Black;
+            dataGridView1.BorderStyle = BorderStyle.None;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Column1, Column2, Column3, Column4, Column5, Column6, Column7 });
-            dataGridView1.Location = new Point(-3, 376);
+            dataGridView1.Location = new Point(-3, 394);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.Size = new Size(759, 290);
+            dataGridView1.Size = new Size(780, 315);
             dataGridView1.TabIndex = 6;
             dataGridView1.CellContentClick += dataGridView1_CellContentClick;
             dataGridView1.DataBindingComplete += dataGridView1_DataBindingComplete;
@@ -270,6 +178,7 @@ namespace last_project
             Column7.DataPropertyName = "stock";
             Column7.HeaderText = "재고";
             Column7.Name = "Column7";
+            Column7.Width = 120;
             // 
             // chart2
             // 
@@ -337,7 +246,7 @@ namespace last_project
             webViewCam1.AllowExternalDrop = true;
             webViewCam1.CreationProperties = null;
             webViewCam1.DefaultBackgroundColor = SysColor.White;
-            webViewCam1.Location = new Point(8, 3);
+            webViewCam1.Location = new Point(1, 3);
             webViewCam1.Name = "webViewCam1";
             webViewCam1.Size = new Size(514, 318);
             webViewCam1.TabIndex = 0;
@@ -380,6 +289,13 @@ namespace last_project
             tabPage5.Text = "All CAM";
             tabPage5.UseVisualStyleBackColor = true;
             // 
+            // elementHost2
+            // 
+            elementHost2.Location = new Point(-1, 353);
+            elementHost2.Name = "elementHost2";
+            elementHost2.Size = new Size(300, 40);
+            elementHost2.TabIndex = 9;
+            // 
             // timer1
             // 
             timer1.Tick += timer1_Tick;
@@ -397,10 +313,8 @@ namespace last_project
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);
-            splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)chart2).EndInit();
             ((System.ComponentModel.ISupportInitialize)chart1).EndInit();
@@ -420,21 +334,16 @@ namespace last_project
         private TabPage tabPage3;
         private TabPage tabPage4;
         private TabPage tabPage5;
-        private Button button2;
         private Label lblClock;
         private System.Windows.Forms.Timer timer1;
         private BindingSource bindingSource1;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
-        private Button btnSetting;
-        private Button button3;
         private DataGridView dataGridView1;
-        private Button button5;
-        private TextBox tb_search;
-        private DataGridView dataGridView2;
-        private Button button6;
-        private Button button1;
+        private System.Windows.Forms.Integration.ElementHost elementHost1;
+        private System.Windows.Forms.Integration.ElementHost elementHost2;
+        private Microsoft.Web.WebView2.WinForms.WebView2 webViewCam1;
         private DataGridViewTextBoxColumn Column1;
         private DataGridViewTextBoxColumn Column2;
         private DataGridViewTextBoxColumn Column3;
@@ -442,6 +351,5 @@ namespace last_project
         private DataGridViewTextBoxColumn Column5;
         private DataGridViewTextBoxColumn Column6;
         private DataGridViewTextBoxColumn Column7;
-        private Microsoft.Web.WebView2.WinForms.WebView2 webViewCam1;
     }
 }

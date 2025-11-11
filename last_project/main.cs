@@ -13,6 +13,8 @@ using System.Windows.Forms;
 using Microsoft.Web.WebView2.Core;
 // ▲▲▲ --- ▲▲▲
 
+
+
 namespace last_project
 {
 
@@ -77,7 +79,7 @@ namespace last_project
             lblClock.TextAlign = ContentAlignment.MiddleCenter;
             lblClock.Padding = new Padding(0, 6, 0, 0);
             lblClock.Font = new Font("Segoe UI", 11f, FontStyle.Regular);
-
+            lblClock.BackColor = System.Drawing.Color.Black;
             timer1.Interval = 1000;
             timer1.Start();
             UpdateClock();
@@ -93,6 +95,66 @@ namespace last_project
                 // 2. ▼▼▼ 카메라 WebView2 초기화 (추가된 부분) ▼▼▼
                 await InitializeCameraWebViewAsync();
             }
+            // 1. (★★★★★) WPF 메뉴 인스턴스를 만듭니다.
+            WpfButtonMenu wpfMenu = new WpfButtonMenu();
+
+            // 2. (★★★★★) WPF가 보낸 "신호"를 main.cs의 함수와 "연결"합니다.
+
+            // (예) WPF의 "Setting" 버튼 신호가 오면 -> 
+            //      main.cs의 "btnSetting_Click" 함수를 실행해라
+            wpfMenu.SettingButtonClicked += btnSetting_Click;
+
+            // (아래 3개 버튼도 기존 함수에 연결하거나 새 함수를 만드세요)
+            // wpfMenu.BaljuButtonClicked += button1_Click; // (예시)
+            // wpfMenu.TonggyeButtonClicked += button2_Click; // (예시)
+            // wpfMenu.LogButtonClicked += button3_Click; // (예시)
+
+            // 3. (핵심) ElementHost(그릇)에 WPF 메뉴(내용물)를 담습니다.
+            // (우리가 1단계에서 코드로 만든 'elementHost1' 변수를 사용)
+            elementHost1.Child = wpfMenu;
+
+            // 1. (★★★★★) WPF 검색창 인스턴스를 만듭니다.
+            WpfSearchBar wpfSearch = new WpfSearchBar();
+
+            // 2. (★★★★★) WPF가 보낸 "신호"를 main.cs의 함수와 "연결"합니다.
+            wpfSearch.SearchButtonClicked += WpfSearch_SearchButtonClicked;
+            wpfSearch.RefreshButtonClicked += WpfSearch_RefreshButtonClicked;
+
+            // 3. (핵심) ElementHost(그릇)에 WPF 검색창(내용물)을 담습니다.
+            elementHost2.Child = wpfSearch;
+
+            var grid = dataGridView1;
+
+            // 1. (핵심) 그리드 테두리 없애기
+            grid.BorderStyle = BorderStyle.None;
+
+            // 2. 그리드 전체 배경색 (빈 공간)
+            grid.BackgroundColor = System.Drawing.Color.Black; // 폼 배경색과 맞춤
+
+            // 3. 헤더(제목) 스타일 설정
+            grid.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None; // 헤더 테두리 없음
+            grid.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(25, 25, 25); // 헤더 배경색 (진한 검정)
+            grid.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White; // 헤더 글자색 (흰색)
+            grid.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10f, FontStyle.Bold); // 헤더 폰트
+            grid.EnableHeadersVisualStyles = false; // (중요) 이걸 꺼야 위 스타일이 먹힘
+
+            // 4. 셀(칸) 스타일 설정
+            grid.RowHeadersVisible = false; // (맨 왼쪽) 행 선택 회색 바 숨기기
+            grid.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(45, 45, 48); // 셀 배경색 (어두운 회색)
+            grid.DefaultCellStyle.ForeColor = System.Drawing.Color.White; // 셀 글자색 (흰색)
+    
+            grid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            grid.GridColor = System.Drawing.Color.Gray; // 셀 구분선 색상
+
+            // 5. 셀 "선택" 스타일 설정
+            grid.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.CornflowerBlue; // 선택 시 배경색 (WPF 버튼과 비슷하게)
+            grid.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.White; // 선택 시 글자색
+
+            // 6. (옵션) 행 높이 조절
+            grid.RowTemplate.Height = 30; // 행 높이를 살짝
+            grid.ColumnHeadersHeight = 35; // 헤더 높이를 살짝
+
+
         }
 
         // ▼▼▼ 새로 추가된 카메라 초기화 함수 ▼▼▼
@@ -172,10 +234,6 @@ namespace last_project
             }
         }
 
-        private async void button6_Click(object sender, EventArgs e)
-        {
-            await LoadProductDataAsync();
-        }
 
         private void dataGridView1_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
@@ -217,6 +275,68 @@ namespace last_project
                 MessageBox.Show($"재고 상태 업데이트 중 오류: {ex.Message}");
             }
         }
+
+       
+
+        private void WpfSearch_SearchButtonClicked(object sender, EventArgs e)
+        {
+            // 1. (★★★★★) elementHost2(그릇)에서 WpfSearchBar(내용물)를 꺼냅니다.
+            WpfSearchBar wpfSearch = elementHost2.Child as WpfSearchBar;
+            if (wpfSearch == null) return;
+
+            // 2. WpfSearchBar에서 검색어를 가져옵니다.
+            string searchTerm = wpfSearch.SearchTerm.Trim();
+
+            // 3. 그리드의 DataSource를 DataTable로 변환합니다.
+            DataTable table = dataGridView1.DataSource as DataTable;
+            if (table == null) return;
+
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                table.DefaultView.RowFilter = string.Empty;
+            }
+            else
+            {
+                // 4. (핵심) DataTable 필터 실행
+                string safeSearchTerm = searchTerm.Replace("'", "''");
+                table.DefaultView.RowFilter = string.Format(
+                    "item_code LIKE '%{0}%' OR " +
+                    "product_name LIKE '%{0}%' OR " +
+                    "brand LIKE '%{0}%' OR " +
+                    "color LIKE '%{0}%' OR " +
+                    "size LIKE '%{0}%' OR " +
+                    "category LIKE '%{0}%'",
+                    safeSearchTerm
+                );
+            }
+        }
+
+        private async void WpfSearch_RefreshButtonClicked(object sender, EventArgs e)
+        {
+            // 1. (★★★★★) elementHost2(그릇)에서 WpfSearchBar(내용물)를 꺼냅니다.
+            WpfSearchBar wpfSearch = elementHost2.Child as WpfSearchBar;
+
+            // 2. 검색 필터를 해제합니다.
+            DataTable table = dataGridView1.DataSource as DataTable;
+            if (table != null)
+            {
+                table.DefaultView.RowFilter = string.Empty;
+            }
+
+            // 3. 검색 텍스트박스를 비웁니다.
+            if (wpfSearch != null)
+            {
+                wpfSearch.SearchTerm = "";
+            }
+
+            // 4. [기존 기능] 서버에서 새 데이터를 로드합니다.
+            await LoadProductDataAsync();
+        }
+
+
+
+
+
     } // public partial class main 끝
 
     public class Product
