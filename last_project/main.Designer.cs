@@ -130,10 +130,10 @@ namespace last_project
             dataGridView1.BorderStyle = BorderStyle.None;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Column1, Column2, Column3, Column4, Column5, Column6, Column7 });
-            dataGridView1.Location = new Point(-3, 394);
+            dataGridView1.Location = new Point(3, 393);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.Size = new Size(780, 315);
+            dataGridView1.Size = new Size(746, 253);
             dataGridView1.TabIndex = 6;
             dataGridView1.CellContentClick += dataGridView1_CellContentClick;
             dataGridView1.DataBindingComplete += dataGridView1_DataBindingComplete;
@@ -142,43 +142,49 @@ namespace last_project
             // 
             Column1.HeaderText = "재고상태";
             Column1.Name = "Column1";
+            Column1.Width = 110;
             // 
             // Column2
             // 
             Column2.DataPropertyName = "item_code";
             Column2.HeaderText = "품목번호";
             Column2.Name = "Column2";
+            Column2.Width = 110;
             // 
             // Column3
             // 
             Column3.DataPropertyName = "brand";
             Column3.HeaderText = "브랜드";
             Column3.Name = "Column3";
+            Column3.Width = 110;
             // 
             // Column4
             // 
             Column4.DataPropertyName = "color";
             Column4.HeaderText = "색상";
             Column4.Name = "Column4";
+            Column4.Width = 110;
             // 
             // Column5
             // 
             Column5.DataPropertyName = "size";
             Column5.HeaderText = "사이즈";
             Column5.Name = "Column5";
+            Column5.Width = 110;
             // 
             // Column6
             // 
             Column6.DataPropertyName = "category";
             Column6.HeaderText = "카테고리";
             Column6.Name = "Column6";
+            Column6.Width = 110;
             // 
             // Column7
             // 
             Column7.DataPropertyName = "stock";
             Column7.HeaderText = "재고";
             Column7.Name = "Column7";
-            Column7.Width = 120;
+            Column7.Width = 110;
             // 
             // chart2
             // 
@@ -246,9 +252,9 @@ namespace last_project
             webViewCam1.AllowExternalDrop = true;
             webViewCam1.CreationProperties = null;
             webViewCam1.DefaultBackgroundColor = SysColor.White;
-            webViewCam1.Location = new Point(1, 3);
+            webViewCam1.Location = new Point(1, -2);
             webViewCam1.Name = "webViewCam1";
-            webViewCam1.Size = new Size(514, 318);
+            webViewCam1.Size = new Size(528, 329);
             webViewCam1.TabIndex = 0;
             webViewCam1.ZoomFactor = 1D;
             // 

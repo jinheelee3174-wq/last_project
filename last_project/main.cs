@@ -154,7 +154,7 @@ namespace last_project
             grid.RowTemplate.Height = 30; // 행 높이를 살짝
             grid.ColumnHeadersHeight = 35; // 헤더 높이를 살짝
 
-
+           
         }
 
         // ▼▼▼ 새로 추가된 카메라 초기화 함수 ▼▼▼
