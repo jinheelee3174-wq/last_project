@@ -7,26 +7,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Net.Http; // 서버 통신용
-using Newtonsoft.Json; // JSON 변환용
-using Microsoft.VisualBasic; // InputBox 용
-using System.Windows.Forms.Integration; // <-- 1. ElementHost를 위해 추가!
+using System.Net.Http;
+using Newtonsoft.Json;
+using Microsoft.VisualBasic;
+using System.Windows.Forms.Integration; // (필수) ElementHost
 
 namespace last_project
 {
     public partial class setting : Form
     {
-        // (★★★★★) 서버와 통신하기 위한 필수 객체입니다.
         private static readonly HttpClient client = new HttpClient();
-
-        // --- ▼▼▼ [수정!] 클래스 변수 5줄 (오류 방지) ▼▼▼ ---
         private Size largeFormSize = new Size(1043, 658);
         private Size smallFormSize = new Size(473, 584);
 
-        // (WPF 컨트롤 2개를 클래스 변수로 선언)
-        // (WpfEditor_SlotDrawn 함수가 wpfSlotInfo를 참조해야 하기 때문)
+        // --- ▼▼▼ [수정!] WPF 컨트롤 3개를 '클래스 변수'로 선언 ▼▼▼ ---
         private WpfSlotEditor wpfEditor;
         private WpfSlotInfo wpfSlotInfo;
+        private WpfProductAdmin wpfProductAdmin; // (★★★★★) tabPage2용 컨트롤
         // --- ▲▲▲ 'isSlotEditorLoaded' 깃발은 이제 필요 없음 ▲▲▲ ---
 
         public setting()
@@ -34,48 +31,31 @@ namespace last_project
             InitializeComponent();
         }
 
-        // --- ▼▼▼ [추가!] 폼이 "처음 켜질 때" 실행되는 Load 이벤트 ▼▼▼ ---
-        // (디자이너 [속성] > [⚡] > 'Load'를 더블 클릭해서 연결해야 합니다!)
+        // --- ▼▼▼ 폼이 "처음 켜질 때" 실행되는 Load 이벤트 ▼▼▼ ---
         private void setting_Load(object sender, EventArgs e)
         {
-            // (★★★★★) 
-            // 폼이 켜질 때 0번 탭("슬롯 상세")의 WPF 컨트롤을 '미리' 로드합니다.
-
             // --- 1. 왼쪽 패널 (WPF 카메라/그리기) 설정 ---
             ElementHost wpfHostLeft = new ElementHost();
             wpfHostLeft.Dock = DockStyle.Fill;
-            wpfEditor = new WpfSlotEditor(); // (클래스 변수에 할당)
-            wpfEditor.SlotDrawn += WpfEditor_SlotDrawn; // (신호 연결)
+            wpfEditor = new WpfSlotEditor();
+            wpfEditor.SlotDrawn += WpfEditor_SlotDrawn;
             wpfHostLeft.Child = wpfEditor;
-            splitContainer1.Panel1.Controls.Add(wpfHostLeft); // (Panel1에 추가)
+            splitContainer1.Panel1.Controls.Add(wpfHostLeft);
 
             // --- 2. 오른쪽 패널 (WPF 슬롯 정보) 설정 ---
             ElementHost wpfHostRight = new ElementHost();
             wpfHostRight.Dock = DockStyle.Fill;
-            wpfSlotInfo = new WpfSlotInfo(); // (클래스 변수에 할당)
+            wpfSlotInfo = new WpfSlotInfo();
             // (wpfSlotInfo.SaveButtonClicked += ... 나중에 "저장" 기능 연결)
             wpfHostRight.Child = wpfSlotInfo;
-
-            // (★★★★★) 
-            // Panel2(오른쪽 패널)에 'groupBox1' 대신 'wpfHostRight'를 추가!
-            // (주의! dataGridView1(슬롯 목록)도 Panel2에 있어야 합니다)
-
-            // (Panel2에서 기존 groupBox1을 찾아서 제거)
-            if (this.Controls.Find("groupBox1", true).Length > 0)
-            {
-                Control groupBox = this.Controls.Find("groupBox1", true)[0];
-                splitContainer1.Panel2.Controls.Remove(groupBox);
-            }
 
             // (Panel2에 wpfHostRight를 추가)
             splitContainer1.Panel2.Controls.Add(wpfHostRight);
 
-            // (Panel2의 컨트롤 순서 정리: WPF 정보창이 맨 위, 그리드가 그 아래)
-            wpfHostRight.Dock = DockStyle.Top; // "슬롯 정보"는 위쪽에 붙이기
-            wpfHostRight.Height = 220; // (WPF XAML에서 정한 디자인 높이)
-
-            dataGridView1.Dock = DockStyle.Fill; // "슬롯 목록"이 남은 공간 꽉 채우기
-
+            wpfHostRight.Dock = DockStyle.Top;
+            wpfHostRight.Height = 220;
+            dataGridView1.Dock = DockStyle.Fill;
+            // (★★★★★) 그리드 컨트롤 이름이 'dataGridView1'이 맞는지 확인!
             var grid = dataGridView1;
 
             // 1. (핵심) 그리드 테두리 없애기
@@ -105,15 +85,13 @@ namespace last_project
             // 6. (옵션) 행 높이 조절
             grid.RowTemplate.Height = 30; // 행 높이를 살짝
             grid.ColumnHeadersHeight = 35; // 헤더 높이를 살짝
-
-            splitContainer1.BackColor = System.Drawing.Color.Black;
         }
 
         // (기존 이벤트 핸들러 - 내용은 비어있음)
         private void label4_Click(object sender, EventArgs e) { }
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e) { }
 
-        // --- ▼▼▼ [수정] 탭 변경 이벤트 (폼 크기 조절만 남김) ▼▼▼ ---
+        // --- ▼▼▼ [수정] 탭 변경 이벤트 (tabPage2 로드 기능 추가) ▼▼▼ ---
         private async void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             // 0번 인덱스 ("슬롯 상세 설정")
@@ -125,6 +103,38 @@ namespace last_project
             else if (tabControl1.SelectedIndex == 1)
             {
                 this.Size = smallFormSize;
+
+                // --- ▼▼▼ [핵심] tabPage2에 WPF 컨트롤 심기 ▼▼▼ ---
+
+                // (WPF 컨트롤이 '처음' 로드되는지 확인하는 '깃발')
+                if (wpfProductAdmin == null)
+                {
+                    // 1. (그릇) WPF를 담을 ElementHost 생성
+                    ElementHost wpfHostProducts = new ElementHost();
+                    wpfHostProducts.Dock = DockStyle.Top; // tabPage2의 '위쪽'에 붙이기
+                    wpfHostProducts.Height = 300; // (XAML 디자인 높이)
+
+                    // 2. (내용물) "WPF 제품 관리" 생성
+                    wpfProductAdmin = new WpfProductAdmin(); // (클래스 변수에 할당)
+
+                    // 3. (신호 연결) WPF 버튼의 '신호'를 C# '함수'와 연결
+                    wpfProductAdmin.RegisterClicked += btnRegister_Click; // "신규등록"
+                    wpfProductAdmin.UpdateClicked += button3_Click; // "수정"
+                    wpfProductAdmin.DeleteClicked += btnDelete_Click; // "삭제"
+                    wpfProductAdmin.RefreshClicked += btnRefresh_Click; // "새로고침"
+
+                    // 4. (조립) 그릇에 내용물을 담습니다.
+                    wpfHostProducts.Child = wpfProductAdmin;
+
+                    // 5. (★★★★★) 
+                    // tabPage2 (두 번째 탭)에 '그릇'을 추가합니다!
+                    tabPage2.Controls.Add(wpfHostProducts);
+
+                    // (옵션) dataGridView2를 '아래쪽' 꽉 채우기
+                    dataGridView2.Dock = DockStyle.Fill;
+                }
+
+                // 1번 탭을 누를 때마다 "제품 목록" 새로고침
                 await LoadProductDataAsync();
             }
             // 그 외 다른 탭들 ("수동 제어" - 2번 등)
@@ -132,40 +142,63 @@ namespace last_project
             {
                 this.Size = largeFormSize;
             }
+            // (★★★★★) 그리드 컨트롤 이름이 'dataGridView2'가 맞는지 확인!
+            var grid = dataGridView2;
+
+            // 1. (핵심) 그리드 테두리 없애기
+            grid.BorderStyle = BorderStyle.None;
+
+            // 2. 그리드 전체 배경색 (빈 공간)
+            grid.BackgroundColor = System.Drawing.Color.FromArgb(45, 45, 48); // 셀 배경과 통일
+
+            // 3. 헤더(제목) 스타일 설정
+            grid.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            grid.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(25, 25, 25);
+            grid.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            grid.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10f, FontStyle.Bold);
+            grid.EnableHeadersVisualStyles = false;
+
+            // 4. 셀(칸) 스타일 설정
+            grid.RowHeadersVisible = false;
+            grid.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(45, 45, 48);
+            grid.DefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            grid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            grid.GridColor = System.Drawing.Color.Gray;
+
+            // 5. 셀 "선택" 스타일 설정
+            grid.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.CornflowerBlue;
+            grid.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.White;
+
+            // 6. (옵션) 행 높이 조절
+            grid.RowTemplate.Height = 30;
+            grid.ColumnHeadersHeight = 35;
         }
 
-        // --- ▼▼▼ [수정!] "좌표 받기" 함수 (WpfEditor_SlotDrawn) ▼▼▼ ---
-        // (textBox2 대신, wpfSlotInfo의 속성을 채우도록 수정!)
+        // --- ▼▼▼ "좌표 받기" 함수 (WpfEditor_SlotDrawn) ▼▼▼ ---
         private void WpfEditor_SlotDrawn(object sender, SlotDrawnEventArgs e)
         {
-            // (방어 코드) wpfSlotInfo(오른쪽 패널)가 로드되기 전이면 종료
             if (wpfSlotInfo == null) return;
 
-            // 1. (WPF 좌표는 double) WinForms 텍스트박스에 맞게 정수(int)로 변환
             int x = (int)Math.Round(e.X);
             int y = (int)Math.Round(e.Y);
             int w = (int)Math.Round(e.W);
             int h = (int)Math.Round(e.H);
 
-            // 2. (★★★★★ 핵심 수정 ★★★★★)
-            // WPF "슬롯 정보" 텍스트박스에 좌표값 채우기
-            wpfSlotInfo.SlotX = x.ToString(); // '좌표 X' 텍스트박스
-            wpfSlotInfo.SlotY = y.ToString(); // '좌표 Y' 텍스트박스
-            wpfSlotInfo.SlotW = w.ToString(); // '너비 W' 텍스트박스
-            wpfSlotInfo.SlotH = h.ToString(); // '높이 H' 텍스트박스
-
+            // (WPF "슬롯 정보" 텍스트박스에 좌표값 채우기)
+            wpfSlotInfo.SlotX = x.ToString();
+            wpfSlotInfo.SlotY = y.ToString();
+            wpfSlotInfo.SlotW = w.ToString();
+            wpfSlotInfo.SlotH = h.ToString();
             wpfSlotInfo.SlotId = "(신규 슬롯)";
-            wpfSlotInfo.IsSlotActive = true; // '활성화'에 자동 체크
+            wpfSlotInfo.IsSlotActive = true;
         }
 
         // --- (이하 "제품 품목 설정" 탭(tabPage2)의 모든 함수들) ---
-        // (LoadProductDataAsync, UpdateStockInDatabaseAsync, AddNewProductAsync,
-        //  DeleteProductAsync, btnRegister_Click, button3_Click, btnDelete_Click,
-        //  btnRefresh_Click, dataGridView2_DataBindingComplete, dataGridView2_CellClick 등...)
+        // (★★★★★ 코드 내용은 동일하지만, 텍스트박스 읽는 부분만 수정됨 ★★★★★)
 
-        // ( ... [이전 대화]의 모든 함수 코드가 여기에 있다고 가정합니다 ... )
+        // --- 1. 데이터 "읽기" 함수 (DataTable 버전) ---
         private async Task LoadProductDataAsync()
-        { /* ... (이전 코드와 동일) ... */
+        {
             var targetGrid = dataGridView2;
             targetGrid.AutoGenerateColumns = false;
             string apiUrl = $"http://127.0.0.1:5000/api/products?_t={DateTime.Now.Ticks}";
@@ -188,8 +221,10 @@ namespace last_project
                 MessageBox.Show($"데이터 로드 중 오류 발생: {ex.Message}");
             }
         }
+
+        // --- 2. 데이터 "수정" 함수 ---
         private async Task UpdateStockInDatabaseAsync(string itemCode, int newStock)
-        { /* ... (이전 코드와 동일) ... */
+        {
             string apiUrl = "http://127.0.0.1:5000/api/product/update_stock";
             try
             {
@@ -212,80 +247,57 @@ namespace last_project
                 MessageBox.Show($"재고 수정 중 예외 발생: {ex.Message}");
             }
         }
-        private void dataGridView2_CellClick(object sender, DataGridViewCellEventArgs e) { /* ... (이전 코드와 동일) ... */ }
-        private void dataGridView2_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        { /* ... (이전 코드와 동일) ... */
-            try
-            {
-                string stockStatusColumnName = "Column1";
-                string stockValueColumnName = "Column12";
-                foreach (DataGridViewRow row in dataGridView2.Rows)
-                {
-                    if (row.Cells[stockValueColumnName].Value != null)
-                    {
-                        int stock = Convert.ToInt32(row.Cells[stockValueColumnName].Value);
-                        DataGridViewCell statusCell = row.Cells[stockStatusColumnName];
-                        if (stock <= 2)
-                        {
-                            statusCell.Value = "위험";
-                            statusCell.Style.ForeColor = System.Drawing.Color.Red;
-                            statusCell.Style.Font = new Font(dataGridView2.Font, FontStyle.Bold);
-                        }
-                        else if (stock == 3)
-                        {
-                            statusCell.Value = "주의";
-                            statusCell.Style.ForeColor = System.Drawing.Color.Orange;
-                            statusCell.Style.Font = new Font(dataGridView2.Font, FontStyle.Regular);
-                        }
-                        else
-                        {
-                            statusCell.Value = "정상";
-                            statusCell.Style.ForeColor = System.Drawing.Color.Green;
-                            statusCell.Style.Font = new Font(dataGridView2.Font, FontStyle.Regular);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex) { MessageBox.Show($"재고 상태 업데이트 중 오류: {ex.Message}"); }
-        }
+
+      
+
+        // (이벤트 핸들러 - 비어있음)
+        private void dataGridView2_CellClick(object sender, DataGridViewCellEventArgs e) { }
         private void dataGridView2_CellClick_1(object sender, DataGridViewCellEventArgs e) { }
-        private void dataGridView2_DataBindingComplete_1(object sender, DataGridViewBindingCompleteEventArgs e) { }
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
+
+
+        // --- ▼▼▼ [수정!] "수정" 버튼 클릭 이벤트 (WPF가 호출) ▼▼▼ ---
         private async void button3_Click(object sender, EventArgs e)
-        { /* ... (이전 코드와 동일) ... */
+        {
             var targetGrid = dataGridView2;
             string stockColumnName = "Column12";
             string itemCodeColumnName = "Column13";
+
             if (targetGrid.SelectedRows.Count > 0)
             {
                 DataGridViewRow selectedRow = targetGrid.SelectedRows[0];
                 string itemCode = selectedRow.Cells[itemCodeColumnName].Value.ToString();
-                string currentStock = selectedRow.Cells[stockColumnName].Value.ToString();
-                string prompt = $"'{itemCode}'의 재고를 수정합니다.\n\n현재 재고: {currentStock}";
-                string title = "재고 수정";
-                string newStockString = Microsoft.VisualBasic.Interaction.InputBox(prompt, title, currentStock);
-                if (!string.IsNullOrWhiteSpace(newStockString))
+
+                // (★★★★★)
+                // '수정'은 팝업창을 띄우는 게 아니라, 
+                // "WPF 텍스트박스"의 값을 읽어와야 합니다!
+                try
                 {
-                    try
-                    {
-                        int newStock = Convert.ToInt32(newStockString);
-                        await UpdateStockInDatabaseAsync(itemCode, newStock);
-                        await LoadProductDataAsync();
-                    }
-                    catch (FormatException) { MessageBox.Show("숫자만 입력해주세요."); }
-                    catch (Exception ex) { MessageBox.Show($"수정 중 오류: {ex.Message}"); }
+                    int newStock = Convert.ToInt32(wpfProductAdmin.Stock); // WPF 텍스트박스에서 읽기!
+                    await UpdateStockInDatabaseAsync(itemCode, newStock);
+                    await LoadProductDataAsync(); // 새로고침
                 }
+                catch (FormatException) { MessageBox.Show("재고는 숫자만 입력해주세요."); }
+                catch (Exception ex) { MessageBox.Show($"수정 중 오류: {ex.Message}"); }
             }
             else
             {
-                MessageBox.Show("먼저 그리드에서 수정할 행을 '선택'해주세요.\n(행의 맨 앞 회색 칸을 클릭하세요)");
+                MessageBox.Show("먼저 그리드에서 수정할 행을 '선택'해주세요.");
             }
         }
+
+        // --- ▼▼▼ [수정!] "새로고침" 버튼 클릭 이벤트 (WPF가 호출) ▼▼▼ ---
         private async void btnRefresh_Click(object sender, EventArgs e)
-        { /* ... (이전 코드와 동일) ... */
+        {
+            // (WPF 텍스트박스 비우기)
+            if (wpfProductAdmin != null) wpfProductAdmin.ClearTextBoxes();
+
             await LoadProductDataAsync();
         }
+
+        // --- "신규 등록" 전송 함수 (수정 없음) ---
         private async Task AddNewProductAsync(string itemCode, string brand, string color, string size, string category, int stock)
-        { /* ... (이전 코드와 동일) ... */
+        {
             string apiUrl = "http://127.0.0.1:5000/api/product/add";
             try
             {
@@ -308,43 +320,49 @@ namespace last_project
                 MessageBox.Show($"신규 등록 중 예외 발생: {ex.Message}");
             }
         }
+
+        // --- ▼▼▼ [수정!] "신규등록" 버튼 클릭 이벤트 (WPF가 호출) ▼▼▼ ---
         private async void btnRegister_Click(object sender, EventArgs e)
-        { /* ... (이전 코드와 동일) ... */
-            string itemCode = txtItemCode.Text;
-            string brand = txtBrand.Text;
-            string color = txtColor.Text;
-            string size = txtSize.Text;
-            string category = txtCategory.Text;
-            string stockText = txtStock.Text;
+        {
+            // (방어 코드)
+            if (wpfProductAdmin == null) return;
+
+            // (★★★★★ 1. '삭제된' WinForms 텍스트박스 대신, 'WPF' 속성에서 값을 읽어옵니다!)
+            string itemCode = wpfProductAdmin.ItemCode;
+            string brand = wpfProductAdmin.Brand;
+            string color = wpfProductAdmin.Color;
+            string size = wpfProductAdmin.ProductSize;
+            string category = wpfProductAdmin.Category;
+            string stockText = wpfProductAdmin.Stock;
+
             if (string.IsNullOrWhiteSpace(itemCode))
             {
                 MessageBox.Show("품목번호는 필수 입력 항목입니다.");
                 return;
             }
+
             int stock = 0;
             if (!string.IsNullOrWhiteSpace(stockText) && !int.TryParse(stockText, out stock))
             {
                 MessageBox.Show("재고는 숫자만 입력해주세요.");
                 return;
             }
+
             try
             {
                 await AddNewProductAsync(itemCode, brand, color, size, category, stock);
-                await LoadProductDataAsync();
-                txtItemCode.Text = "";
-                txtBrand.Text = "";
-                txtColor.Text = "";
-                txtSize.Text = "";
-                txtCategory.Text = "";
-                txtStock.Text = "";
+                await LoadProductDataAsync(); // 새로고침
+                wpfProductAdmin.ClearTextBoxes(); // 텍스트박스 비우기
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"신규 등록 중 오류 발생: {ex.Message}");
             }
         }
+
+        // --- "삭제" 전송 함수 (수정 없음) ---
         private async Task DeleteProductAsync(string itemCode)
-        { /* ... (이전 코드와 동일) ... */
+        {
             string apiUrl = "http://127.0.0.1:5000/api/product/delete";
             try
             {
@@ -367,27 +385,31 @@ namespace last_project
                 MessageBox.Show($"삭제 중 예외 발생: {ex.Message}");
             }
         }
-        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
+
+        // --- "삭제" 버튼 클릭 이벤트 (WPF가 호출) ---
         private async void btnDelete_Click(object sender, EventArgs e)
-        { /* ... (이전 코드와 동일) ... */
+        {
             var targetGrid = dataGridView2;
             string itemCodeColumnName = "Column13";
+
             if (targetGrid.SelectedRows.Count > 0)
             {
                 DataGridViewRow selectedRow = targetGrid.SelectedRows[0];
                 string itemCode = selectedRow.Cells[itemCodeColumnName].Value.ToString();
+
                 DialogResult result = MessageBox.Show(
                     $"정말 '{itemCode}' 제품을 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.",
                     "삭제 확인",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning
                 );
+
                 if (result == DialogResult.Yes)
                 {
                     try
                     {
                         await DeleteProductAsync(itemCode);
-                        await LoadProductDataAsync();
+                        await LoadProductDataAsync(); // 새로고침
                     }
                     catch (Exception ex)
                     {
@@ -397,7 +419,7 @@ namespace last_project
             }
             else
             {
-                MessageBox.Show("먼저 그리드에서 삭제할 행을 '선택'해주세요.\n(행의 맨 앞 회색 칸을 클릭하세요)");
+                MessageBox.Show("먼저 그리드에서 삭제할 행을 '선택'해주세요.");
             }
         }
     }

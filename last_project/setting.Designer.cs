@@ -32,38 +32,21 @@
             tabPage1 = new TabPage();
             splitContainer1 = new SplitContainer();
             dataGridView1 = new DataGridView();
-            tabPage2 = new TabPage();
-            dataGridView2 = new DataGridView();
-            btnRefresh = new Button();
-            btnDelete = new Button();
-            button3 = new Button();
-            btnRegister = new Button();
-            groupBox2 = new GroupBox();
-            tabPage3 = new TabPage();
-            Column13 = new DataGridViewTextBoxColumn();
-            Column8 = new DataGridViewTextBoxColumn();
-            Column9 = new DataGridViewTextBoxColumn();
-            Column10 = new DataGridViewTextBoxColumn();
-            Column11 = new DataGridViewTextBoxColumn();
-            Column12 = new DataGridViewTextBoxColumn();
-            txtStock = new TextBox();
-            txtCategory = new TextBox();
-            txtSize = new TextBox();
-            txtColor = new TextBox();
-            txtBrand = new TextBox();
-            txtItemCode = new TextBox();
-            label7 = new Label();
-            label11 = new Label();
-            label10 = new Label();
-            label9 = new Label();
-            label8 = new Label();
-            label6 = new Label();
             Column1 = new DataGridViewTextBoxColumn();
             Column2 = new DataGridViewTextBoxColumn();
             Column3 = new DataGridViewTextBoxColumn();
             Column4 = new DataGridViewTextBoxColumn();
             Column5 = new DataGridViewTextBoxColumn();
             Column6 = new DataGridViewTextBoxColumn();
+            tabPage2 = new TabPage();
+            dataGridView2 = new DataGridView();
+            Column13 = new DataGridViewTextBoxColumn();
+            Column8 = new DataGridViewTextBoxColumn();
+            Column9 = new DataGridViewTextBoxColumn();
+            Column10 = new DataGridViewTextBoxColumn();
+            Column11 = new DataGridViewTextBoxColumn();
+            Column12 = new DataGridViewTextBoxColumn();
+            tabPage3 = new TabPage();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -115,20 +98,52 @@
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Column1, Column2, Column3, Column4, Column5, Column6 });
-            dataGridView1.Location = new Point(0, 214);
+            dataGridView1.Location = new Point(3, 216);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.Size = new Size(387, 339);
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.Size = new Size(394, 406);
             dataGridView1.TabIndex = 1;
+            // 
+            // Column1
+            // 
+            Column1.HeaderText = "ID";
+            Column1.Name = "Column1";
+            Column1.Width = 66;
+            // 
+            // Column2
+            // 
+            Column2.HeaderText = "X";
+            Column2.Name = "Column2";
+            Column2.Width = 66;
+            // 
+            // Column3
+            // 
+            Column3.HeaderText = "Y";
+            Column3.Name = "Column3";
+            Column3.Width = 66;
+            // 
+            // Column4
+            // 
+            Column4.HeaderText = "W";
+            Column4.Name = "Column4";
+            Column4.Width = 66;
+            // 
+            // Column5
+            // 
+            Column5.HeaderText = "H";
+            Column5.Name = "Column5";
+            Column5.Width = 66;
+            // 
+            // Column6
+            // 
+            Column6.HeaderText = "슬롯 활성화";
+            Column6.Name = "Column6";
+            Column6.Width = 66;
             // 
             // tabPage2
             // 
             tabPage2.Controls.Add(dataGridView2);
-            tabPage2.Controls.Add(btnRefresh);
-            tabPage2.Controls.Add(btnDelete);
-            tabPage2.Controls.Add(button3);
-            tabPage2.Controls.Add(btnRegister);
-            tabPage2.Controls.Add(groupBox2);
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
@@ -139,46 +154,58 @@
             // 
             // dataGridView2
             // 
-            dataGridView2.Location = new Point(0, 0);
+            dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView2.Columns.AddRange(new DataGridViewColumn[] { Column13, Column8, Column9, Column10, Column11, Column12 });
+            dataGridView2.Location = new Point(2, 277);
             dataGridView2.Name = "dataGridView2";
-            dataGridView2.Size = new Size(240, 150);
-            dataGridView2.TabIndex = 0;
+            dataGridView2.RowTemplate.Height = 25;
+            dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView2.Size = new Size(431, 238);
+            dataGridView2.TabIndex = 3;
+            dataGridView2.CellClick += dataGridView2_CellClick_1;
+            dataGridView2.CellContentClick += dataGridView2_CellContentClick;
             // 
-            // btnRefresh
+            // Column13
             // 
-            btnRefresh.Location = new Point(0, 0);
-            btnRefresh.Name = "btnRefresh";
-            btnRefresh.Size = new Size(75, 23);
-            btnRefresh.TabIndex = 1;
+            Column13.DataPropertyName = "item_code";
+            Column13.HeaderText = "품목번호";
+            Column13.Name = "Column13";
+            Column13.Width = 75;
             // 
-            // btnDelete
+            // Column8
             // 
-            btnDelete.Location = new Point(0, 0);
-            btnDelete.Name = "btnDelete";
-            btnDelete.Size = new Size(75, 23);
-            btnDelete.TabIndex = 2;
+            Column8.DataPropertyName = "brand";
+            Column8.HeaderText = "브랜드";
+            Column8.Name = "Column8";
+            Column8.Width = 75;
             // 
-            // button3
+            // Column9
             // 
-            button3.Location = new Point(0, 0);
-            button3.Name = "button3";
-            button3.Size = new Size(75, 23);
-            button3.TabIndex = 3;
+            Column9.DataPropertyName = "color";
+            Column9.HeaderText = "색상";
+            Column9.Name = "Column9";
+            Column9.Width = 75;
             // 
-            // btnRegister
+            // Column10
             // 
-            btnRegister.Location = new Point(0, 0);
-            btnRegister.Name = "btnRegister";
-            btnRegister.Size = new Size(75, 23);
-            btnRegister.TabIndex = 4;
+            Column10.DataPropertyName = "size";
+            Column10.HeaderText = "사이즈";
+            Column10.Name = "Column10";
+            Column10.Width = 75;
             // 
-            // groupBox2
+            // Column11
             // 
-            groupBox2.Location = new Point(0, 0);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(200, 100);
-            groupBox2.TabIndex = 5;
-            groupBox2.TabStop = false;
+            Column11.DataPropertyName = "category";
+            Column11.HeaderText = "카테고리";
+            Column11.Name = "Column11";
+            Column11.Width = 75;
+            // 
+            // Column12
+            // 
+            Column12.DataPropertyName = "stock";
+            Column12.HeaderText = "재고";
+            Column12.Name = "Column12";
+            Column12.Width = 75;
             // 
             // tabPage3
             // 
@@ -186,157 +213,14 @@
             tabPage3.Name = "tabPage3";
             tabPage3.Size = new Size(1035, 630);
             tabPage3.TabIndex = 2;
-            // 
-            // Column13
-            // 
-            Column13.Name = "Column13";
-            // 
-            // Column8
-            // 
-            Column8.Name = "Column8";
-            // 
-            // Column9
-            // 
-            Column9.Name = "Column9";
-            // 
-            // Column10
-            // 
-            Column10.Name = "Column10";
-            // 
-            // Column11
-            // 
-            Column11.Name = "Column11";
-            // 
-            // Column12
-            // 
-            Column12.Name = "Column12";
-            // 
-            // txtStock
-            // 
-            txtStock.Location = new Point(0, 0);
-            txtStock.Name = "txtStock";
-            txtStock.Size = new Size(100, 23);
-            txtStock.TabIndex = 0;
-            // 
-            // txtCategory
-            // 
-            txtCategory.Location = new Point(0, 0);
-            txtCategory.Name = "txtCategory";
-            txtCategory.Size = new Size(100, 23);
-            txtCategory.TabIndex = 0;
-            // 
-            // txtSize
-            // 
-            txtSize.Location = new Point(0, 0);
-            txtSize.Name = "txtSize";
-            txtSize.Size = new Size(100, 23);
-            txtSize.TabIndex = 0;
-            // 
-            // txtColor
-            // 
-            txtColor.Location = new Point(0, 0);
-            txtColor.Name = "txtColor";
-            txtColor.Size = new Size(100, 23);
-            txtColor.TabIndex = 0;
-            // 
-            // txtBrand
-            // 
-            txtBrand.Location = new Point(0, 0);
-            txtBrand.Name = "txtBrand";
-            txtBrand.Size = new Size(100, 23);
-            txtBrand.TabIndex = 0;
-            // 
-            // txtItemCode
-            // 
-            txtItemCode.Location = new Point(0, 0);
-            txtItemCode.Name = "txtItemCode";
-            txtItemCode.Size = new Size(100, 23);
-            txtItemCode.TabIndex = 0;
-            // 
-            // label7
-            // 
-            label7.Location = new Point(0, 0);
-            label7.Name = "label7";
-            label7.Size = new Size(100, 23);
-            label7.TabIndex = 0;
-            // 
-            // label11
-            // 
-            label11.Location = new Point(0, 0);
-            label11.Name = "label11";
-            label11.Size = new Size(100, 23);
-            label11.TabIndex = 0;
-            // 
-            // label10
-            // 
-            label10.Location = new Point(0, 0);
-            label10.Name = "label10";
-            label10.Size = new Size(100, 23);
-            label10.TabIndex = 0;
-            // 
-            // label9
-            // 
-            label9.Location = new Point(0, 0);
-            label9.Name = "label9";
-            label9.Size = new Size(100, 23);
-            label9.TabIndex = 0;
-            // 
-            // label8
-            // 
-            label8.Location = new Point(0, 0);
-            label8.Name = "label8";
-            label8.Size = new Size(100, 23);
-            label8.TabIndex = 0;
-            // 
-            // label6
-            // 
-            label6.Location = new Point(0, 0);
-            label6.Name = "label6";
-            label6.Size = new Size(100, 23);
-            label6.TabIndex = 0;
-            // 
-            // Column1
-            // 
-            Column1.HeaderText = "ID";
-            Column1.Name = "Column1";
-            Column1.Width = 64;
-            // 
-            // Column2
-            // 
-            Column2.HeaderText = "X";
-            Column2.Name = "Column2";
-            Column2.Width = 64;
-            // 
-            // Column3
-            // 
-            Column3.HeaderText = "Y";
-            Column3.Name = "Column3";
-            Column3.Width = 64;
-            // 
-            // Column4
-            // 
-            Column4.HeaderText = "W";
-            Column4.Name = "Column4";
-            Column4.Width = 64;
-            // 
-            // Column5
-            // 
-            Column5.HeaderText = "H";
-            Column5.Name = "Column5";
-            Column5.Width = 64;
-            // 
-            // Column6
-            // 
-            Column6.HeaderText = "활성화";
-            Column6.Name = "Column6";
-            Column6.Width = 64;
+            tabPage3.Text = "수동 제어";
+            tabPage3.UseVisualStyleBackColor = true;
             // 
             // setting
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.WhiteSmoke;
-            ClientSize = new Size(1023, 582);
+            ClientSize = new Size(1038, 658);
             Controls.Add(tabControl1);
             Name = "setting";
             Text = "setting";
@@ -354,37 +238,27 @@
 
         #endregion
 
-        // --- ▼▼▼ [복구] 맨 아래 변수 선언 코드 ▼▼▼ ---
+        // --- ▼▼▼ [수정!] 맨 아래 변수 선언 코드 ▼▼▼ ---
         private TabControl tabControl1;
         private TabPage tabPage1;
         private TabPage tabPage2;
         private TabPage tabPage3;
-        private GroupBox groupBox2;
-        private TextBox txtCategory;
-        private TextBox txtSize;
-        private TextBox txtColor;
-        private TextBox txtBrand;
-        private Label label11;
-        private Label label10;
-        private Label label9;
-        private Label label8;
-        private Label label6;
-        private DataGridView dataGridView2;
-        private Button btnRefresh;
-        private Button btnDelete;
-        private Button button3;
-        private Button btnRegister;
-        private DataGridViewTextBoxColumn Column13;
-        private DataGridViewTextBoxColumn Column8;
-        private DataGridViewTextBoxColumn Column9;
-        private DataGridViewTextBoxColumn Column10;
-        private DataGridViewTextBoxColumn Column11;
-        private DataGridViewTextBoxColumn Column12;
-        private TextBox txtItemCode;
-        private TextBox txtStock;
-        private Label label7;
 
-        // --- (★★★★★) tabPage1의 컨트롤 변수들 "복구" (★★★★★) ---
+        // --- (tabPage2 "제품 품목 설정" 관련 변수들 - 'dataGridView2'만 남김) ---
+        private DataGridView dataGridView2;
+
+        // --- ▼▼▼ [삭제!] groupBox2와 그 안의 컨트롤, 버튼 4개 변수 "모두 삭제" ▼▼▼ ---
+        // private GroupBox groupBox2;
+        // private TextBox txtCategory;
+        // ( ... 이하 txtSize, txtColor, txtBrand, txtItemCode, txtStock ... )
+        // ( ... 이하 label11, label10, label9, label8, label6, label7 ... )
+        // private Button btnRefresh;
+        // private Button btnDelete;
+        // private Button button3;
+        // private Button btnRegister;
+        // --- ▲▲▲ [삭제!] 여기까지 ▲▲▲ ---
+
+        // --- (tabPage1 "슬롯 상세 설정" 관련 변수들 - 그대로 둡니다) ---
         private SplitContainer splitContainer1;
         private DataGridView dataGridView1;
         private DataGridViewTextBoxColumn Column1;
@@ -393,6 +267,12 @@
         private DataGridViewTextBoxColumn Column4;
         private DataGridViewTextBoxColumn Column5;
         private DataGridViewTextBoxColumn Column6;
-        // --- ▲▲▲ [복구] 여기까지 ▲▲▲ ---
+        private DataGridViewTextBoxColumn Column13;
+        private DataGridViewTextBoxColumn Column8;
+        private DataGridViewTextBoxColumn Column9;
+        private DataGridViewTextBoxColumn Column10;
+        private DataGridViewTextBoxColumn Column11;
+        private DataGridViewTextBoxColumn Column12;
     }
 }
+
