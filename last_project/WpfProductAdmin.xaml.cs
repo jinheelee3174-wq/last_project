@@ -40,6 +40,13 @@ namespace last_project
             get { return TxtSize.Text; }
             set { TxtSize.Text = value; }
         }
+
+        [Obsolete("Use ProductSize instead of Size to avoid conflicts.")]
+        public string Size
+        {
+            get => ProductSize;
+            set => ProductSize = value;
+        }
         // --- ▲▲▲ [핵심 수정!] ---
 
         public string Category

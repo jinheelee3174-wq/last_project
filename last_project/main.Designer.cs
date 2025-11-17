@@ -251,10 +251,11 @@ namespace last_project
             // 
             webViewCam1.AllowExternalDrop = true;
             webViewCam1.CreationProperties = null;
-            webViewCam1.DefaultBackgroundColor = SysColor.White;
-            webViewCam1.Location = new Point(1, -2);
+            webViewCam1.DefaultBackgroundColor = SysColor.Black;
+            webViewCam1.Dock = DockStyle.Fill;
+            webViewCam1.Location = new Point(3, 3);
             webViewCam1.Name = "webViewCam1";
-            webViewCam1.Size = new Size(528, 329);
+            webViewCam1.Size = new Size(519, 317);
             webViewCam1.TabIndex = 0;
             webViewCam1.ZoomFactor = 1D;
             // 
