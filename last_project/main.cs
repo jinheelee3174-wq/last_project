@@ -17,7 +17,6 @@ using Microsoft.Web.WebView2.Core;
 
 namespace last_project
 {
-
     public partial class main : Form
     {
         private static readonly HttpClient client = new HttpClient();
