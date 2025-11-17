@@ -64,6 +64,7 @@
             tabControl1.Controls.Add(tabPage2);
             tabControl1.Controls.Add(tabPage3);
             tabControl1.Controls.Add(tabPage4);
+            tabControl1.Dock = DockStyle.Fill;
             tabControl1.Location = new Point(0, 3);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
@@ -232,7 +233,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1038, 658);
+            ClientSize = new Size(1034, 610);
             Controls.Add(tabControl1);
             Name = "setting";
             Text = "setting";

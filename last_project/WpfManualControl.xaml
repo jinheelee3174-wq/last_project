@@ -72,19 +72,23 @@
 
         <GroupBox Header="차량 이동" Grid.Row="0" Grid.Column="0" MinWidth="150">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                <Button x:Name="ForwardButton" Content="▲ 전진" Width="100" Height="30" 
-                        MouseDown="ForwardButton_MouseDown" 
-                        MouseUp="ForwardButton_MouseUp" />
 
-                <Button x:Name="StopButton" Content="■ 정지" Width="100" Height="35" FontWeight="Bold" Margin="5,10,5,10"
+                <Button x:Name="ForwardButton" Content="▲ 전진" Width="100" Height="40" 
+                        Margin="5,10,5,5"
+                        MouseDown="ForwardButton_MouseDown" 
+                        MouseUp="ForwardButton_MouseUp" Click="ForwardButton_Click" />
+
+                <Button x:Name="StopButton" Content="■ 정지" Width="100" Height="40" 
+                        Margin="5,5,5,5" FontWeight="Bold" 
                         Click="StopButton_Click" />
 
-                <Button x:Name="BackwardButton" Content="▼ 후진" Width="100" Height="30" 
+                <Button x:Name="BackwardButton" Content="▼ 후진" Width="100" Height="40" 
+                        Margin="5,5,5,10"
                         MouseDown="BackwardButton_MouseDown" 
-                        MouseUp="BackwardButton_MouseUp" />
+                        MouseUp="BackwardButton_MouseUp" Click="BackwardButton_Click" />
+
             </StackPanel>
         </GroupBox>
-
         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical">
             <GroupBox Header="속도 조절">
                 <StackPanel Orientation="Vertical">

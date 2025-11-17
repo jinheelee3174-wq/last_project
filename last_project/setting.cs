@@ -21,7 +21,8 @@ namespace last_project
 
         // --- ▼▼▼ [수정] 클래스 변수 5줄 (오류 방지) ▼▼▼ ---
         private Size largeFormSize = new Size(1043, 658);
-        private Size smallFormSize = new Size(473, 584);
+        private Size smallFormSize = new Size(520, 584);
+        private Size productTabSize = new Size(456, 581);
 
         // (WPF 컨트롤 3개를 클래스 변수로 선언)
         private WpfSlotEditor wpfEditor;
@@ -29,10 +30,33 @@ namespace last_project
         private WpfProductAdmin wpfProductAdmin;
         private bool isManualControlLoaded = false; // (tabPage3용 '깃발')
         // --- ▲▲▲ 'isSlotEditorLoaded' 깃발은 이제 필요 없음 ▲▲▲ ---
-
+        private WpfLogoutControl wpfLogoutControl;
+        private bool isLogoutLoaded = false;
         public setting()
         {
             InitializeComponent();
+        }
+
+        private void WpfLogoutControl_LogoutClicked(object sender, EventArgs e)
+        {
+            LogManager.Add("로그아웃 버튼 클릭됨. 확인창 표시.");
+
+            DialogResult result = MessageBox.Show(
+                "정말 로그아웃하시겠습니까?\n프로그램이 재시작되어 로그인 화면으로 돌아갑니다.",
+                "로그아웃 확인",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning
+            );
+
+            if (result == DialogResult.Yes)
+            {
+                LogManager.Add("사용자가 '예'를 선택. 애플리케이션을 다시 시작합니다.");
+                Application.Restart(); // 로그인 폼(second.cs)으로 돌아갑니다.
+            }
+            else
+            {
+                LogManager.Add("사용자가 '아니요'를 선택. 로그아웃 취소.");
+            }
         }
 
         // --- ▼▼▼ [추가!] 폼이 "처음 켜질 때" 실행되는 Load 이벤트 ▼▼▼ ---
@@ -101,7 +125,7 @@ namespace last_project
             // 1번 인덱스 ("제품 품목 설정")
             else if (tabControl1.SelectedIndex == 1)
             {
-                this.Size = smallFormSize;
+                this.Size = productTabSize;
 
                 // --- ▼▼▼ [핵심] tabPage2에 WPF 컨트롤 심기 ▼▼▼ ---
                 if (wpfProductAdmin == null)
@@ -146,7 +170,7 @@ namespace last_project
 
                 await LoadProductDataAsync();
             }
-            // --- ▼▼▼ [수정!] 2번 인덱스 ("수동 제어") ▼▼▼ ---
+            // 2번 인덱스 ("수동 제어")
             else if (tabControl1.SelectedIndex == 2)
             {
                 this.Size = largeFormSize;
@@ -168,6 +192,38 @@ namespace last_project
                     tabPage3.Controls.Add(wpfHostManual);
 
                     isManualControlLoaded = true; // "띄우기 완료" 깃발
+                }
+            }
+            // --- ▼▼▼ [3. 추가!] 3번 인덱스 ("로그아웃") 처리 ▼▼▼ ---
+            else if (tabControl1.SelectedIndex == 3)
+            {
+                // 로그아웃 탭은 창 크기를 작게 조절
+                this.Size = smallFormSize;
+
+                // 로그아웃 컨트롤이 아직 로드되지 않았다면
+                if (isLogoutLoaded == false)
+                {
+                    // 1. (그릇) ElementHost 생성
+                    ElementHost wpfHostLogout = new ElementHost();
+                    wpfHostLogout.Dock = DockStyle.Fill; // tabPage4 꽉 채우기
+
+                    // 2. (내용물) "WPF 로그아웃 컨트롤" 생성
+                    // (WpfLogoutControl.xaml과 .cs 파일이 프로젝트에 있어야 합니다)
+                    wpfLogoutControl = new WpfLogoutControl();
+
+                    // 3. (★★★★★) "신호" 연결!
+                    // WPF 컨트롤의 'LogoutClicked' 신호가 오면
+                    // 'WpfLogoutControl_LogoutClicked' 함수를 실행
+                    wpfLogoutControl.LogoutClicked += WpfLogoutControl_LogoutClicked;
+
+                    // 4. (조립) 그릇에 내용물을 담습니다.
+                    wpfHostLogout.Child = wpfLogoutControl;
+
+                    // 5. tabPage4 (네 번째 탭)에 '그릇'을 추가!
+                    // (디자이너에서 tabPage4가 있는지 확인하세요)
+                    tabPage4.Controls.Add(wpfHostLogout);
+
+                    isLogoutLoaded = true; // "띄우기 완료" 깃발
                 }
             }
             // --- ▲▲▲ [수정!] 여기까지 ▲▲▲ ---
