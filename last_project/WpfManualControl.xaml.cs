@@ -4,7 +4,7 @@ using System.Windows;      // (필수) RoutedEventArgs 등을 사용하기 위�
 using System.Windows.Controls; // (필수) UserControl, Slider, TextBlock 등을 사용하기 위해
 using System.Windows.Input;  // (필수) MouseButtonEventArgs 등을 사용하기 위해
 using System.ComponentModel; // <-- ▼▼▼ 1. '디자이너 모드' 확인을 위해 1줄 추가! ▼▼▼
-
+using System.IO.Ports;
 // (중요) x:Class="last_project.WpfManualControl"와 일치해야 합니다.
 namespace last_project
 {

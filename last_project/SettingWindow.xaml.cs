@@ -3,7 +3,7 @@ using System.IO.Ports;     // (필수) 아두이노 통신(SerialPort)을 위해
 using System.Windows;      // (필수) Window, RoutedEventArgs 등을 사용하기 위해
 using System.Windows.Controls; // (필수) Slider, TextBlock 등을 사용하기 위해
 using System.Windows.Input;  // (필수) MouseButtonEventArgs 등을 사용하기 위해
-
+using System.IO.Ports;
 // (중요) setting.xaml의 x:Class="last_project.SettingWindow"와 일치해야 합니다.
 namespace last_project
 {
