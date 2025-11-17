@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" d:DesignWidth="160"
-             Background="Black" Height="518">
+             Background="Black" Height="Auto">
     <UserControl.Resources>
         <Style TargetType="Button">
             <Setter Property="Height" Value="87" />
@@ -35,10 +35,11 @@
         </Style>
     </UserControl.Resources>
 
-    <StackPanel Orientation="Vertical" Margin="0,80,0,0">
+    <StackPanel Orientation="Vertical" Margin="0,70,0,0">
         <Button x:Name="BtnBalju" Content="Order" Click="BtnBalju_Click" />
         <Button x:Name="BtnTonggye" Content="statistics" Click="BtnTonggye_Click" />
         <Button x:Name="BtnLog" Content="picture Log" Click="BtnLog_Click" />
         <Button x:Name="BtnSetting" Content="Setting" Click="BtnSetting_Click" />
+        <Button x:Name="BtnAppLog" Content="Log" Click="BtnAppLog_Click" />
     </StackPanel>
 </UserControl>

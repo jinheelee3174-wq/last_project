@@ -14,7 +14,7 @@ namespace last_project
         public event EventHandler TonggyeButtonClicked;
         public event EventHandler LogButtonClicked;
         public event EventHandler SettingButtonClicked;
-
+        public event EventHandler AppLogButtonClicked;
         public WpfButtonMenu()
         {
             InitializeComponent();
@@ -40,6 +40,12 @@ namespace last_project
         private void BtnSetting_Click(object sender, RoutedEventArgs e)
         {
             SettingButtonClicked?.Invoke(this, EventArgs.Empty);
+        }
+        // ▼▼▼ [추가!] XAML에서 연결한 "BtnAppLog_Click" 함수입니다 ▼▼▼
+        private void BtnAppLog_Click(object sender, RoutedEventArgs e)
+        {
+            // "AppLog 버튼 눌렸다!" 라고 main.cs에 신호를 보냅니다.
+            AppLogButtonClicked?.Invoke(this, EventArgs.Empty);
         }
     }
 }

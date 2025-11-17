@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+ï»¿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -6,12 +6,12 @@ using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-// ¡å¡å¡å Ãß°¡µÈ using ¹® ¡å¡å¡å
+// â–¼â–¼â–¼ ì¶”ê°€ëœ using ë¬¸ â–¼â–¼â–¼
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 using Microsoft.Web.WebView2.Core;
-// ¡ã¡ã¡ã --- ¡ã¡ã¡ã
+// â–²â–²â–² --- â–²â–²â–²
 
 
 
@@ -22,17 +22,18 @@ namespace last_project
     {
         private static readonly HttpClient client = new HttpClient();
 
-        // ¡å¡å¡å WebRTC Ä«¸Ş¶ó ½ºÆ®¸² ÁÖ¼Ò ¡å¡å¡å
-        // (¡Ú¡Ú¡Ú¡Ú¡Ú ´Ô È¯°æÀÇ MediaMTX ¼­¹ö IP·Î ¼öÁ¤ÇÏ¼¼¿ä ¡Ú¡Ú¡Ú¡Ú¡Ú)
+        // â–¼â–¼â–¼ WebRTC ì¹´ë©”ë¼ ìŠ¤íŠ¸ë¦¼ ì£¼ì†Œ â–¼â–¼â–¼
+        // (â˜…â˜…â˜…â˜…â˜… ë‹˜ í™˜ê²½ì˜ MediaMTX ì„œë²„ IPë¡œ ìˆ˜ì •í•˜ì„¸ìš” â˜…â˜…â˜…â˜…â˜…)
         private const string MEDIAMTX_SERVER_IP = "192.168.0.72";
         private const string STREAM_NAME = "mystream";
         private const string WEBRTC_URL = $"http://{MEDIAMTX_SERVER_IP}:8889/{STREAM_NAME}";
-        // ¡ã¡ã¡ã --- ¡ã¡ã¡ã
+        // â–²â–²â–² --- â–²â–²â–²
 
         public main()
         {
             InitializeComponent();
             splitContainer1.Panel1.BackColor = System.Drawing.Color.Gray;
+            splitContainer1.BackColor = System.Drawing.Color.Black;
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -42,7 +43,7 @@ namespace last_project
 
         private void tabPage1_Click(object sender, EventArgs e)
         {
-            // (Âü°í) ÅÇ ÆäÀÌÁö ÀÚÃ¼°¡ ¾Æ´Ï¶ó, ±× ¾ÈÀÇ WebView2 ÄÁÆ®·ÑÀÌ ¿µ»óÀ» ¶ç¿ó´Ï´Ù.
+            // (ì°¸ê³ ) íƒ­ í˜ì´ì§€ ìì²´ê°€ ì•„ë‹ˆë¼, ê·¸ ì•ˆì˜ WebView2 ì»¨íŠ¸ë¡¤ì´ ì˜ìƒì„ ë„ì›ë‹ˆë‹¤.
         }
 
         private async void button2_Click(object sender, EventArgs e)
@@ -69,10 +70,10 @@ namespace last_project
             UpdateClock();
         }
 
-        // ¡å¡å¡å Æû ·Îµå ÇÔ¼ö (Ä«¸Ş¶ó ·ÎÁ÷ Ãß°¡µÊ) ¡å¡å¡å
+        // â–¼â–¼â–¼ í¼ ë¡œë“œ í•¨ìˆ˜ (ì¹´ë©”ë¼ ë¡œì§ ì¶”ê°€ë¨) â–¼â–¼â–¼
         private async void main_Load(object sender, EventArgs e)
         {
-            // ½Ã°è ¼³Á¤
+            // ì‹œê³„ ì„¤ì •
             lblClock.AutoSize = false;
             lblClock.Dock = DockStyle.Top;
             lblClock.Height = 80;
@@ -84,96 +85,96 @@ namespace last_project
             timer1.Start();
             UpdateClock();
 
-            // ±×¸®µå ¼³Á¤
+            // ê·¸ë¦¬ë“œ ì„¤ì •
             dataGridView1.AutoGenerateColumns = false;
 
             if (!this.DesignMode)
             {
-                // 1. ±âÁ¸ µ¥ÀÌÅÍ ·Îµå
+                // 1. ê¸°ì¡´ ë°ì´í„° ë¡œë“œ
                 await LoadProductDataAsync();
 
-                // 2. ¡å¡å¡å Ä«¸Ş¶ó WebView2 ÃÊ±âÈ­ (Ãß°¡µÈ ºÎºĞ) ¡å¡å¡å
+                // 2. â–¼â–¼â–¼ ì¹´ë©”ë¼ WebView2 ì´ˆê¸°í™” (ì¶”ê°€ëœ ë¶€ë¶„) â–¼â–¼â–¼
                 await InitializeCameraWebViewAsync();
             }
-            // 1. (¡Ú¡Ú¡Ú¡Ú¡Ú) WPF ¸Ş´º ÀÎ½ºÅÏ½º¸¦ ¸¸µì´Ï´Ù.
+            // 1. (â˜…â˜…â˜…â˜…â˜…) WPF ë©”ë‰´ ì¸ìŠ¤í„´ìŠ¤ë¥¼ ë§Œë“­ë‹ˆë‹¤.
             WpfButtonMenu wpfMenu = new WpfButtonMenu();
 
-            // 2. (¡Ú¡Ú¡Ú¡Ú¡Ú) WPF°¡ º¸³½ "½ÅÈ£"¸¦ main.csÀÇ ÇÔ¼ö¿Í "¿¬°á"ÇÕ´Ï´Ù.
+            // 2. (â˜…â˜…â˜…â˜…â˜…) WPFê°€ ë³´ë‚¸ "ì‹ í˜¸"ë¥¼ main.csì˜ í•¨ìˆ˜ì™€ "ì—°ê²°"í•©ë‹ˆë‹¤.
 
-            // (¿¹) WPFÀÇ "Setting" ¹öÆ° ½ÅÈ£°¡ ¿À¸é -> 
-            //      main.csÀÇ "btnSetting_Click" ÇÔ¼ö¸¦ ½ÇÇàÇØ¶ó
+            // (ì˜ˆ) WPFì˜ "Setting" ë²„íŠ¼ ì‹ í˜¸ê°€ ì˜¤ë©´ -> 
+            //      main.csì˜ "btnSetting_Click" í•¨ìˆ˜ë¥¼ ì‹¤í–‰í•´ë¼
             wpfMenu.SettingButtonClicked += btnSetting_Click;
+            wpfMenu.AppLogButtonClicked += btnAppLog_Click;
+            // (ì•„ë˜ 3ê°œ ë²„íŠ¼ë„ ê¸°ì¡´ í•¨ìˆ˜ì— ì—°ê²°í•˜ê±°ë‚˜ ìƒˆ í•¨ìˆ˜ë¥¼ ë§Œë“œì„¸ìš”)
+            // wpfMenu.BaljuButtonClicked += button1_Click; // (ì˜ˆì‹œ)
+            // wpfMenu.TonggyeButtonClicked += button2_Click; // (ì˜ˆì‹œ)
+            // wpfMenu.LogButtonClicked += button3_Click; // (ì˜ˆì‹œ)
 
-            // (¾Æ·¡ 3°³ ¹öÆ°µµ ±âÁ¸ ÇÔ¼ö¿¡ ¿¬°áÇÏ°Å³ª »õ ÇÔ¼ö¸¦ ¸¸µå¼¼¿ä)
-            // wpfMenu.BaljuButtonClicked += button1_Click; // (¿¹½Ã)
-            // wpfMenu.TonggyeButtonClicked += button2_Click; // (¿¹½Ã)
-            // wpfMenu.LogButtonClicked += button3_Click; // (¿¹½Ã)
-
-            // 3. (ÇÙ½É) ElementHost(±×¸©)¿¡ WPF ¸Ş´º(³»¿ë¹°)¸¦ ´ã½À´Ï´Ù.
-            // (¿ì¸®°¡ 1´Ü°è¿¡¼­ ÄÚµå·Î ¸¸µç 'elementHost1' º¯¼ö¸¦ »ç¿ë)
+            // 3. (í•µì‹¬) ElementHost(ê·¸ë¦‡)ì— WPF ë©”ë‰´(ë‚´ìš©ë¬¼)ë¥¼ ë‹´ìŠµë‹ˆë‹¤.
+            // (ìš°ë¦¬ê°€ 1ë‹¨ê³„ì—ì„œ ì½”ë“œë¡œ ë§Œë“  'elementHost1' ë³€ìˆ˜ë¥¼ ì‚¬ìš©)
             elementHost1.Child = wpfMenu;
 
-            // 1. (¡Ú¡Ú¡Ú¡Ú¡Ú) WPF °Ë»öÃ¢ ÀÎ½ºÅÏ½º¸¦ ¸¸µì´Ï´Ù.
+            // 1. (â˜…â˜…â˜…â˜…â˜…) WPF ê²€ìƒ‰ì°½ ì¸ìŠ¤í„´ìŠ¤ë¥¼ ë§Œë“­ë‹ˆë‹¤.
             WpfSearchBar wpfSearch = new WpfSearchBar();
 
-            // 2. (¡Ú¡Ú¡Ú¡Ú¡Ú) WPF°¡ º¸³½ "½ÅÈ£"¸¦ main.csÀÇ ÇÔ¼ö¿Í "¿¬°á"ÇÕ´Ï´Ù.
+            // 2. (â˜…â˜…â˜…â˜…â˜…) WPFê°€ ë³´ë‚¸ "ì‹ í˜¸"ë¥¼ main.csì˜ í•¨ìˆ˜ì™€ "ì—°ê²°"í•©ë‹ˆë‹¤.
             wpfSearch.SearchButtonClicked += WpfSearch_SearchButtonClicked;
             wpfSearch.RefreshButtonClicked += WpfSearch_RefreshButtonClicked;
 
-            // 3. (ÇÙ½É) ElementHost(±×¸©)¿¡ WPF °Ë»öÃ¢(³»¿ë¹°)À» ´ã½À´Ï´Ù.
+            // 3. (í•µì‹¬) ElementHost(ê·¸ë¦‡)ì— WPF ê²€ìƒ‰ì°½(ë‚´ìš©ë¬¼)ì„ ë‹´ìŠµë‹ˆë‹¤.
             elementHost2.Child = wpfSearch;
 
             var grid = dataGridView1;
 
-            // 1. (ÇÙ½É) ±×¸®µå Å×µÎ¸® ¾ø¾Ö±â
+            // 1. (í•µì‹¬) ê·¸ë¦¬ë“œ í…Œë‘ë¦¬ ì—†ì• ê¸°
             grid.BorderStyle = BorderStyle.None;
 
-            // 2. ±×¸®µå ÀüÃ¼ ¹è°æ»ö (ºó °ø°£)
-            grid.BackgroundColor = System.Drawing.Color.Black; // Æû ¹è°æ»ö°ú ¸ÂÃã
+            // 2. ê·¸ë¦¬ë“œ ì „ì²´ ë°°ê²½ìƒ‰ (ë¹ˆ ê³µê°„)
+            grid.BackgroundColor = System.Drawing.Color.Black; // í¼ ë°°ê²½ìƒ‰ê³¼ ë§ì¶¤
 
-            // 3. Çì´õ(Á¦¸ñ) ½ºÅ¸ÀÏ ¼³Á¤
-            grid.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None; // Çì´õ Å×µÎ¸® ¾øÀ½
-            grid.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(25, 25, 25); // Çì´õ ¹è°æ»ö (ÁøÇÑ °ËÁ¤)
-            grid.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White; // Çì´õ ±ÛÀÚ»ö (Èò»ö)
-            grid.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10f, FontStyle.Bold); // Çì´õ ÆùÆ®
-            grid.EnableHeadersVisualStyles = false; // (Áß¿ä) ÀÌ°É ²¨¾ß À§ ½ºÅ¸ÀÏÀÌ ¸ÔÈû
+            // 3. í—¤ë”(ì œëª©) ìŠ¤íƒ€ì¼ ì„¤ì •
+            grid.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None; // í—¤ë” í…Œë‘ë¦¬ ì—†ìŒ
+            grid.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(25, 25, 25); // í—¤ë” ë°°ê²½ìƒ‰ (ì§„í•œ ê²€ì •)
+            grid.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White; // í—¤ë” ê¸€ììƒ‰ (í°ìƒ‰)
+            grid.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10f, FontStyle.Bold); // í—¤ë” í°íŠ¸
+            grid.EnableHeadersVisualStyles = false; // (ì¤‘ìš”) ì´ê±¸ êº¼ì•¼ ìœ„ ìŠ¤íƒ€ì¼ì´ ë¨¹í˜
 
-            // 4. ¼¿(Ä­) ½ºÅ¸ÀÏ ¼³Á¤
-            grid.RowHeadersVisible = false; // (¸Ç ¿ŞÂÊ) Çà ¼±ÅÃ È¸»ö ¹Ù ¼û±â±â
-            grid.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(45, 45, 48); // ¼¿ ¹è°æ»ö (¾îµÎ¿î È¸»ö)
-            grid.DefaultCellStyle.ForeColor = System.Drawing.Color.White; // ¼¿ ±ÛÀÚ»ö (Èò»ö)
+            // 4. ì…€(ì¹¸) ìŠ¤íƒ€ì¼ ì„¤ì •
+            grid.RowHeadersVisible = false; // (ë§¨ ì™¼ìª½) í–‰ ì„ íƒ íšŒìƒ‰ ë°” ìˆ¨ê¸°ê¸°
+            grid.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(45, 45, 48); // ì…€ ë°°ê²½ìƒ‰ (ì–´ë‘ìš´ íšŒìƒ‰)
+            grid.DefaultCellStyle.ForeColor = System.Drawing.Color.White; // ì…€ ê¸€ììƒ‰ (í°ìƒ‰)
     
             grid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-            grid.GridColor = System.Drawing.Color.Gray; // ¼¿ ±¸ºĞ¼± »ö»ó
+            grid.GridColor = System.Drawing.Color.Gray; // ì…€ êµ¬ë¶„ì„  ìƒ‰ìƒ
 
-            // 5. ¼¿ "¼±ÅÃ" ½ºÅ¸ÀÏ ¼³Á¤
-            grid.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.CornflowerBlue; // ¼±ÅÃ ½Ã ¹è°æ»ö (WPF ¹öÆ°°ú ºñ½ÁÇÏ°Ô)
-            grid.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.White; // ¼±ÅÃ ½Ã ±ÛÀÚ»ö
+            // 5. ì…€ "ì„ íƒ" ìŠ¤íƒ€ì¼ ì„¤ì •
+            grid.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.CornflowerBlue; // ì„ íƒ ì‹œ ë°°ê²½ìƒ‰ (WPF ë²„íŠ¼ê³¼ ë¹„ìŠ·í•˜ê²Œ)
+            grid.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.White; // ì„ íƒ ì‹œ ê¸€ììƒ‰
 
-            // 6. (¿É¼Ç) Çà ³ôÀÌ Á¶Àı
-            grid.RowTemplate.Height = 30; // Çà ³ôÀÌ¸¦ »ìÂ¦
-            grid.ColumnHeadersHeight = 35; // Çì´õ ³ôÀÌ¸¦ »ìÂ¦
+            // 6. (ì˜µì…˜) í–‰ ë†’ì´ ì¡°ì ˆ
+            grid.RowTemplate.Height = 30; // í–‰ ë†’ì´ë¥¼ ì‚´ì§
+            grid.ColumnHeadersHeight = 35; // í—¤ë” ë†’ì´ë¥¼ ì‚´ì§
 
            
         }
 
-        // ¡å¡å¡å »õ·Î Ãß°¡µÈ Ä«¸Ş¶ó ÃÊ±âÈ­ ÇÔ¼ö ¡å¡å¡å
+        // â–¼â–¼â–¼ ìƒˆë¡œ ì¶”ê°€ëœ ì¹´ë©”ë¼ ì´ˆê¸°í™” í•¨ìˆ˜ â–¼â–¼â–¼
         private async Task InitializeCameraWebViewAsync()
         {
             try
             {
-                // µğÀÚÀÌ³Ê¿¡¼­ Ãß°¡ÇÑ 'webViewCam1' ÄÁÆ®·ÑÀ» ÃÊ±âÈ­ÇÕ´Ï´Ù.
+                // ë””ìì´ë„ˆì—ì„œ ì¶”ê°€í•œ 'webViewCam1' ì»¨íŠ¸ë¡¤ì„ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
                 await webViewCam1.EnsureCoreWebView2Async(null);
 
-                // ÃÊ±âÈ­°¡ ¿Ï·áµÇ¸é WebRTC ÁÖ¼Ò·Î Á¢¼ÓÇÕ´Ï´Ù.
+                // ì´ˆê¸°í™”ê°€ ì™„ë£Œë˜ë©´ WebRTC ì£¼ì†Œë¡œ ì ‘ì†í•©ë‹ˆë‹¤.
                 webViewCam1.CoreWebView2.Navigate(WEBRTC_URL);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"CAM1 WebView2 ÃÊ±âÈ­ ¿À·ù: {ex.Message}");
+                MessageBox.Show($"CAM1 WebView2 ì´ˆê¸°í™” ì˜¤ë¥˜: {ex.Message}");
             }
         }
-        // ¡ã¡ã¡ã --- ¡ã¡ã¡ã
+        // â–²â–²â–² --- â–²â–²â–²
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -197,13 +198,25 @@ namespace last_project
 
         private void tabPage1_Click_1(object sender, EventArgs e)
         {
-            // (tabPage1_Click°ú Áßº¹µÈ ÀÌº¥Æ® ÇÚµé·¯·Î º¸ÀÔ´Ï´Ù. ±×´ë·Î µÓ´Ï´Ù.)
+            // (tabPage1_Clickê³¼ ì¤‘ë³µëœ ì´ë²¤íŠ¸ í•¸ë“¤ëŸ¬ë¡œ ë³´ì…ë‹ˆë‹¤. ê·¸ëŒ€ë¡œ ë‘¡ë‹ˆë‹¤.)
         }
 
         private void btnSetting_Click(object sender, EventArgs e)
         {
             setting settingForm = new setting();
             settingForm.ShowDialog();
+        }
+
+        private void btnAppLog_Click(object sender, EventArgs e)
+        {
+Â  Â  Â  Â  Â  Â  // 1. (ë¡œê·¸ ê¸°ë¡) "Log" ë²„íŠ¼ì„ ëˆŒë €ë‹¤ëŠ” ì‚¬ì‹¤ ìì²´ë¥¼ ë¡œê·¸ë¡œ ë‚¨ê¹ë‹ˆë‹¤.
+Â  Â  Â  Â  Â  Â  // (ì´ LogManagerëŠ” ì´ì „ì— ë§Œë“¤ê¸°ë¡œ í–ˆë˜ LogManager.cs í´ë˜ìŠ¤ì…ë‹ˆë‹¤)
+Â  Â  Â  Â  Â  Â  LogManager.Add("Log ë²„íŠ¼ í´ë¦­. ë¡œê·¸ í¼ì„ ì—½ë‹ˆë‹¤.");
+
+Â  Â  Â  Â  Â  Â  // 2. (ë¡œê·¸ í¼ ì—´ê¸°) ì´ì „ì— ë§Œë“¤ê¸°ë¡œ í–ˆë˜ 'LogForm'ì„ ìƒì„±í•˜ê³  ì—½ë‹ˆë‹¤.
+Â  Â  Â  Â  Â  Â  // (Show()ë¥¼ ì‚¬ìš©í•´ì•¼ ë©”ì¸ í¼ê³¼ ê°™ì´ ë³¼ ìˆ˜ ìˆìŠµë‹ˆë‹¤)
+Â  Â  Â  Â  Â  Â  LogForm logForm = new LogForm();
+            logForm.Show();
         }
 
         private async Task LoadProductDataAsync()
@@ -217,7 +230,7 @@ namespace last_project
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonResponse = await response.Content.ReadAsStringAsync();
-                    System.Diagnostics.Debug.WriteLine("--- ¼­¹ö¿¡¼­ ¹ŞÀº JSON ---");
+                    System.Diagnostics.Debug.WriteLine("--- ì„œë²„ì—ì„œ ë°›ì€ JSON ---");
                     System.Diagnostics.Debug.WriteLine(jsonResponse);
 
                     DataTable productTable = JsonConvert.DeserializeObject<DataTable>(jsonResponse);
@@ -225,12 +238,12 @@ namespace last_project
                 }
                 else
                 {
-                    MessageBox.Show($"¼­¹ö ÀÀ´ä ¿À·ù: {response.StatusCode}");
+                    MessageBox.Show($"ì„œë²„ ì‘ë‹µ ì˜¤ë¥˜: {response.StatusCode}");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"µ¥ÀÌÅÍ ·Îµå Áß ¿À·ù ¹ß»ı: {ex.Message}");
+                MessageBox.Show($"ë°ì´í„° ë¡œë“œ ì¤‘ ì˜¤ë¥˜ ë°œìƒ: {ex.Message}");
             }
         }
 
@@ -249,21 +262,21 @@ namespace last_project
                         int stock = Convert.ToInt32(row.Cells[stockValueColumnName].Value);
                         DataGridViewCell statusCell = row.Cells[stockStatusColumnName];
 
-                        if (stock <= 2) // 2°³ ÀÌÇÏ (À§Çè)
+                        if (stock <= 2) // 2ê°œ ì´í•˜ (ìœ„í—˜)
                         {
-                            statusCell.Value = "À§Çè";
+                            statusCell.Value = "ìœ„í—˜";
                             statusCell.Style.ForeColor = System.Drawing.Color.Red;
                             statusCell.Style.Font = new Font(dataGridView1.Font, FontStyle.Bold);
                         }
-                        else if (stock == 3) // µü 3°³ (ÁÖÀÇ)
+                        else if (stock == 3) // ë”± 3ê°œ (ì£¼ì˜)
                         {
-                            statusCell.Value = "ÁÖÀÇ";
+                            statusCell.Value = "ì£¼ì˜";
                             statusCell.Style.ForeColor = System.Drawing.Color.Orange;
                             statusCell.Style.Font = new Font(dataGridView1.Font, FontStyle.Regular);
                         }
-                        else // 4°³ ÀÌ»ó (Á¤»ó)
+                        else // 4ê°œ ì´ìƒ (ì •ìƒ)
                         {
-                            statusCell.Value = "Á¤»ó";
+                            statusCell.Value = "ì •ìƒ";
                             statusCell.Style.ForeColor = System.Drawing.Color.Green;
                             statusCell.Style.Font = new Font(dataGridView1.Font, FontStyle.Regular);
                         }
@@ -272,7 +285,7 @@ namespace last_project
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Àç°í »óÅÂ ¾÷µ¥ÀÌÆ® Áß ¿À·ù: {ex.Message}");
+                MessageBox.Show($"ì¬ê³  ìƒíƒœ ì—…ë°ì´íŠ¸ ì¤‘ ì˜¤ë¥˜: {ex.Message}");
             }
         }
 
@@ -280,14 +293,14 @@ namespace last_project
 
         private void WpfSearch_SearchButtonClicked(object sender, EventArgs e)
         {
-            // 1. (¡Ú¡Ú¡Ú¡Ú¡Ú) elementHost2(±×¸©)¿¡¼­ WpfSearchBar(³»¿ë¹°)¸¦ ²¨³À´Ï´Ù.
+            // 1. (â˜…â˜…â˜…â˜…â˜…) elementHost2(ê·¸ë¦‡)ì—ì„œ WpfSearchBar(ë‚´ìš©ë¬¼)ë¥¼ êº¼ëƒ…ë‹ˆë‹¤.
             WpfSearchBar wpfSearch = elementHost2.Child as WpfSearchBar;
             if (wpfSearch == null) return;
 
-            // 2. WpfSearchBar¿¡¼­ °Ë»ö¾î¸¦ °¡Á®¿É´Ï´Ù.
+            // 2. WpfSearchBarì—ì„œ ê²€ìƒ‰ì–´ë¥¼ ê°€ì ¸ì˜µë‹ˆë‹¤.
             string searchTerm = wpfSearch.SearchTerm.Trim();
 
-            // 3. ±×¸®µåÀÇ DataSource¸¦ DataTable·Î º¯È¯ÇÕ´Ï´Ù.
+            // 3. ê·¸ë¦¬ë“œì˜ DataSourceë¥¼ DataTableë¡œ ë³€í™˜í•©ë‹ˆë‹¤.
             DataTable table = dataGridView1.DataSource as DataTable;
             if (table == null) return;
 
@@ -297,7 +310,7 @@ namespace last_project
             }
             else
             {
-                // 4. (ÇÙ½É) DataTable ÇÊÅÍ ½ÇÇà
+                // 4. (í•µì‹¬) DataTable í•„í„° ì‹¤í–‰
                 string safeSearchTerm = searchTerm.Replace("'", "''");
                 table.DefaultView.RowFilter = string.Format(
                     "item_code LIKE '%{0}%' OR " +
@@ -313,23 +326,23 @@ namespace last_project
 
         private async void WpfSearch_RefreshButtonClicked(object sender, EventArgs e)
         {
-            // 1. (¡Ú¡Ú¡Ú¡Ú¡Ú) elementHost2(±×¸©)¿¡¼­ WpfSearchBar(³»¿ë¹°)¸¦ ²¨³À´Ï´Ù.
+            // 1. (â˜…â˜…â˜…â˜…â˜…) elementHost2(ê·¸ë¦‡)ì—ì„œ WpfSearchBar(ë‚´ìš©ë¬¼)ë¥¼ êº¼ëƒ…ë‹ˆë‹¤.
             WpfSearchBar wpfSearch = elementHost2.Child as WpfSearchBar;
 
-            // 2. °Ë»ö ÇÊÅÍ¸¦ ÇØÁ¦ÇÕ´Ï´Ù.
+            // 2. ê²€ìƒ‰ í•„í„°ë¥¼ í•´ì œí•©ë‹ˆë‹¤.
             DataTable table = dataGridView1.DataSource as DataTable;
             if (table != null)
             {
                 table.DefaultView.RowFilter = string.Empty;
             }
 
-            // 3. °Ë»ö ÅØ½ºÆ®¹Ú½º¸¦ ºñ¿ó´Ï´Ù.
+            // 3. ê²€ìƒ‰ í…ìŠ¤íŠ¸ë°•ìŠ¤ë¥¼ ë¹„ì›ë‹ˆë‹¤.
             if (wpfSearch != null)
             {
                 wpfSearch.SearchTerm = "";
             }
 
-            // 4. [±âÁ¸ ±â´É] ¼­¹ö¿¡¼­ »õ µ¥ÀÌÅÍ¸¦ ·ÎµåÇÕ´Ï´Ù.
+            // 4. [ê¸°ì¡´ ê¸°ëŠ¥] ì„œë²„ì—ì„œ ìƒˆ ë°ì´í„°ë¥¼ ë¡œë“œí•©ë‹ˆë‹¤.
             await LoadProductDataAsync();
         }
 
@@ -337,7 +350,12 @@ namespace last_project
 
 
 
-    } // public partial class main ³¡
+
+
+    } // public partial class main ë
+
+
+
 
     public class Product
     {
@@ -350,4 +368,4 @@ namespace last_project
         public string size { get; set; }
         public int stock { get; set; }
     }
-} // namespace last_project ³¡
+} // namespace last_project ë
