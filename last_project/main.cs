@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Microsoft.Web.WebView2.Core;
 // ▲▲▲ --- ▲▲▲
+using System.Windows.Forms.Integration;
 
 
 
@@ -28,6 +29,8 @@ namespace last_project
         private const string STREAM_NAME = "mystream";
         private const string WEBRTC_URL = $"http://{MEDIAMTX_SERVER_IP}:8889/{STREAM_NAME}";
         // ▲▲▲ --- ▲▲▲
+        private PictureLogViewModel pictureLogViewModel = new PictureLogViewModel();
+       
 
         public main()
         {
@@ -105,10 +108,15 @@ namespace last_project
             //      main.cs의 "btnSetting_Click" 함수를 실행해라
             wpfMenu.SettingButtonClicked += btnSetting_Click;
             wpfMenu.AppLogButtonClicked += btnAppLog_Click;
-            // (아래 3개 버튼도 기존 함수에 연결하거나 새 함수를 만드세요)
-            // wpfMenu.BaljuButtonClicked += button1_Click; // (예시)
-            // wpfMenu.TonggyeButtonClicked += button2_Click; // (예시)
-            // wpfMenu.LogButtonClicked += button3_Click; // (예시)
+
+            // ▼▼▼ [수정된 부분] ▼▼▼
+            // "Picture Log" 버튼(BtnLog)의 신호를 WpfMenu_LogButtonClicked 함수와 연결합니다.
+            wpfMenu.LogButtonClicked += WpfMenu_LogButtonClicked;
+
+            // (다른 버튼들도 필요시 여기에 연결)
+            // wpfMenu.BaljuButtonClicked += button1_Click; 
+            // wpfMenu.TonggyeButtonClicked += button2_Click; 
+            // ▲▲▲ [수정 완료] ▲▲▲
 
             // 3. (핵심) ElementHost(그릇)에 WPF 메뉴(내용물)를 담습니다.
             // (우리가 1단계에서 코드로 만든 'elementHost1' 변수를 사용)
@@ -143,7 +151,7 @@ namespace last_project
             grid.RowHeadersVisible = false; // (맨 왼쪽) 행 선택 회색 바 숨기기
             grid.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(45, 45, 48); // 셀 배경색 (어두운 회색)
             grid.DefaultCellStyle.ForeColor = System.Drawing.Color.White; // 셀 글자색 (흰색)
-    
+
             grid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             grid.GridColor = System.Drawing.Color.Gray; // 셀 구분선 색상
 
@@ -155,9 +163,62 @@ namespace last_project
             grid.RowTemplate.Height = 30; // 행 높이를 살짝
             grid.ColumnHeadersHeight = 35; // 헤더 높이를 살짝
 
-           
+
         }
 
+        /// <summary>
+        /// (WPF) "Picture Log" 버튼 클릭 시 실행
+        /// </summary>
+        // (▼▼▼ 새 폼을 띄우는 이 함수로 통째로 교체하세요 ▼▼▼)
+        /// <summary>
+        /// (WPF) "Picture Log" 버튼 클릭 시 실행 (새 폼으로 띄우기)
+        /// </summary>
+        /// <summary>
+        /// (WPF) "Picture Log" 버튼 클릭 시 실행 (새 폼으로 띄우기)
+        /// </summary>
+        private void WpfMenu_LogButtonClicked(object sender, EventArgs e)
+        {
+            // 1. (그릇) ElementHost 생성
+            ElementHost host = new ElementHost();
+            host.Dock = DockStyle.Fill;
+
+            // 2. (내용물) WpfPictureLog 컨트롤 생성
+            WpfPictureLog wpfControl = new WpfPictureLog();
+
+            // 3. (★★★★★) 내용물에 ViewModel(데이터) 연결
+            wpfControl.DataContext = this.pictureLogViewModel;
+
+            // 4. (조립) 그릇에 내용물을 담습니다.
+            host.Child = wpfControl;
+
+            // 5. (새 폼) WPF 컨트롤을 담을 새 WinForms 폼을 생성합니다.
+            Form logForm = new Form();
+            logForm.Text = "Picture Log Viewer"; // 폼 제목
+            logForm.Size = new System.Drawing.Size(503, 713);
+            logForm.StartPosition = FormStartPosition.CenterScreen; // 화면 중앙
+            logForm.BackColor = System.Drawing.Color.FromArgb(45, 45, 48); // 배경색
+
+            // 6. 새 폼에 (그릇) ElementHost를 추가합니다.
+            logForm.Controls.Add(host);
+
+            // 7. 폼을 띄웁니다.
+            logForm.Show(); // (ShowDialog() 아님)
+
+            LogManager.Add("Picture Log 폼을 열었습니다.");
+
+            // --- ▼▼▼ [수정된 테스트 코드!] ▼▼▼ ---
+
+            // 1. 알려주신 경로 ( \ -> \\ 로 변경)
+            string myPath = "C:\\Users\\모블\\Desktop\\사진";
+
+            // 2. (★★★★★) '사진' 폴더 안에 있는 실제 파일 4개 추가
+            // (3열 그리드에 맞춰 2줄로 표시될 것입니다)
+
+            pictureLogViewModel.AddLog(myPath + "\\거누.jpg", "거누");
+            pictureLogViewModel.AddLog(myPath + "\\모블FC.jpg", "모블FC");
+            pictureLogViewModel.AddLog(myPath + "\\쏭이형.png", "씅이형");
+            pictureLogViewModel.AddLog(myPath + "\\주엽이형.jpg", "주엽이형");
+        }
         // ▼▼▼ 새로 추가된 카메라 초기화 함수 ▼▼▼
         private async Task InitializeCameraWebViewAsync()
         {

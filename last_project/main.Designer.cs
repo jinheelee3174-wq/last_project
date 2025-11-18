@@ -341,6 +341,8 @@ namespace last_project
         private TabPage tabPage3;
         private TabPage tabPage4;
         private TabPage tabPage5;
+      
+
         private Label lblClock;
         private System.Windows.Forms.Timer timer1;
         private BindingSource bindingSource1;
