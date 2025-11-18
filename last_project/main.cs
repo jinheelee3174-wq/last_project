@@ -227,6 +227,7 @@ namespace last_project
                 // 디자이너에서 추가한 'webViewCam1' 컨트롤을 초기화합니다.
                 await webViewCam1.EnsureCoreWebView2Async(null);
 
+                webViewCam1.CoreWebView2.NavigationCompleted += CoreWebView2_NavigationCompleted;
                 // 초기화가 완료되면 WebRTC 주소로 접속합니다.
                 webViewCam1.CoreWebView2.Navigate(WEBRTC_URL);
             }
@@ -408,12 +409,67 @@ namespace last_project
         }
 
 
+        private async void CoreWebView2_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
+        {
+            // 페이지 로드가 성공했을 때만 실행
+            if (e.IsSuccess)
+            {
+                // MediaMTX의 기본 WebRTC 플레이어는 <video> 태그를 사용합니다.
+                // 이 <video> 태그가 컨테이너를 꽉 채우도록 CSS를 주입합니다.
+
+                // 1. (추천) "Cover" 모드:
+                //    비율을 유지하면서 꽉 채웁니다. (영상의 상/하 또는 좌/우 일부가 잘릴 수 있음)
+                string css = @"
+                    video {
+                        object-fit: cover !important; /* 'cover'로 설정 */
+                        width: 100% !important;
+                        height: 100% !important;
+                        left: 0 !important;
+                        top: 0 !important;
+                    }
+                    body {
+                        overflow: hidden !important; /* 스크롤바 숨기기 */
+                        background-color: black !important; /* 여백 배경 검은색 */
+                    }
+                ";
+
+                // 2. (참고) "Fill" 모드:
+                //    비율을 무시하고 꽉 채웁니다. (영상이 찌그러져 보일 수 있음)
+                /*
+                string css = @"
+                    video {
+                        object-fit: fill !important; // 'fill'로 설정
+                        width: 100% !important;
+                        height: 100% !important;
+                        left: 0 !important;
+                        top: 0 !important;
+                    }
+                    body {
+                        overflow: hidden !important;
+                        background-color: black !important;
+                    }
+                ";
+                */
+
+
+                // CSS를 <style> 태그로 만들어서 <body>에 주입하는 스크립트 실행
+                string script = $@"
+                    var style = document.createElement('style');
+                    style.type = 'text/css';
+                    style.innerHTML = `{css.Replace("\n", "").Replace("\r", "")}`;
+                    document.body.appendChild(style);
+                ";
+
+                await webViewCam1.CoreWebView2.ExecuteScriptAsync(script);
+            }
+        }
 
 
 
 
 
     } // public partial class main 끝
+
 
 
 

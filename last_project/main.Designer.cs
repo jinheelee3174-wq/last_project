@@ -30,12 +30,6 @@ namespace last_project
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             splitContainer1 = new SplitContainer();
             lblClock = new Label();
             elementHost1 = new System.Windows.Forms.Integration.ElementHost();
@@ -47,8 +41,7 @@ namespace last_project
             Column5 = new DataGridViewTextBoxColumn();
             Column6 = new DataGridViewTextBoxColumn();
             Column7 = new DataGridViewTextBoxColumn();
-            chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            elementHost2 = new System.Windows.Forms.Integration.ElementHost();
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
             webViewCam1 = new Microsoft.Web.WebView2.WinForms.WebView2();
@@ -56,7 +49,6 @@ namespace last_project
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
             tabPage5 = new TabPage();
-            elementHost2 = new System.Windows.Forms.Integration.ElementHost();
             timer1 = new System.Windows.Forms.Timer(components);
             bindingSource1 = new BindingSource(components);
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
@@ -65,8 +57,6 @@ namespace last_project
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)chart2).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)chart1).BeginInit();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)webViewCam1).BeginInit();
@@ -92,10 +82,8 @@ namespace last_project
             // 
             splitContainer1.Panel2.BackColor = SysColor.Black;
             splitContainer1.Panel2.Controls.Add(dataGridView1);
-            splitContainer1.Panel2.Controls.Add(chart2);
-            splitContainer1.Panel2.Controls.Add(chart1);
-            splitContainer1.Panel2.Controls.Add(tabControl1);
             splitContainer1.Panel2.Controls.Add(elementHost2);
+            splitContainer1.Panel2.Controls.Add(tabControl1);
             splitContainer1.Size = new Size(915, 649);
             splitContainer1.SplitterDistance = 162;
             splitContainer1.TabIndex = 0;
@@ -125,15 +113,15 @@ namespace last_project
             // dataGridView1
             // 
             dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridView1.BackgroundColor = SysColor.Black;
             dataGridView1.BorderStyle = BorderStyle.None;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Column1, Column2, Column3, Column4, Column5, Column6, Column7 });
-            dataGridView1.Location = new Point(3, 393);
+            dataGridView1.Dock = DockStyle.Fill;
+            dataGridView1.Location = new Point(0, 391);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.Size = new Size(746, 253);
+            dataGridView1.Size = new Size(749, 258);
             dataGridView1.TabIndex = 6;
             dataGridView1.CellContentClick += dataGridView1_CellContentClick;
             dataGridView1.DataBindingComplete += dataGridView1_DataBindingComplete;
@@ -186,40 +174,13 @@ namespace last_project
             Column7.Name = "Column7";
             Column7.Width = 110;
             // 
-            // chart2
+            // elementHost2
             // 
-            chartArea1.Name = "ChartArea1";
-            chart2.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            chart2.Legends.Add(legend1);
-            chart2.Location = new Point(525, 188);
-            chart2.Name = "chart2";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Doughnut;
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            chart2.Series.Add(series1);
-            chart2.Size = new Size(216, 165);
-            chart2.TabIndex = 5;
-            chart2.Text = "chart2";
-            // 
-            // chart1
-            // 
-            chartArea2.Name = "ChartArea1";
-            chart1.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            chart1.Legends.Add(legend2);
-            chart1.Location = new Point(525, 24);
-            chart1.Name = "chart1";
-            chart1.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright;
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Doughnut;
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            chart1.Series.Add(series2);
-            chart1.Size = new Size(216, 162);
-            chart1.TabIndex = 4;
-            chart1.Text = "chart1";
+            elementHost2.Dock = DockStyle.Top;
+            elementHost2.Location = new Point(0, 351);
+            elementHost2.Name = "elementHost2";
+            elementHost2.Size = new Size(749, 40);
+            elementHost2.TabIndex = 9;
             // 
             // tabControl1
             // 
@@ -228,10 +189,11 @@ namespace last_project
             tabControl1.Controls.Add(tabPage3);
             tabControl1.Controls.Add(tabPage4);
             tabControl1.Controls.Add(tabPage5);
-            tabControl1.Location = new Point(-9, 2);
+            tabControl1.Dock = DockStyle.Top;
+            tabControl1.Location = new Point(0, 0);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(533, 351);
+            tabControl1.Size = new Size(749, 351);
             tabControl1.TabIndex = 3;
             // 
             // tabPage1
@@ -241,7 +203,7 @@ namespace last_project
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(525, 323);
+            tabPage1.Size = new Size(741, 323);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "CAM1";
             tabPage1.UseVisualStyleBackColor = true;
@@ -255,7 +217,7 @@ namespace last_project
             webViewCam1.Dock = DockStyle.Fill;
             webViewCam1.Location = new Point(3, 3);
             webViewCam1.Name = "webViewCam1";
-            webViewCam1.Size = new Size(519, 317);
+            webViewCam1.Size = new Size(735, 317);
             webViewCam1.TabIndex = 0;
             webViewCam1.ZoomFactor = 1D;
             // 
@@ -264,7 +226,7 @@ namespace last_project
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(525, 323);
+            tabPage2.Size = new Size(741, 323);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "CAM2";
             tabPage2.UseVisualStyleBackColor = true;
@@ -273,7 +235,7 @@ namespace last_project
             // 
             tabPage3.Location = new Point(4, 24);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(525, 323);
+            tabPage3.Size = new Size(741, 323);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "CAM3";
             tabPage3.UseVisualStyleBackColor = true;
@@ -282,7 +244,7 @@ namespace last_project
             // 
             tabPage4.Location = new Point(4, 24);
             tabPage4.Name = "tabPage4";
-            tabPage4.Size = new Size(525, 323);
+            tabPage4.Size = new Size(741, 323);
             tabPage4.TabIndex = 3;
             tabPage4.Text = "PI CAM";
             tabPage4.UseVisualStyleBackColor = true;
@@ -291,17 +253,10 @@ namespace last_project
             // 
             tabPage5.Location = new Point(4, 24);
             tabPage5.Name = "tabPage5";
-            tabPage5.Size = new Size(525, 323);
+            tabPage5.Size = new Size(741, 323);
             tabPage5.TabIndex = 4;
             tabPage5.Text = "All CAM";
             tabPage5.UseVisualStyleBackColor = true;
-            // 
-            // elementHost2
-            // 
-            elementHost2.Location = new Point(-1, 353);
-            elementHost2.Name = "elementHost2";
-            elementHost2.Size = new Size(300, 40);
-            elementHost2.TabIndex = 9;
             // 
             // timer1
             // 
@@ -323,8 +278,6 @@ namespace last_project
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)chart2).EndInit();
-            ((System.ComponentModel.ISupportInitialize)chart1).EndInit();
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)webViewCam1).EndInit();
@@ -347,8 +300,6 @@ namespace last_project
         private System.Windows.Forms.Timer timer1;
         private BindingSource bindingSource1;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
         private DataGridView dataGridView1;
         private System.Windows.Forms.Integration.ElementHost elementHost1;
         private System.Windows.Forms.Integration.ElementHost elementHost2;
