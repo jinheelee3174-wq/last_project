@@ -113,6 +113,8 @@ namespace last_project
             // "Picture Log" 버튼(BtnLog)의 신호를 WpfMenu_LogButtonClicked 함수와 연결합니다.
             wpfMenu.LogButtonClicked += WpfMenu_LogButtonClicked;
 
+            wpfMenu.TonggyeButtonClicked += WpfMenu_TonggyeButtonClicked;
+
             // (다른 버튼들도 필요시 여기에 연결)
             // wpfMenu.BaljuButtonClicked += button1_Click; 
             // wpfMenu.TonggyeButtonClicked += button2_Click; 
@@ -309,6 +311,31 @@ namespace last_project
             }
         }
 
+
+        // ▼▼▼ [추가할 함수] 통계 창 띄우기 ▼▼▼
+        private void WpfMenu_TonggyeButtonClicked(object sender, EventArgs e)
+        {
+            // 1. (그릇) ElementHost 생성
+            ElementHost host = new ElementHost();
+            host.Dock = DockStyle.Fill;
+
+            // 2. (내용물) 아까 만든 예쁜 통계 화면 생성
+            WpfStatistics wpfStats = new WpfStatistics();
+
+            // 3. (조립) 그릇에 내용물 담기
+            host.Child = wpfStats;
+
+            // 4. (새 창) 폼 만들어서 띄우기
+            Form statsForm = new Form();
+            statsForm.Text = "Statistics Dashboard"; // 창 제목
+            statsForm.Size = new System.Drawing.Size(1100, 750); // 창 크기
+            statsForm.StartPosition = FormStartPosition.CenterScreen; // 화면 중앙에 뜨게
+            statsForm.BackColor = System.Drawing.Color.FromArgb(30, 30, 30); // 배경색 어둡게
+
+            // 폼에 그릇 추가하고 보여주기
+            statsForm.Controls.Add(host);
+            statsForm.Show(); // (ShowDialog()로 하면 창 끌 때까지 메인화면 못 씀)
+        }
 
         private void dataGridView1_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
