@@ -32,6 +32,8 @@ namespace last_project
         // --- ▲▲▲ 'isSlotEditorLoaded' 깃발은 이제 필요 없음 ▲▲▲ ---
         private WpfLogoutControl wpfLogoutControl;
         private bool isLogoutLoaded = false;
+        private TabPage tabPageProfile; // 코드로 추가할 탭 페이지 객체
+        private bool isMyInfoLoaded = false; // 내 정보 탭이 로드되었는지 확인하는 플래그
         public setting()
         {
             InitializeComponent();
@@ -63,6 +65,21 @@ namespace last_project
         private async void setting_Load(object sender, EventArgs e)
         {
             // --- 1. 왼쪽 패널 (WPF 카메라/그리기) 설정 ---
+            if (tabPageProfile == null)
+            {
+                tabPageProfile = new TabPage("내 정보"); // 탭 이름
+                tabPageProfile.BackColor = Color.FromArgb(30, 30, 30); // 배경색 (다크 모드)
+
+                // 기존 탭(0, 1, 2) 뒤인 3번 인덱스에 삽입 (로그아웃 탭은 4번으로 밀림)
+                if (tabControl1.TabCount >= 3)
+                {
+                    tabControl1.TabPages.Insert(3, tabPageProfile);
+                }
+                else
+                {
+                    tabControl1.TabPages.Add(tabPageProfile);
+                }
+            }
             ElementHost wpfHostLeft = new ElementHost();
             wpfHostLeft.Dock = DockStyle.Fill;
             wpfEditor = new WpfSlotEditor(); // (클래스 변수에 할당)
@@ -197,36 +214,45 @@ namespace last_project
             // --- ▼▼▼ [3. 추가!] 3번 인덱스 ("로그아웃") 처리 ▼▼▼ ---
             else if (tabControl1.SelectedIndex == 3)
             {
-                // 로그아웃 탭은 창 크기를 작게 조절
-                this.Size = smallFormSize;
+                this.Size = largeFormSize; // 큰 화면 사용
 
-                // 로그아웃 컨트롤이 아직 로드되지 않았다면
-                if (isLogoutLoaded == false)
+                // 내 정보 컨트롤이 아직 로드되지 않았으면 로드
+                if (!isMyInfoLoaded && tabPageProfile != null)
                 {
-                    // 1. (그릇) ElementHost 생성
-                    ElementHost wpfHostLogout = new ElementHost();
-                    wpfHostLogout.Dock = DockStyle.Fill; // tabPage4 꽉 채우기
+                    ElementHost host = new ElementHost();
+                    host.Dock = DockStyle.Fill;
 
-                    // 2. (내용물) "WPF 로그아웃 컨트롤" 생성
-                    // (WpfLogoutControl.xaml과 .cs 파일이 프로젝트에 있어야 합니다)
-                    wpfLogoutControl = new WpfLogoutControl();
+                    // 방금 만든 WPF 내 정보 컨트롤 생성
+                    WpfMyProfile myProfile = new WpfMyProfile();
+                    host.Child = myProfile;
 
-                    // 3. (★★★★★) "신호" 연결!
-                    // WPF 컨트롤의 'LogoutClicked' 신호가 오면
-                    // 'WpfLogoutControl_LogoutClicked' 함수를 실행
-                    wpfLogoutControl.LogoutClicked += WpfLogoutControl_LogoutClicked;
-
-                    // 4. (조립) 그릇에 내용물을 담습니다.
-                    wpfHostLogout.Child = wpfLogoutControl;
-
-                    // 5. tabPage4 (네 번째 탭)에 '그릇'을 추가!
-                    // (디자이너에서 tabPage4가 있는지 확인하세요)
-                    tabPage4.Controls.Add(wpfHostLogout);
-
-                    isLogoutLoaded = true; // "띄우기 완료" 깃발
+                    // 코드로 만든 탭 페이지에 추가
+                    tabPageProfile.Controls.Add(host);
+                    isMyInfoLoaded = true;
                 }
             }
-            // --- ▲▲▲ [수정!] 여기까지 ▲▲▲ ---
+
+            // 4번: "로그아웃" 탭 (원래 3번이었으나 뒤로 밀림)
+            else if (tabControl1.SelectedIndex == 4)
+            {
+                this.Size = smallFormSize; // 작은 화면 사용
+
+                if (isLogoutLoaded == false)
+                {
+                    // ... (기존 로그아웃 로직 그대로 사용) ...
+                    ElementHost wpfHostLogout = new ElementHost();
+                    wpfHostLogout.Dock = DockStyle.Fill;
+                    wpfLogoutControl = new WpfLogoutControl();
+                    wpfLogoutControl.LogoutClicked += WpfLogoutControl_LogoutClicked;
+                    wpfHostLogout.Child = wpfLogoutControl;
+
+                    // 주의: 디자이너에 있는 기존 탭(tabPage4)을 사용
+                    tabPage4.Controls.Add(wpfHostLogout);
+                    isLogoutLoaded = true;
+                }
+            }
+
+
         }
 
         // --- "좌표 받기" 함수 (WpfEditor_SlotDrawn) ---

@@ -4,8 +4,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              mc:Ignorable="d" 
-             Height="500" Width="420"
+             Height="650" Width="450"
              Background="#FF1E1E1E" Foreground="White">
+
     <UserControl.Resources>
         <Style TargetType="Control" x:Key="InputBoxStyle">
             <Setter Property="Height" Value="40"/>
@@ -79,7 +80,7 @@
         </Style>
 
         <Style x:Key="SubButtonStyle" TargetType="Button">
-            <Setter Property="Height" Value="40"/>
+            <Setter Property="Height" Value="35"/>
             <Setter Property="Background" Value="#FF3E3E42"/>
             <Setter Property="Foreground" Value="#FFDDDDDD"/>
             <Setter Property="FontSize" Value="13"/>
@@ -102,74 +103,54 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <Style TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#FF9CA3AF"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Margin" Value="0,0,10,0"/>
-        </Style>
-
     </UserControl.Resources>
 
-    <Grid Margin="40">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="40">
+            <TextBlock Text="Sign Up" FontSize="28" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+            <TextBlock Text="상세 정보 입력" FontSize="14" Foreground="#FF6B7280" HorizontalAlignment="Center" Margin="0,5,0,20"/>
 
-        <StackPanel Grid.Row="0" HorizontalAlignment="Center">
-            <TextBlock Text="Sign Up" FontSize="28" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0"/>
-            <TextBlock Text="새 계정 만들기" FontSize="14" Foreground="#FF6B7280" HorizontalAlignment="Center" Margin="0,5,0,0"/>
-        </StackPanel>
+            <TextBlock Text="아이디" Foreground="#FF9CA3AF" Margin="0,0,0,5"/>
+            <Grid Margin="0,0,0,15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="TxtId" Height="35" VerticalContentAlignment="Center"/>
+                <Button x:Name="BtnCheckDup" Grid.Column="1" Content="확인" Margin="5,0,0,0" 
+                        Style="{StaticResource SubButtonStyle}" Click="BtnCheckDup_Click"/>
+            </Grid>
 
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="90"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="아이디"/>
-            <TextBox x:Name="TxtId" Grid.Column="1" Margin="0,0,10,0"/>
-            <Button x:Name="BtnCheckDup" Grid.Column="2" Content="중복확인" 
-                    Style="{StaticResource SubButtonStyle}" Click="BtnCheckDup_Click"/>
-        </Grid>
+            <TextBlock Text="비밀번호" Foreground="#FF9CA3AF" Margin="0,0,0,5"/>
+            <PasswordBox x:Name="TxtPw" Height="35" Margin="0,0,0,15"/>
 
-        <Grid Grid.Row="4">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="비밀번호"/>
-            <PasswordBox x:Name="TxtPw" Grid.Column="1"/>
-        </Grid>
+            <TextBlock Text="비밀번호 확인" Foreground="#FF9CA3AF" Margin="0,0,0,5"/>
+            <PasswordBox x:Name="TxtPwConfirm" Height="35" Margin="0,0,0,15"/>
 
-        <Grid Grid.Row="6">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="비번 확인"/>
-            <PasswordBox x:Name="TxtPwConfirm" Grid.Column="1"/>
-        </Grid>
+            <TextBlock Text="이름 (실명)" Foreground="#FF9CA3AF" Margin="0,0,0,5"/>
+            <TextBox x:Name="TxtName" Height="35" Margin="0,0,0,15"/>
 
-        <StackPanel Grid.Row="8" Orientation="Vertical">
-            <Button x:Name="BtnRegister" Content="회원가입 완료" 
-                    Style="{StaticResource MainButtonStyle}" 
-                    Click="BtnRegister_Click"/>
+            <TextBlock Text="닉네임 (별명)" Foreground="#FF9CA3AF" Margin="0,0,0,5"/>
+            <TextBox x:Name="TxtNickname" Height="35" Margin="0,0,0,15"/>
 
-            <Button x:Name="BtnCancel" Content="취소하고 돌아가기" 
-                    Height="30"
-                    Margin="0,15,0,0"
-                    Background="Transparent" Foreground="#FF6B7280" FontSize="13" BorderThickness="0" Cursor="Hand"
-                    Click="BtnCancel_Click">
+            <TextBlock Text="생년월일 (예: 1990-01-01)" Foreground="#FF9CA3AF" Margin="0,0,0,5"/>
+            <TextBox x:Name="TxtBirthdate" Height="35" Margin="0,0,0,15"/>
+
+            <TextBlock Text="직급 (Role)" Foreground="#FF9CA3AF" Margin="0,0,0,5"/>
+            <ComboBox x:Name="CmbRole" Height="35" Margin="0,0,0,15" SelectedIndex="0">
+                <ComboBoxItem Content="STAFF (일반 사원)"/>
+                <ComboBoxItem Content="MANAGER (관리자)"/>
+                <ComboBoxItem Content="ADMIN (최고 관리자)"/>
+            </ComboBox>
+
+            <TextBlock Text="연락처" Foreground="#FF9CA3AF" Margin="0,0,0,5"/>
+            <TextBox x:Name="TxtPhone" Height="35" Margin="0,0,0,15"/>
+
+            <TextBlock Text="이메일" Foreground="#FF9CA3AF" Margin="0,0,0,5"/>
+            <TextBox x:Name="TxtEmail" Height="35" Margin="0,0,0,20"/>
+
+            <Button x:Name="BtnRegister" Content="회원가입 완료" Style="{StaticResource MainButtonStyle}" Click="BtnRegister_Click"/>
+            <Button x:Name="BtnCancel" Content="취소" Click="BtnCancel_Click" Margin="0,10,0,0" Background="Transparent" Foreground="Gray">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <TextBlock Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" 
@@ -183,5 +164,5 @@
                 </Button.Template>
             </Button>
         </StackPanel>
-    </Grid>
+    </ScrollViewer>
 </UserControl>

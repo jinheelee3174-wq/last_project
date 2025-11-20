@@ -11,10 +11,35 @@ namespace last_project
         public event EventHandler CancelClicked;
         public event EventHandler CheckDuplicateClicked;
 
-        // 입력값을 외부에서 가져갈 수 있게 속성 정의
+        // --- [기존] 입력값 속성 ---
         public string UserId => TxtId.Text;
         public string UserPw => TxtPw.Password;
         public string UserPwConfirm => TxtPwConfirm.Password;
+
+        // --- [추가] 새로 만든 입력칸들의 값을 가져오는 속성들 ---
+        public string UserName => TxtName.Text;          // 이름
+        public string UserNickname => TxtNickname.Text;  // 닉네임
+        public string UserBirthdate => TxtBirthdate.Text;// 생년월일
+        public string UserPhone => TxtPhone.Text;        // 연락처
+        public string UserEmail => TxtEmail.Text;        // 이메일
+
+        // 직급 (콤보박스에서 선택된 항목의 텍스트 앞부분만 가져옴, 예: "STAFF")
+        public string UserRole
+        {
+            get
+            {
+                if (CmbRole.SelectedItem is ComboBoxItem item)
+                {
+                    // "STAFF (일반 사원)" 같은 문자열에서 공백 앞부분만 잘라서 반환
+                    if (item.Content != null)
+                    {
+                        string content = item.Content.ToString();
+                        return content.Split(' ')[0];
+                    }
+                }
+                return "STAFF"; // 기본값
+            }
+        }
 
         public WpfRegistration()
         {
@@ -26,31 +51,33 @@ namespace last_project
         {
             if (string.IsNullOrWhiteSpace(UserId))
             {
-                // [수정] 명시적으로 System.Windows.MessageBox 사용
                 System.Windows.MessageBox.Show("아이디를 입력해주세요.");
                 return;
             }
             CheckDuplicateClicked?.Invoke(this, EventArgs.Empty);
         }
 
-        // 회원가입 버튼
+        // [수정됨] 회원가입 완료 버튼
         private void BtnRegister_Click(object sender, RoutedEventArgs e)
         {
-            // 간단한 유효성 검사
-            if (string.IsNullOrWhiteSpace(UserId) || string.IsNullOrWhiteSpace(UserPw))
+            // 1. 필수 입력값 검사
+            if (string.IsNullOrWhiteSpace(UserId) ||
+                string.IsNullOrWhiteSpace(UserPw) ||
+                string.IsNullOrWhiteSpace(UserName) ||
+                string.IsNullOrWhiteSpace(UserNickname))
             {
-                // [수정] 명시적으로 System.Windows.MessageBox 사용
-                System.Windows.MessageBox.Show("아이디와 비밀번호를 모두 입력해주세요.");
+                System.Windows.MessageBox.Show("필수 정보(아이디, 비번, 이름, 닉네임)를 모두 입력해주세요.", "입력 오류", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
+            // 2. 비밀번호 일치 여부 확인
             if (UserPw != UserPwConfirm)
             {
-                // [수정] WPF 스타일의 옵션 사용 (MessageBoxButton.OK, MessageBoxImage.Warning)
                 System.Windows.MessageBox.Show("비밀번호가 일치하지 않습니다.", "오류", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
+            // 3. 부모 폼(second.cs)에 신호 전송
             RegisterClicked?.Invoke(this, EventArgs.Empty);
         }
 

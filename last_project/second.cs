@@ -79,7 +79,34 @@ namespace last_project
                     if (response.IsSuccessStatusCode)
                     {
                         // ★ 로그인 성공 ★
-                        MessageBox.Show($"환영합니다, {inputId}님!", "로그인 성공", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // [수정] 서버 응답에서 사용자 정보를 읽어와 Session에 저장
+                        // (서버가 JSON으로 { "result": "ok", "userInfo": { ... } } 를 준다고 가정)
+                        string responseJson = await response.Content.ReadAsStringAsync();
+
+                        try
+                        {
+                            // 1. 서버 응답 파싱
+                            dynamic result = JsonConvert.DeserializeObject(responseJson);
+
+                            // 2. Session에 정보 저장 (null 체크 포함)
+                            // result.userInfo가 있으면 그 값을, 없으면 기본값 사용
+                            string name = result.userInfo?.name ?? "관리자";
+                            string nickname = result.userInfo?.nickname ?? "Admin";
+                            string role = result.userInfo?.role ?? "ADMIN";
+                            string email = result.userInfo?.email ?? "admin@test.com";
+                            string phone = result.userInfo?.phone ?? "010-0000-0000";
+                            string birthdate = result.userInfo?.birthdate ?? "2000-01-01";
+
+                            Session.SetUser(inputId, name, nickname, role, email, phone, birthdate);
+                        }
+                        catch
+                        {
+                            // [예외 처리] 서버 데이터 형식이 다를 경우 임시 데이터 사용
+                            Session.SetUser(inputId, "관리자(임시)", "Admin", "ADMIN", "admin@test.com", "010-0000-0000", "2000-01-01");
+                        }
+
+                        MessageBox.Show($"환영합니다, {Session.UserName}님!", "로그인 성공", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         // 현재 로그인 창 숨기기
                         this.Hide();
@@ -124,13 +151,13 @@ namespace last_project
             OpenRegisterForm();
         }
 
-        // 회원가입 창을 띄우는 함수 (기존 btnRegister_Click 로직을 여기로 이동)
+        // 회원가입 창을 띄우는 함수 (전체 수정됨)
         private void OpenRegisterForm()
         {
             // 1. 새 윈폼 창 생성 (껍데기)
             Form registerForm = new Form();
             registerForm.Text = "회원가입";
-            registerForm.Size = new Size(440, 550);
+            registerForm.Size = new Size(465, 690); // [수정] 입력 항목이 늘어나서 창 높이 키움
             registerForm.StartPosition = FormStartPosition.CenterParent;
             registerForm.BackColor = Color.FromArgb(30, 30, 30);
             registerForm.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -169,7 +196,19 @@ namespace last_project
             // --- [이벤트] 회원가입 완료 버튼 ---
             wpfReg.RegisterClicked += async (s, args) =>
             {
-                var joinData = new { id = wpfReg.UserId, pw = wpfReg.UserPw };
+                // [수정] 추가된 정보(이름, 닉네임, 직급, 연락처 등)를 모두 포함하여 JSON 생성
+                var joinData = new
+                {
+                    id = wpfReg.UserId,
+                    pw = wpfReg.UserPw,
+                    name = wpfReg.UserName,          // 추가됨
+                    nickname = wpfReg.UserNickname,  // 추가됨
+                    role = wpfReg.UserRole,          // 추가됨
+                    phone = wpfReg.UserPhone,        // 추가됨
+                    email = wpfReg.UserEmail,        // 추가됨
+                    birthdate = wpfReg.UserBirthdate // 추가됨
+                };
+
                 string jsonString = JsonConvert.SerializeObject(joinData);
                 StringContent content = new StringContent(jsonString, Encoding.UTF8, "application/json");
                 string url = "http://127.0.0.1:5000/api/register";
