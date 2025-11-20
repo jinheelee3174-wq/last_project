@@ -1,37 +1,40 @@
 ﻿<UserControl x:Class="last_project.WpfStatistics"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-             mc:Ignorable="d"
+             mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="1000"
-             Background="#FF1E1E1E" Foreground="White">
+             Background="#FF121212" Foreground="White"
+             UseLayoutRounding="True"
+             SnapsToDevicePixels="True"
+             TextOptions.TextFormattingMode="Display"
+             TextOptions.TextRenderingMode="ClearType">
 
     <UserControl.Resources>
         <Style TargetType="Border" x:Key="ChartCard">
-            <Setter Property="Background" Value="#FF2D2D30"/>
-            <Setter Property="CornerRadius" Value="10"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Padding" Value="10"/>
-            <Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="3"/>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="Background" Value="#FF1E1E1E"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Margin" Value="6"/>
+            <Setter Property="Padding" Value="15"/>
+            <Setter Property="BorderBrush" Value="#FF333333"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Effect" Value="{x:Null}"/>
         </Style>
+
         <Style TargetType="TextBlock" x:Key="ChartTitle">
             <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Foreground" Value="#FFDDDDDD"/>
-            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Foreground" Value="#FFE0E0E0"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
         </Style>
     </UserControl.Resources>
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="200"/>
+            <RowDefinition Height="210"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
@@ -51,13 +54,13 @@
                     </Grid.RowDefinitions>
                     <TextBlock Text="A수납장 적재율" Style="{StaticResource ChartTitle}"/>
                     <Grid Grid.Row="1">
-                        <lvc:PieChart Series="{Binding SeriesCollectionA}" InnerRadius="50" LegendLocation="Bottom" Hoverable="True" DataTooltip="{x:Null}">
+                        <lvc:PieChart Series="{Binding SeriesCollectionA}" InnerRadius="55" LegendLocation="Bottom" Hoverable="True" DataTooltip="{x:Null}">
                             <lvc:PieChart.ChartLegend>
-                                <lvc:DefaultLegend Foreground="#FFAAAAAA"/>
+                                <lvc:DefaultLegend Foreground="#FF888888" FontSize="11"/>
                             </lvc:PieChart.ChartLegend>
                         </lvc:PieChart>
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" IsHitTestVisible="False">
-                            <TextBlock Text="{Binding A_Percent}" Foreground="White" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding A_Percent}" Foreground="White" FontSize="26" FontWeight="Bold" HorizontalAlignment="Center"/>
                             <TextBlock Text="적재됨" Foreground="#FF888888" FontSize="12" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Grid>
@@ -72,13 +75,13 @@
                     </Grid.RowDefinitions>
                     <TextBlock Text="B수납장 적재율" Style="{StaticResource ChartTitle}"/>
                     <Grid Grid.Row="1">
-                        <lvc:PieChart Series="{Binding SeriesCollectionB}" InnerRadius="50" LegendLocation="Bottom" Hoverable="True" DataTooltip="{x:Null}">
+                        <lvc:PieChart Series="{Binding SeriesCollectionB}" InnerRadius="55" LegendLocation="Bottom" Hoverable="True" DataTooltip="{x:Null}">
                             <lvc:PieChart.ChartLegend>
-                                <lvc:DefaultLegend Foreground="#FFAAAAAA"/>
+                                <lvc:DefaultLegend Foreground="#FF888888" FontSize="11"/>
                             </lvc:PieChart.ChartLegend>
                         </lvc:PieChart>
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" IsHitTestVisible="False">
-                            <TextBlock Text="{Binding B_Percent}" Foreground="White" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding B_Percent}" Foreground="White" FontSize="26" FontWeight="Bold" HorizontalAlignment="Center"/>
                             <TextBlock Text="적재됨" Foreground="#FF888888" FontSize="12" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Grid>
@@ -102,16 +105,16 @@
                     <TextBlock Text="날짜별 입고/출고 추이" Style="{StaticResource ChartTitle}"/>
                     <lvc:CartesianChart Grid.Row="1" Series="{Binding InOutSeries}" LegendLocation="None">
                         <lvc:CartesianChart.AxisX>
-                            <lvc:Axis Labels="{Binding DateLabels}" Foreground="#FF888888">
+                            <lvc:Axis Labels="{Binding DateLabels}" Foreground="#FF888888" FontSize="11">
                                 <lvc:Axis.Separator>
                                     <lvc:Separator Step="1" StrokeThickness="0"/>
                                 </lvc:Axis.Separator>
                             </lvc:Axis>
                         </lvc:CartesianChart.AxisX>
                         <lvc:CartesianChart.AxisY>
-                            <lvc:Axis Foreground="#FF888888">
+                            <lvc:Axis Foreground="#FF555555" FontSize="11">
                                 <lvc:Axis.Separator>
-                                    <lvc:Separator Stroke="#33555555"/>
+                                    <lvc:Separator Stroke="#1AFFFFFF" StrokeThickness="1"/>
                                 </lvc:Axis.Separator>
                             </lvc:Axis>
                         </lvc:CartesianChart.AxisY>
@@ -128,13 +131,11 @@
                     <TextBlock Text="AI 빈 슬롯 감지 성공률" Style="{StaticResource ChartTitle}"/>
                     <lvc:AngularGauge Grid.Row="1" Value="{Binding AiSuccessRate}" FromValue="0" ToValue="100"
                                       TicksForeground="Transparent" Foreground="White"
-                                      Wedge="300" 
-                                      LabelsStep="50"
-                                      NeedleFill="#FF00E676">
+                                      Wedge="300" LabelsStep="50" NeedleFill="#FF00E676">
                         <lvc:AngularGauge.Sections>
-                            <lvc:AngularSection FromValue="0" ToValue="50" Fill="#FFEF5350"/>
-                            <lvc:AngularSection FromValue="50" ToValue="80" Fill="#FFFFCA28"/>
-                            <lvc:AngularSection FromValue="80" ToValue="100" Fill="#FF00E676"/>
+                            <lvc:AngularSection FromValue="0" ToValue="60" Fill="#FFD32F2F"/>
+                            <lvc:AngularSection FromValue="60" ToValue="85" Fill="#FFFBC02D"/>
+                            <lvc:AngularSection FromValue="85" ToValue="100" Fill="#FF388E3C"/>
                         </lvc:AngularGauge.Sections>
                     </lvc:AngularGauge>
                 </Grid>
@@ -149,15 +150,15 @@
                     <TextBlock Text="평균 작업시간 (초)" Style="{StaticResource ChartTitle}"/>
                     <lvc:CartesianChart Grid.Row="1" Series="{Binding AvgTimeSeries}" LegendLocation="Bottom">
                         <lvc:CartesianChart.ChartLegend>
-                            <lvc:DefaultLegend Foreground="#FFAAAAAA"/>
+                            <lvc:DefaultLegend Foreground="#FF888888" FontSize="11"/>
                         </lvc:CartesianChart.ChartLegend>
                         <lvc:CartesianChart.AxisX>
-                            <lvc:Axis Labels="{Binding TaskLabels}" Foreground="#FF888888" ShowLabels="False"/>
+                            <lvc:Axis Labels="{Binding TaskLabels}" ShowLabels="False"/>
                         </lvc:CartesianChart.AxisX>
                         <lvc:CartesianChart.AxisY>
-                            <lvc:Axis Foreground="#FF888888">
+                            <lvc:Axis Foreground="#FF555555" FontSize="11">
                                 <lvc:Axis.Separator>
-                                    <lvc:Separator Stroke="#33555555"/>
+                                    <lvc:Separator Stroke="#1AFFFFFF" StrokeThickness="1"/>
                                 </lvc:Axis.Separator>
                             </lvc:Axis>
                         </lvc:CartesianChart.AxisY>
@@ -182,15 +183,22 @@
                     <TextBlock Text="브랜드별 재고 상태 (누적)" Style="{StaticResource ChartTitle}"/>
                     <lvc:CartesianChart Grid.Row="1" Series="{Binding BrandStockSeries}" LegendLocation="Right">
                         <lvc:CartesianChart.ChartLegend>
-                            <lvc:DefaultLegend Foreground="#FFAAAAAA"/>
+                            <lvc:DefaultLegend Foreground="#FF888888" FontSize="11"/>
                         </lvc:CartesianChart.ChartLegend>
                         <lvc:CartesianChart.AxisX>
-                            <lvc:Axis Labels="{Binding BrandLabels}" Foreground="#FF888888">
+                            <lvc:Axis Labels="{Binding BrandLabels}" Foreground="#FF888888" FontSize="11">
                                 <lvc:Axis.Separator>
                                     <lvc:Separator Step="1" StrokeThickness="0"/>
                                 </lvc:Axis.Separator>
                             </lvc:Axis>
                         </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis Foreground="#FF555555" FontSize="11">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator Stroke="#1AFFFFFF" StrokeThickness="1"/>
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                        </lvc:CartesianChart.AxisY>
                     </lvc:CartesianChart>
                 </Grid>
             </Border>
@@ -204,15 +212,22 @@
                     <TextBlock Text="수납장별 브랜드 분류" Style="{StaticResource ChartTitle}"/>
                     <lvc:CartesianChart Grid.Row="1" Series="{Binding CabinetSeries}" LegendLocation="Right">
                         <lvc:CartesianChart.ChartLegend>
-                            <lvc:DefaultLegend Foreground="#FFAAAAAA"/>
+                            <lvc:DefaultLegend Foreground="#FF888888" FontSize="11"/>
                         </lvc:CartesianChart.ChartLegend>
                         <lvc:CartesianChart.AxisX>
-                            <lvc:Axis Labels="{Binding CabinetLabels}" Foreground="#FF888888">
+                            <lvc:Axis Labels="{Binding CabinetLabels}" Foreground="#FF888888" FontSize="11">
                                 <lvc:Axis.Separator>
                                     <lvc:Separator Step="1" StrokeThickness="0"/>
                                 </lvc:Axis.Separator>
                             </lvc:Axis>
                         </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis Foreground="#FF555555" FontSize="11">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator Stroke="#1AFFFFFF" StrokeThickness="1"/>
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                        </lvc:CartesianChart.AxisY>
                     </lvc:CartesianChart>
                 </Grid>
             </Border>
@@ -226,10 +241,10 @@
                     <TextBlock Text="수동제어 명령어 사용빈도" Style="{StaticResource ChartTitle}"/>
                     <lvc:CartesianChart Grid.Row="1" Series="{Binding CommandSeries}" LegendLocation="None">
                         <lvc:CartesianChart.AxisX>
-                            <lvc:Axis MinValue="0" Foreground="#FF888888"/>
+                            <lvc:Axis MinValue="0" Foreground="#FF888888" FontSize="11"/>
                         </lvc:CartesianChart.AxisX>
                         <lvc:CartesianChart.AxisY>
-                            <lvc:Axis Labels="{Binding CommandLabels}" Foreground="White" FontSize="12">
+                            <lvc:Axis Labels="{Binding CommandLabels}" Foreground="#FFFFFFFF" FontSize="12">
                                 <lvc:Axis.Separator>
                                     <lvc:Separator Step="1" StrokeThickness="0"/>
                                 </lvc:Axis.Separator>

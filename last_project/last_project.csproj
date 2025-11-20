@@ -28,9 +28,6 @@
 
   <ItemGroup>
     <Compile Update="main.cs" />
-    <Compile Update="new_registration.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Update="second.cs">
       <SubType>Form</SubType>
     </Compile>
