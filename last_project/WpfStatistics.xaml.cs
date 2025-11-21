@@ -15,15 +15,12 @@ using System.Windows.Shapes;
 using LiveCharts;
 using LiveCharts.Wpf;
 
-// ▼▼▼ [핵심 1] 색상 충돌 방지 코드 (이게 있어야 빨간 줄이 안 뜹니다) ▼▼▼
+// [핵심] 색상 충돌 방지
 using Brushes = System.Windows.Media.Brushes;
 using Color = System.Windows.Media.Color;
 
 namespace last_project
 {
-    /// <summary>
-    /// WpfStatistics.xaml에 대한 상호 작용 논리
-    /// </summary>
     public partial class WpfStatistics : System.Windows.Controls.UserControl
     {
         // --- 1. 상단 원형(도넛) 차트 데이터 ---
@@ -31,6 +28,12 @@ namespace last_project
         public SeriesCollection SeriesCollectionB { get; set; }
         public string A_Percent { get; set; }
         public string B_Percent { get; set; }
+
+        // ▼▼▼ [추가됨] 상단 신규 차트 데이터 2개 ▼▼▼
+        public SeriesCollection CategorySeries { get; set; }       // 카테고리 비율
+        public SeriesCollection HourlyActivitySeries { get; set; } // 시간대별 활동량
+        public string[] HourLabels { get; set; }                   // 시간대 라벨
+        // ▲▲▲ ----------------------------------- ▲▲▲
 
         // --- 2. 중간 차트 데이터 ---
         public SeriesCollection InOutSeries { get; set; }
@@ -97,6 +100,58 @@ namespace last_project
                     DataLabels = false
                 }
             };
+
+            // ▼▼▼ [추가됨] 3. 카테고리별 비율 (도넛 차트) ▼▼▼
+            CategorySeries = new SeriesCollection
+            {
+                new PieSeries
+                {
+                    Title = "Top",
+                    Values = new ChartValues<double> { 40 },
+                    Fill = Brushes.OrangeRed,
+                    DataLabels = true,
+                    LabelPoint = point => point.Y + "%"
+                },
+                new PieSeries
+                {
+                    Title = "Bottom",
+                    Values = new ChartValues<double> { 30 },
+                    Fill = Brushes.DeepSkyBlue,
+                    DataLabels = true,
+                    LabelPoint = point => point.Y + "%"
+                },
+                new PieSeries
+                {
+                    Title = "Outer",
+                    Values = new ChartValues<double> { 20 },
+                    Fill = Brushes.MediumSeaGreen,
+                    DataLabels = true,
+                    LabelPoint = point => point.Y + "%"
+                },
+                new PieSeries
+                {
+                    Title = "Shoes",
+                    Values = new ChartValues<double> { 10 },
+                    Fill = Brushes.Gold,
+                    DataLabels = true,
+                    LabelPoint = point => point.Y + "%"
+                }
+            };
+
+            // ▼▼▼ [추가됨] 4. 시간대별 활동량 (막대 차트) ▼▼▼
+            HourlyActivitySeries = new SeriesCollection
+            {
+                new ColumnSeries
+                {
+                    Title = "작업 건수",
+                    Values = new ChartValues<double> { 5, 12, 25, 18, 10, 4 },
+                    Fill = Brushes.MediumPurple,
+                    MaxColumnWidth = 15, // 막대 두께
+                    DataLabels = true
+                }
+            };
+            HourLabels = new[] { "09시", "11시", "13시", "15시", "17시", "19시" };
+
 
             // 2. [중간] 날짜별 입고/출고 추이
             InOutSeries = new SeriesCollection
@@ -192,12 +247,12 @@ namespace last_project
                     Values = new ChartValues<double> { 50, 35, 12 },
                     Fill = Brushes.SpringGreen,
                     DataLabels = true
-                    // ▼▼▼ [수정 완료] 오류가 나던 MaxRowHeight 줄을 삭제했습니다! ▼▼▼
                 }
             };
             CommandLabels = new[] { "전진(F)", "후진(B)", "정지(S)" };
 
+            // ★★★ 데이터 바인딩 (이게 없으면 화면에 데이터가 안 뜹니다) ★★★
             this.DataContext = this;
         }
     }
-}
+} 

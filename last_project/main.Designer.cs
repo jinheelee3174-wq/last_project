@@ -202,7 +202,6 @@ namespace last_project
             tabPage1.ForeColor = SystemColors.ControlDarkDark;
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(3);
             tabPage1.Size = new Size(741, 323);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "CAM1";
@@ -215,9 +214,9 @@ namespace last_project
             webViewCam1.CreationProperties = null;
             webViewCam1.DefaultBackgroundColor = SysColor.Black;
             webViewCam1.Dock = DockStyle.Fill;
-            webViewCam1.Location = new Point(3, 3);
+            webViewCam1.Location = new Point(0, 0);
             webViewCam1.Name = "webViewCam1";
-            webViewCam1.Size = new Size(735, 317);
+            webViewCam1.Size = new Size(741, 323);
             webViewCam1.TabIndex = 0;
             webViewCam1.ZoomFactor = 1D;
             // 

@@ -43,7 +43,8 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <Border Grid.Column="0" Style="{StaticResource ChartCard}">
@@ -85,6 +86,48 @@
                             <TextBlock Text="적재됨" Foreground="#FF888888" FontSize="12" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Grid>
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="2" Style="{StaticResource ChartCard}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="카테고리 비율" Style="{StaticResource ChartTitle}"/>
+                    <lvc:PieChart Grid.Row="1" Series="{Binding CategorySeries}" 
+                                  InnerRadius="40" LegendLocation="Right" Hoverable="True">
+                        <lvc:PieChart.ChartLegend>
+                            <lvc:DefaultLegend Foreground="#FF888888" FontSize="10"/>
+                        </lvc:PieChart.ChartLegend>
+                    </lvc:PieChart>
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="3" Style="{StaticResource ChartCard}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="시간대별 활동량" Style="{StaticResource ChartTitle}"/>
+                    <lvc:CartesianChart Grid.Row="1" Series="{Binding HourlyActivitySeries}" LegendLocation="None">
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis Labels="{Binding HourLabels}" Foreground="#FF888888" FontSize="10">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator Step="1" StrokeThickness="0"/>
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                        </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis Foreground="#FF555555" FontSize="10">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator Stroke="#1AFFFFFF" StrokeThickness="1"/>
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                        </lvc:CartesianChart.AxisY>
+                    </lvc:CartesianChart>
                 </Grid>
             </Border>
         </Grid>
