@@ -22,7 +22,7 @@ namespace last_project
         private WpfRectangle rect;
 
         /// <summary>
-        /// Raised when the user finishes drawing a rectangle on the canvas.
+        /// 사용자가 드래그를 마쳤을 때 좌표 정보를 전달하는 이벤트
         /// </summary>
         public event EventHandler<SlotDrawnEventArgs> SlotDrawn;
 
@@ -33,17 +33,15 @@ namespace last_project
 
         private void CamSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Placeholder for future camera selection logic.
+            // 카메라 선택 로직 (필요 시 구현)
         }
 
         private void DrawingCanvas_MouseLeftButtonDown(object sender, InputMouseButtonEventArgs e)
         {
             startPoint = e.GetPosition(DrawingCanvas);
 
-            if (rect != null)
-            {
-                DrawingCanvas.Children.Remove(rect);
-            }
+            // [수정됨] 새로 그리기 시작할 때, 캔버스에 있는 기존 도형들을 모두 지웁니다.
+            DrawingCanvas.Children.Clear();
 
             rect = new WpfRectangle
             {
