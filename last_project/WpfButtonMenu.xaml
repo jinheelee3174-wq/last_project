@@ -36,7 +36,7 @@
     </UserControl.Resources>
 
     <StackPanel Orientation="Vertical" Margin="0,70,0,0">
-        <Button x:Name="BtnBalju" Content="Order" Click="BtnBalju_Click" />
+        <Button x:Name="BtnBalju" Content="Order confirmation" Click="BtnBalju_Click" />
         <Button x:Name="BtnTonggye" Content="statistics" Click="BtnTonggye_Click" />
         <Button x:Name="BtnLog" Content="picture Log" Click="BtnLog_Click" />
         <Button x:Name="BtnSetting" Content="Setting" Click="BtnSetting_Click" />

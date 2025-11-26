@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using Microsoft.Web.WebView2.Core;
 // ▲▲▲ --- ▲▲▲
 using System.Windows.Forms.Integration;
+using System.Text;
 
 
 
@@ -44,6 +45,115 @@ namespace last_project
 
         }
 
+        // =============================================================
+        //  ▼▼▼ [신규 추가] 발주 관리(Order Confirmation) 관련 함수들 ▼▼▼
+        // =============================================================
+
+        /// <summary>
+        /// (1) 메뉴에서 'Order' 버튼 클릭 시 실행 -> 발주 관리 창 띄우기
+        /// </summary>
+        private async void WpfMenu_BaljuButtonClicked(object sender, EventArgs e)
+        {
+            // 1. (그릇) ElementHost 생성
+            ElementHost host = new ElementHost();
+            host.Dock = DockStyle.Fill;
+
+            // 2. (내용물) 방금 만든 WpfOrderConfirmation 생성
+            WpfOrderConfirmation wpfOrder = new WpfOrderConfirmation();
+
+            // 3. (이벤트 연결) WPF 화면에서 버튼을 눌렀을 때 실행할 C# 로직 연결
+            //    - 새로고침
+            wpfOrder.RefreshClicked += async (s, ev) => await LoadOrderDataAsync(wpfOrder);
+
+            //    - 승인 (ID를 받아서 처리)
+            wpfOrder.ApproveClicked += async (s, orderId) =>
+            {
+                await UpdateOrderStatusAsync(orderId, "승인됨");
+                await LoadOrderDataAsync(wpfOrder); // 처리 후 목록 갱신
+            };
+
+            //    - 취소 (ID를 받아서 처리)
+            wpfOrder.CancelOrderClicked += async (s, orderId) =>
+            {
+                await UpdateOrderStatusAsync(orderId, "취소");
+                await LoadOrderDataAsync(wpfOrder); // 처리 후 목록 갱신
+            };
+
+            // 4. (조립) 그릇에 내용물 담기
+            host.Child = wpfOrder;
+
+            // 5. (새 창) 폼 생성 및 설정
+            Form orderForm = new Form();
+            orderForm.Text = "Order Management System";
+            orderForm.Size = new System.Drawing.Size(1000, 700);
+            orderForm.StartPosition = FormStartPosition.CenterScreen;
+            orderForm.BackColor = System.Drawing.Color.FromArgb(30, 30, 30); // 다크 테마 배경
+            orderForm.Controls.Add(host);
+
+            // 6. (데이터 로드) 창을 띄우기 전에 데이터 먼저 가져오기
+            await LoadOrderDataAsync(wpfOrder);
+
+            // 7. 창 띄우기
+            orderForm.Show();
+        }
+
+        /// <summary>
+        /// (2) API: 주문 목록 가져오기 (GET /api/orders)
+        /// </summary>
+        private async Task LoadOrderDataAsync(WpfOrderConfirmation wpfControl)
+        {
+            string apiUrl = $"http://127.0.0.1:5000/api/orders?_t={DateTime.Now.Ticks}"; // 캐시 방지
+
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(apiUrl);
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+
+                    // JSON을 리스트로 변환 (OrderModel 클래스 필요)
+                    var orders = JsonConvert.DeserializeObject<List<OrderModel>>(json);
+
+                    // WPF 화면에 데이터 전달
+                    wpfControl.SetOrderData(orders);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"주문 목록 로드 실패: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// (3) API: 주문 상태 변경 (POST /api/order/update_status)
+        /// </summary>
+        private async Task UpdateOrderStatusAsync(string orderId, string newStatus)
+        {
+            string apiUrl = "http://127.0.0.1:5000/api/order/update_status";
+
+            try
+            {
+                var data = new { id = orderId, status = newStatus };
+                string json = JsonConvert.SerializeObject(data);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await client.PostAsync(apiUrl, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // 성공 시 별도 메시지 없이 갱신만 해도 됨 (혹은 로그 남기기)
+                    LogManager.Add($"주문 {orderId} 상태 변경 -> {newStatus}");
+                }
+                else
+                {
+                    MessageBox.Show("상태 변경 실패 (서버 오류)");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"통신 오류: {ex.Message}");
+            }
+        }
         private void tabPage1_Click(object sender, EventArgs e)
         {
             // (참고) 탭 페이지 자체가 아니라, 그 안의 WebView2 컨트롤이 영상을 띄웁니다.
@@ -130,7 +240,7 @@ namespace last_project
             // 2. (★★★★★) WPF가 보낸 "신호"를 main.cs의 함수와 "연결"합니다.
             wpfSearch.SearchButtonClicked += WpfSearch_SearchButtonClicked;
             wpfSearch.RefreshButtonClicked += WpfSearch_RefreshButtonClicked;
-
+            wpfMenu.BaljuButtonClicked += WpfMenu_BaljuButtonClicked;
             // 3. (핵심) ElementHost(그릇)에 WPF 검색창(내용물)을 담습니다.
             elementHost2.Child = wpfSearch;
 
