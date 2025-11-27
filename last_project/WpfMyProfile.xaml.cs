@@ -22,6 +22,26 @@ namespace last_project
             StartTimer();   
         }
 
+
+        // WpfMyProfile.xaml.cs 파일 안에 추가하세요
+        private void ProfileImage_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            // 세션에서 이미지 경로 가져오기
+            string imagePath = Session.ProfileImagePath;
+
+            if (string.IsNullOrEmpty(imagePath)) return;
+
+            try
+            {
+                // 큰 화면 뷰어 띄우기
+                PictureViewerWindow viewer = new PictureViewerWindow(imagePath);
+                viewer.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("이미지 로드 오류: " + ex.Message);
+            }
+        }
         private void LoadSessionData()
         {
             if (TxtBigName != null) TxtBigName.Text = Session.UserName;

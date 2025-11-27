@@ -15,7 +15,9 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Column="0">
-            <Border Width="200" Height="200" CornerRadius="100" BorderBrush="#FF444444" BorderThickness="2" Margin="0,0,0,20">
+            <Border Width="200" Height="200" CornerRadius="100" BorderBrush="#FF444444" BorderThickness="2" Margin="0,0,0,20"
+                    Cursor="Hand"
+                    MouseLeftButtonDown="ProfileImage_Click">
                 <Border.Background>
                     <ImageBrush x:Name="ProfileImgBrush" Stretch="UniformToFill"/>
                 </Border.Background>
@@ -136,4 +138,4 @@
             </StackPanel>
         </ScrollViewer>
     </Grid>
-</UserControl>  
+</UserControl>
