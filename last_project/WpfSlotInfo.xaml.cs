@@ -11,6 +11,7 @@ namespace last_project
     {
         // --- 1. main.cs로 "신호"를 보낼 이벤트 정의 ---
         public event EventHandler SaveButtonClicked;
+        public event EventHandler DeleteButtonClicked;
 
         // --- 2. main.cs가 좌표를 '읽고/쓸' 수 있도록 '속성' 정의 ---
         // (XAML의 텍스트박스(예: TxtSlotX)와 C# 속성(예: SlotX)을 연결합니다)
@@ -55,6 +56,11 @@ namespace last_project
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
             SaveButtonClicked?.Invoke(this, EventArgs.Empty);
+        }
+        private void BtnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            // "삭제 버튼 눌렸음!" 하고 외부(setting.cs)로 신호를 보냅니다.
+            DeleteButtonClicked?.Invoke(this, EventArgs.Empty);
         }
     }
 }

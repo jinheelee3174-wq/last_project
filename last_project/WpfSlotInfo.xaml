@@ -87,15 +87,20 @@
             <TextBlock Grid.Row="3" Grid.Column="0" Text="너비 W :" />
             <TextBlock Grid.Row="4" Grid.Column="0" Text="높이 H :" />
 
-            <TextBox x:Name="TxtSlotId" Grid.Row="0" Grid.Column="1" IsReadOnly="True" />
+            <TextBox x:Name="TxtSlotId" Grid.Row="0" Grid.Column="1" />
             <TextBox x:Name="TxtSlotX" Grid.Row="1" Grid.Column="1" />
             <TextBox x:Name="TxtSlotY" Grid.Row="2" Grid.Column="1" />
             <TextBox x:Name="TxtSlotW" Grid.Row="3" Grid.Column="1" />
             <TextBox x:Name="TxtSlotH" Grid.Row="4" Grid.Column="1" />
 
             <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" Margin="5,10,0,0">
-                <CheckBox x:Name="ChkIsActive" Content="슬롯 활성화" />
-                <Button x:Name="BtnSave" Content="저장" Click="BtnSave_Click" />
+                <CheckBox x:Name="ChkIsActive" Content="슬롯 활성화" VerticalAlignment="Center" Margin="0,0,10,0"/>
+
+                <Button x:Name="BtnSave" Content="저장" Click="BtnSave_Click" Margin="0,0,5,0"/>
+
+                <Button x:Name="BtnDelete" Content="삭제" 
+            Background="#FFB91C1C" 
+            Click="BtnDelete_Click" />
             </StackPanel>
 
         </Grid>

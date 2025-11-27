@@ -6,7 +6,11 @@
              xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="1000"
-             Background="#FF121212" Foreground="White">
+             Background="#FF121212" Foreground="White"
+             TextOptions.TextFormattingMode="Display"
+             TextOptions.TextRenderingMode="ClearType"
+             UseLayoutRounding="True"
+             SnapsToDevicePixels="True">
 
     <UserControl.Resources>
         <Style TargetType="Border" x:Key="ChartCard">
@@ -34,7 +38,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- 1행: 원형 차트 모음 -->
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -43,7 +46,6 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- A 수납장 -->
             <Border Grid.Column="0" Style="{StaticResource ChartCard}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -54,9 +56,10 @@
                     <Grid Grid.Row="1">
                         <lvc:PieChart Series="{Binding SeriesA}" 
                                       InitialRotation="-90"
-                                      LegendPosition="Bottom"/>
-                        <!-- 중앙 텍스트 -->
-                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" IsHitTestVisible="False">
+                                      LegendPosition="Bottom"
+                                      TooltipTextPaint="{Binding TooltipTextPaint}"/>
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" IsHitTestVisible="False"
+                                    Margin="0, -20, 0, 0">
                             <TextBlock Text="70%" Foreground="White" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
                             <TextBlock Text="적재됨" Foreground="Gray" FontSize="12" HorizontalAlignment="Center"/>
                         </StackPanel>
@@ -64,7 +67,6 @@
                 </Grid>
             </Border>
 
-            <!-- B 수납장 -->
             <Border Grid.Column="1" Style="{StaticResource ChartCard}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -75,8 +77,10 @@
                     <Grid Grid.Row="1">
                         <lvc:PieChart Series="{Binding SeriesB}" 
                                       InitialRotation="-90"
-                                      LegendPosition="Bottom"/>
-                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" IsHitTestVisible="False">
+                                      LegendPosition="Bottom"
+                                      TooltipTextPaint="{Binding TooltipTextPaint}"/>
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" IsHitTestVisible="False"
+                                    Margin="0, -20, 0, 0">
                             <TextBlock Text="45%" Foreground="White" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
                             <TextBlock Text="적재됨" Foreground="Gray" FontSize="12" HorizontalAlignment="Center"/>
                         </StackPanel>
@@ -84,7 +88,6 @@
                 </Grid>
             </Border>
 
-            <!-- 카테고리 비율 -->
             <Border Grid.Column="2" Style="{StaticResource ChartCard}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -92,11 +95,13 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <TextBlock Text="카테고리 비율" Style="{StaticResource ChartTitle}"/>
-                    <lvc:PieChart Grid.Row="1" Series="{Binding CategorySeries}" LegendPosition="Right"/>
+                    <lvc:PieChart Grid.Row="1" 
+                                  Series="{Binding CategorySeries}" 
+                                  LegendPosition="Right"
+                                  TooltipTextPaint="{Binding TooltipTextPaint}"/>
                 </Grid>
             </Border>
 
-            <!-- 시간대별 활동량 -->
             <Border Grid.Column="3" Style="{StaticResource ChartCard}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -107,12 +112,12 @@
                     <lvc:CartesianChart Grid.Row="1" 
                                         Series="{Binding HourlySeries}" 
                                         XAxes="{Binding HourXAxes}"
-                                        YAxes="{Binding CommonYAxes}"/>
+                                        YAxes="{Binding CommonYAxes}"
+                                        TooltipTextPaint="{Binding TooltipTextPaint}"/>
                 </Grid>
             </Border>
         </Grid>
 
-        <!-- 2행: 꺾은선, 게이지, 막대 -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -120,7 +125,6 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- 입출고 추이 -->
             <Border Grid.Column="0" Style="{StaticResource ChartCard}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -132,11 +136,11 @@
                                         Series="{Binding InOutSeries}" 
                                         XAxes="{Binding DateXAxes}" 
                                         YAxes="{Binding CommonYAxes}"
-                                        LegendPosition="Top"/>
+                                        LegendPosition="Top"
+                                        TooltipTextPaint="{Binding TooltipTextPaint}"/>
                 </Grid>
             </Border>
 
-            <!-- AI 인식 성공률 (게이지 스타일 파이차트) -->
             <Border Grid.Column="1" Style="{StaticResource ChartCard}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -148,14 +152,15 @@
                         <lvc:PieChart Series="{Binding AiGaugeSeries}" 
                                       InitialRotation="-90"
                                       Total="100"
-                                      LegendPosition="Hidden"/>
+                                      LegendPosition="Hidden"
+                                      TooltipTextPaint="{Binding TooltipTextPaint}"/>
                         <TextBlock Text="92.5%" VerticalAlignment="Center" HorizontalAlignment="Center" 
-                                   FontSize="28" FontWeight="Bold" Foreground="#FF00E676"/>
+                                   FontSize="28" FontWeight="Bold" Foreground="#FF00E676"
+                                   Margin="0, -5, 0, 0"/>
                     </Grid>
                 </Grid>
             </Border>
 
-            <!-- 평균 작업 시간 -->
             <Border Grid.Column="2" Style="{StaticResource ChartCard}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -166,12 +171,12 @@
                     <lvc:CartesianChart Grid.Row="1" 
                                         Series="{Binding TimeSeries}" 
                                         XAxes="{Binding TaskXAxes}" 
-                                        YAxes="{Binding CommonYAxes}"/>
+                                        YAxes="{Binding CommonYAxes}"
+                                        TooltipTextPaint="{Binding TooltipTextPaint}"/>
                 </Grid>
             </Border>
         </Grid>
 
-        <!-- 3행: 스택, 그룹, 가로 막대 -->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -179,7 +184,6 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- 브랜드별 재고 -->
             <Border Grid.Column="0" Style="{StaticResource ChartCard}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -191,11 +195,11 @@
                                         Series="{Binding BrandSeries}" 
                                         XAxes="{Binding BrandXAxes}" 
                                         YAxes="{Binding CommonYAxes}"
-                                        LegendPosition="Right"/>
+                                        LegendPosition="Right"
+                                        TooltipTextPaint="{Binding TooltipTextPaint}"/>
                 </Grid>
             </Border>
 
-            <!-- 수납장별 브랜드 -->
             <Border Grid.Column="1" Style="{StaticResource ChartCard}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -207,11 +211,11 @@
                                         Series="{Binding CabinetSeries}" 
                                         XAxes="{Binding CabinetXAxes}" 
                                         YAxes="{Binding CommonYAxes}"
-                                        LegendPosition="Right"/>
+                                        LegendPosition="Right"
+                                        TooltipTextPaint="{Binding TooltipTextPaint}"/>
                 </Grid>
             </Border>
 
-            <!-- 명령어 사용 빈도 (가로 막대) -->
             <Border Grid.Column="2" Style="{StaticResource ChartCard}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -223,7 +227,8 @@
                                         Series="{Binding CommandSeries}" 
                                         XAxes="{Binding CommonYAxes}" 
                                         YAxes="{Binding CommandYAxes}" 
-                                        LegendPosition="Hidden"/>
+                                        LegendPosition="Hidden"
+                                        TooltipTextPaint="{Binding TooltipTextPaint}"/>
                 </Grid>
             </Border>
         </Grid>

@@ -95,6 +95,8 @@ namespace last_project
             // --- ▼▼▼ [추가!] "저장" 버튼 신호 연결! ▼▼▼ ---
             wpfSlotInfo.SaveButtonClicked += async (s, ev) => await SaveSlotDataAsync();
 
+            wpfSlotInfo.DeleteButtonClicked += async (s, ev) => await DeleteSlotAsync();
+
             wpfHostRight.Child = wpfSlotInfo;
             splitContainer1.Panel2.Controls.Add(wpfHostRight);
 
@@ -122,6 +124,12 @@ namespace last_project
             grid.ColumnHeadersHeight = 35;
             splitContainer1.BackColor = System.Drawing.Color.Black;
 
+
+
+            dataGridView1.CellClick += DataGridView1_CellClick;
+
+            // --- ▼▼▼ [추가!] 폼이 켜질 때 "슬롯 목록" 로드! ▼▼▼ ---
+            await LoadSlotDataAsync();
             // --- ▼▼▼ [추가!] 폼이 켜질 때 "슬롯 목록" 로드! ▼▼▼ ---
             await LoadSlotDataAsync();
         }
@@ -279,6 +287,13 @@ namespace last_project
         {
             var targetGrid = dataGridView1; // (★★★★★) 0번 탭의 슬롯 그리드
             targetGrid.AutoGenerateColumns = false;
+
+            targetGrid.Columns[0].DataPropertyName = "slot_id";   // 1번째 칸: ID
+            targetGrid.Columns[1].DataPropertyName = "x";         // 2번째 칸: X
+            targetGrid.Columns[2].DataPropertyName = "y";         // 3번째 칸: Y
+            targetGrid.Columns[3].DataPropertyName = "w";         // 4번째 칸: W
+            targetGrid.Columns[4].DataPropertyName = "h";         // 5번째 칸: H
+            targetGrid.Columns[5].DataPropertyName = "is_active"; // 6번째 칸: 활성화
 
             string apiUrl = $"http://127.0.0.1:5000/api/slots?_t={DateTime.Now.Ticks}";
 
@@ -577,6 +592,107 @@ namespace last_project
             else
             {
                 MessageBox.Show("먼저 그리드에서 삭제할 행을 '선택'해주세요.");
+            }
+        }
+
+        // ▼▼▼ [신규 추가] 그리드 행 클릭 시 상세 정보창에 데이터 채우기 ▼▼▼
+        private void DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // 헤더 클릭이나 빈 공간 클릭 방지
+            if (e.RowIndex < 0 || wpfSlotInfo == null) return;
+
+            try
+            {
+                // 1. 선택된 행 가져오기
+                DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
+
+                // 2. 각 셀의 데이터를 가져와서 WpfSlotInfo에 전달
+                // (DB 컬럼명이나 인덱스가 맞는지 확인 필요, 여기서는 순서대로 매핑한다고 가정)
+                // 만약 DataTable로 바인딩했다면 컬럼 이름("slot_id" 등)으로 접근하는 것이 안전합니다.
+
+                // 예시: DataTable의 컬럼명을 정확히 안다면: row.Cells["slot_id"].Value.ToString();
+                // 현재 코드를 보면 Column1 ~ Column6으로 정의되어 있으므로 인덱스나 이름 확인이 필요합니다.
+                // 보통 DataTable 바인딩 시 DataPropertyName을 따릅니다.
+
+                // 안전하게 셀 값들을 문자열로 변환하여 넣습니다.
+                // (아래 컬럼 인덱스 0~5는 dataGridView1의 컬럼 순서에 따라 조정하세요)
+                wpfSlotInfo.SlotId = row.Cells[0].Value?.ToString() ?? "";       // ID
+                wpfSlotInfo.SlotX = row.Cells[1].Value?.ToString() ?? "0";      // X
+                wpfSlotInfo.SlotY = row.Cells[2].Value?.ToString() ?? "0";      // Y
+                wpfSlotInfo.SlotW = row.Cells[3].Value?.ToString() ?? "0";      // W
+                wpfSlotInfo.SlotH = row.Cells[4].Value?.ToString() ?? "0";      // H
+
+                // "슬롯 활성화" 체크박스 (Boolean 변환)
+                var activeVal = row.Cells[5].Value;
+                if (activeVal is bool bVal)
+                {
+                    wpfSlotInfo.IsSlotActive = bVal;
+                }
+                else if (activeVal != null)
+                {
+                    // 1, "True", "true" 문자열 처리
+                    string sVal = activeVal.ToString().ToLower();
+                    wpfSlotInfo.IsSlotActive = (sVal == "1" || sVal == "true");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"데이터 선택 중 오류: {ex.Message}");
+            }
+        }
+
+        // [setting.cs] 맨 아래쪽 (다른 함수들 근처)에 추가하세요.
+
+        private async Task DeleteSlotAsync()
+        {
+            // 1. 선택된 ID가 있는지 확인
+            string targetId = wpfSlotInfo.SlotId;
+            if (string.IsNullOrWhiteSpace(targetId) || targetId == "(신규 슬롯)")
+            {
+                MessageBox.Show("삭제할 슬롯을 선택해주세요.");
+                return;
+            }
+
+            // 2. 진짜 지울 건지 물어보기 (안전 장치)
+            if (MessageBox.Show($"정말 '{targetId}' 슬롯을 삭제하시겠습니까?", "삭제 확인",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+            {
+                return;
+            }
+
+            // 3. 서버에 삭제 요청 보내기
+            string apiUrl = "http://127.0.0.1:5000/api/slots/delete";
+            try
+            {
+                var data = new { slot_id = targetId };
+                string json = JsonConvert.SerializeObject(data);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await client.PostAsync(apiUrl, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("삭제되었습니다.");
+
+                    // 4. 입력창 비우기
+                    wpfSlotInfo.SlotId = "";
+                    wpfSlotInfo.SlotX = "0";
+                    wpfSlotInfo.SlotY = "0";
+                    wpfSlotInfo.SlotW = "0";
+                    wpfSlotInfo.SlotH = "0";
+                    wpfSlotInfo.IsSlotActive = false;
+
+                    // 5. 목록 새로고침
+                    await LoadSlotDataAsync();
+                }
+                else
+                {
+                    MessageBox.Show("삭제 실패 (서버 오류)");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"삭제 중 오류 발생: {ex.Message}");
             }
         }
     }
