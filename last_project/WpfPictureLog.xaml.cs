@@ -1,45 +1,94 @@
-﻿using System.Windows.Controls;
-using System.Windows; // FrameworkElement를 위해 추가
-using System.Windows.Input; // MouseButtonEventArgs를 위해 추가
+﻿using System;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace last_project
 {
-    /// <summary>
-    /// WpfPictureLog.xaml에 대한 상호 작용 논리
-    /// </summary>
     public partial class WpfPictureLog : System.Windows.Controls.UserControl
     {
         public WpfPictureLog()
         {
             InitializeComponent();
+            InitializeSearchOptions();
         }
 
-        /// <summary>
-        /// (★★★★★ 추가!) XAML의 작은 이미지를 클릭했을 때 실행되는 함수
-        /// </summary>
-        private void SmallImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        // 초기 설정: 콤보박스 채우기 및 오늘 날짜 설정
+        private void InitializeSearchOptions()
         {
-            // 1. 클릭된 컨트롤(Image)을 가져옵니다.
-            var imageControl = sender as FrameworkElement;
-            if (imageControl == null) return;
+            // 1. 날짜는 오늘로 기본 설정
+            DtPicker.SelectedDate = DateTime.Today;
 
-            // 2. 그 컨트롤에 바인딩된 데이터(PictureLogEntry)를 가져옵니다.
-            var logEntry = imageControl.DataContext as PictureLogEntry;
-            if (logEntry == null) return;
-
-            // 3. 데이터에서 이미지 경로(string)를 확인합니다.
-            if (string.IsNullOrEmpty(logEntry.ImagePath))
+            // 2. 시간 콤보박스 (0시 ~ 23시)
+            for (int i = 0; i <= 23; i++)
             {
-                // (혹시 모를 오류 방지)
-                System.Windows.MessageBox.Show("이미지 경로가 없습니다.");
+                string hour = i.ToString("D2"); // "00", "01" ...
+                CmbStartHour.Items.Add(hour);
+                CmbEndHour.Items.Add(hour);
+            }
+
+            // 기본값: 00시 ~ 23시 (하루 전체)
+            CmbStartHour.SelectedIndex = 0;
+            CmbEndHour.SelectedIndex = 23;
+        }
+
+        // [검색] 버튼 클릭
+        private void BtnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            // 1. ViewModel 가져오기
+            var vm = this.DataContext as PictureLogViewModel;
+            if (vm == null) return;
+
+            // 2. 날짜 확인
+            if (DtPicker.SelectedDate == null)
+            {
+                System.Windows.MessageBox.Show("날짜를 선택해주세요.");
+                return;
+            }
+            DateTime selectedDate = DtPicker.SelectedDate.Value;
+
+            // 3. 시간 확인
+            if (CmbStartHour.SelectedItem == null || CmbEndHour.SelectedItem == null) return;
+
+            int start = int.Parse(CmbStartHour.SelectedItem.ToString());
+            int end = int.Parse(CmbEndHour.SelectedItem.ToString());
+
+            if (start > end)
+            {
+                System.Windows.MessageBox.Show("시작 시간이 종료 시간보다 늦을 수 없습니다.");
                 return;
             }
 
-            // 4. (핵심) PictureViewerWindow를 '새로' 만듭니다.
-            //    생성자에 클릭된 이미지의 경로(logEntry.ImagePath)를 전달합니다.
-            PictureViewerWindow viewer = new PictureViewerWindow(logEntry.ImagePath);
+            // 4. ViewModel에 필터링 요청
+            vm.SearchLogs(selectedDate, start, end);
+        }
 
-            // 5. 새 창을 띄웁니다.
+        // [전체] 버튼 클릭 (초기화)
+        private void BtnReset_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = this.DataContext as PictureLogViewModel;
+            if (vm == null) return;
+
+            vm.ResetFilter();
+
+            // UI도 초기화
+            DtPicker.SelectedDate = DateTime.Today;
+            CmbStartHour.SelectedIndex = 0;
+            CmbEndHour.SelectedIndex = 23;
+        }
+
+        // 이미지 클릭 (확대 보기) - 기존 코드 유지
+        private void SmallImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var imageControl = sender as FrameworkElement;
+            if (imageControl == null) return;
+
+            var logEntry = imageControl.DataContext as PictureLogEntry;
+            if (logEntry == null) return;
+
+            if (string.IsNullOrEmpty(logEntry.ImagePath)) return;
+
+            PictureViewerWindow viewer = new PictureViewerWindow(logEntry.ImagePath);
             viewer.ShowDialog();
         }
     }

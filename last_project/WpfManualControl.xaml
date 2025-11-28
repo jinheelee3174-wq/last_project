@@ -3,116 +3,159 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="clr-namespace:last_project"
+             xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="550"
-             Background="#FF2D2D30">
+             d:DesignHeight="600" d:DesignWidth="900"
+             Background="#FF1E1E1E">
+
+    <UserControl.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#FF3A3A3A"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="10, 5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FF505050"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FF202020"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="GroupBox">
+            <Setter Property="Foreground" Value="#FFCCCCCC"/>
+            <Setter Property="BorderBrush" Value="#FF444444"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <Style x:Key="LogBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="#FF121212"/>
+            <Setter Property="Foreground" Value="#FF1CE2D4"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="AcceptsReturn" Value="True"/>
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+    </UserControl.Resources>
 
     <Grid Margin="10">
-        <Grid.Resources>
-            <Style TargetType="Button">
-                <Setter Property="Background" Value="#FF4F4F52"/>
-                <Setter Property="Foreground" Value="White"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Padding" Value="10, 5"/>
-                <Setter Property="Margin" Value="5"/>
-                <Setter Property="Cursor" Value="Hand"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <Border Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="15"
-                                    SnapsToDevicePixels="True">
-                                <ContentPresenter HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center"
-                                                  Margin="{TemplateBinding Padding}"
-                                                  RecognizesAccessKey="True"
-                                                  Content="{TemplateBinding Content}"
-                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                  ContentStringFormat="{TemplateBinding ContentStringFormat}"
-                                                  TextElement.Foreground="{TemplateBinding Foreground}"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="#FF68686A"/>
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-            <Style TargetType="GroupBox">
-                <Setter Property="Foreground" Value="#FFCCCCCC"/>
-                <Setter Property="BorderBrush" Value="#FF4F4F52"/>
-                <Setter Property="BorderThickness" Value="1"/>
-                <Setter Property="Margin" Value="5"/>
-                <Setter Property="Padding" Value="10"/>
-            </Style>
-            <Style x:Key="LogBoxStyle" TargetType="TextBox">
-                <Setter Property="Background" Value="#FF1E1E1E"/>
-                <Setter Property="Foreground" Value="#FFDCDCDC"/>
-                <Setter Property="BorderBrush" Value="#FF4F4F52"/>
-                <Setter Property="IsReadOnly" Value="True"/>
-                <Setter Property="AcceptsReturn" Value="True"/>
-                <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
-                <Setter Property="FontFamily" Value="Consolas"/>
-            </Style>
-        </Grid.Resources>
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="150" />
         </Grid.RowDefinitions>
 
-        <GroupBox Header="차량 이동" Grid.Row="0" Grid.Column="0" MinWidth="150">
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="240" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-                <Button x:Name="ForwardButton" Content="▲ 전진" Width="100" Height="40" 
-                        Margin="5,10,5,5"
-                        MouseDown="ForwardButton_MouseDown" 
-                        MouseUp="ForwardButton_MouseUp" Click="ForwardButton_Click" />
+            <Viewbox Grid.Column="0" VerticalAlignment="Top" Stretch="Uniform" StretchDirection="DownOnly">
 
-                <Button x:Name="StopButton" Content="■ 정지" Width="100" Height="40" 
-                        Margin="5,5,5,5" FontWeight="Bold" 
-                        Click="StopButton_Click" />
+                <StackPanel Orientation="Vertical" Width="230">
 
-                <Button x:Name="BackwardButton" Content="▼ 후진" Width="100" Height="40" 
-                        Margin="5,5,5,10"
-                        MouseDown="BackwardButton_MouseDown" 
-                        MouseUp="BackwardButton_MouseUp" Click="BackwardButton_Click" />
+                    <GroupBox Header="🕹 차량 제어 (Manual)" Margin="5, 5, 5, 15" Padding="10, 20">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 
-            </StackPanel>
-        </GroupBox>
-        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical">
-            <GroupBox Header="속도 조절">
-                <StackPanel Orientation="Vertical">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-                        <Label Content="현재 속도:" VerticalAlignment="Center" Foreground="White"/>
-                        <TextBlock x:Name="SpeedValueText" Text="150" VerticalAlignment="Center" FontWeight="Bold" FontSize="16" Foreground="White"/>
-                    </StackPanel>
+                            <Button x:Name="ForwardButton" Content="▲ 전진" 
+                                    Width="140" Height="65" 
+                                    Margin="0, 0, 0, 15"
+                                    PreviewMouseDown="ForwardButton_PreviewMouseDown" 
+                                    PreviewMouseUp="ForwardButton_PreviewMouseUp" />
 
-                    <Slider x:Name="SpeedSlider" Minimum="0" Maximum="255" Value="150" Margin="5"
-                            MinWidth="200" IsSnapToTickEnabled="True" TickFrequency="1" 
-                            ValueChanged="SpeedSlider_ValueChanged" />
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button x:Name="StopButton" Content="■ 정지" 
+                                        Width="140" Height="65"
+                                        Margin="0, 15, 0, 15"
+                                        Background="#FFB91C1C" Foreground="White"
+                                        Click="StopButton_Click" />
+                            </StackPanel>
+
+                            <Button x:Name="BackwardButton" Content="▼ 후진" 
+                                    Width="140" Height="65" 
+                                    Margin="0, 15, 0, 0"
+                                    PreviewMouseDown="BackwardButton_PreviewMouseDown" 
+                                    PreviewMouseUp="BackwardButton_PreviewMouseUp" />
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox Header="📢 보조 기능" Margin="5, 20, 5, 5" Padding="10">
+                        <StackPanel>
+                            <Button x:Name="HonkButton" Content="경적 울리기" 
+                                    Height="60" Margin="5"
+                                    Background="#FF1F52D2"
+                                    Click="HonkButton_Click" />
+                        </StackPanel>
+                    </GroupBox>
                 </StackPanel>
+            </Viewbox>
+
+            <GroupBox Grid.Column="1" Header="📷 실시간 모니터링 (Live View)" Margin="10,5,5,5">
+                <Border Background="Black" CornerRadius="5" ClipToBounds="True">
+                    <wv2:WebView2 x:Name="CameraWebView" />
+                </Border>
+            </GroupBox>
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="5,10,5,0">
+            <GroupBox Header="📝 시스템 로그" Padding="5">
+                <TextBox x:Name="LogTextBox" 
+                         Style="{StaticResource LogBoxStyle}"
+                         Text="[System] 수동 제어 모드 준비 완료...&#x0a;"/>
             </GroupBox>
 
-            <GroupBox Header="보조 기능">
-                <Button x:Name="HonkButton" Content="경적 울리기" Width="120" Height="30" HorizontalAlignment="Left" 
-                        Click="HonkButton_Click" />
-            </GroupBox>
-        </StackPanel>
-
-        <GroupBox Header="명령 로그" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Padding="5">
-            <TextBox x:Name="LogTextBox" 
-                     Style="{StaticResource LogBoxStyle}"
-                     Text="[로그 창] 프로그램이 시작되었습니다.&#x0a;"/>
-        </GroupBox>
+            <Button x:Name="BtnExpandLog"
+                    Content="⛶" 
+                    ToolTip="로그 새 창으로 보기"
+                    HorizontalAlignment="Right" 
+                    VerticalAlignment="Top"
+                    Width="30" Height="25"
+                    Margin="0, -11, 10, 0"
+                    Background="Transparent"
+                    Foreground="#FF888888"
+                    FontWeight="Bold"
+                    FontSize="16"
+                    BorderThickness="0"
+                    Cursor="Hand"
+                    Click="BtnExpandLog_Click">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </Grid>
     </Grid>
 </UserControl>

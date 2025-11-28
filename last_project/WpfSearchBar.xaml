@@ -59,7 +59,7 @@
     </UserControl.Resources>
 
     <StackPanel Orientation="Horizontal">
-        <TextBox x:Name="TxtSearch" />
+        <TextBox x:Name="TxtSearch" Background="#FF494A4A" Width="120" />
         <Button x:Name="BtnSearch" Content="검색" Click="BtnSearch_Click" />
 
         <Button x:Name="BtnRefresh" Content="새로고침" Width="70" Click="BtnRefresh_Click" />

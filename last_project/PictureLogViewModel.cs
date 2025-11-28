@@ -1,34 +1,27 @@
 ﻿using System;
-using System.Collections.ObjectModel; // (중요!) List 대신 ObservableCollection 사용
+using System.Collections.Generic; // List 사용을 위해 추가
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq; // 필터링(LINQ)을 위해 추가
 using System.Runtime.CompilerServices;
 
 namespace last_project
 {
-    /// <summary>
-    /// WpfPictureLog 컨트롤의 데이터(로그 목록)를 관리하는 ViewModel 클래스입니다.
-    /// </summary>
     public class PictureLogViewModel : INotifyPropertyChanged
     {
-        /// <summary>
-        /// (핵심) 사진 로그 항목들의 '목록'입니다.
-        /// ObservableCollection을 사용해야 UI가 자동으로 업데이트됩니다.
-        /// </summary>
-        public ObservableCollection<PictureLogEntry> LogEntries { get; set; }
+        // 1. (원본 저장소) 모든 로그를 담고 있는 리스트 (화면엔 안 보임)
+        private List<PictureLogEntry> _allLogs;
+
+        // 2. (화면 표시용) 실제 UI(ListBox)와 연결될 컬렉션
+        public ObservableCollection<PictureLogEntry> FilteredLogs { get; set; }
 
         public PictureLogViewModel()
         {
-            LogEntries = new ObservableCollection<PictureLogEntry>();
-
-            // (테스트용) 샘플 데이터가 필요하면 여기서 추가
-            // AddLog("C:\\Path\\To\\SampleImage.jpg", "로그 뷰어 시작됨");
+            _allLogs = new List<PictureLogEntry>();
+            FilteredLogs = new ObservableCollection<PictureLogEntry>();
         }
 
-        /// <summary>
-        /// (외부에서 호출) 새 사진 로그를 목록의 '맨 위에' 추가합니다.
-        /// </summary>
-        /// <param name="imagePath">저장된 이미지 파일 경로</param>
-        /// <param name="description">로그 설명</param>
+        // 로그 추가 함수
         public void AddLog(string imagePath, string description)
         {
             var newEntry = new PictureLogEntry
@@ -38,21 +31,43 @@ namespace last_project
                 Timestamp = DateTime.Now
             };
 
-            // (중요) WPF 컨트롤은 UI 스레드에서 생성/수정되어야 합니다.
-            // 혹시라도 다른 스레드(예: 카메라 캡처 스레드)에서 이 함수를 호출할 경우를 대비해
-            // UI 스레드에서 실행되도록 보장하는 것이 안전합니다.
-            // (지금은 WinForms 기반이라 Application.Current가 null일 수 있으니,
-            //  WinForms에서 호출할 때 스레드 처리를 하거나, 우선 이대로 둡니다.)
+            // 원본 리스트에 추가
+            _allLogs.Insert(0, newEntry);
 
-            // LogEntries.Insert(0, newEntry); // 0번 인덱스(맨 위)에 추가
-
-            // (수정) 더 안전한 스레드 처리 (WPF/WinForms 하이브리드 환경 고려)
-            // 우선 간단하게 직접 추가로 진행합니다.
-            LogEntries.Insert(0, newEntry);
+            // 화면 리스트에도 추가 (필터링 상태가 아닐 때 즉시 반영)
+            // 혹은 단순히 현재 필터 조건에 맞으면 추가할 수도 있으나, 
+            // 편의상 가장 최신은 바로 보여줍니다.
+            FilteredLogs.Insert(0, newEntry);
         }
 
+        // ★ [핵심 기능] 날짜와 시간대로 필터링하는 함수
+        public void SearchLogs(DateTime selectedDate, int startHour, int endHour)
+        {
+            // 1. LINQ를 사용하여 조건에 맞는 데이터만 추출
+            var result = _allLogs.Where(log =>
+                log.Timestamp.Date == selectedDate.Date && // 날짜가 같고
+                log.Timestamp.Hour >= startHour &&         // 시작 시간보다 크거나 같고
+                log.Timestamp.Hour <= endHour              // 종료 시간보다 작거나 같은 것
+            ).OrderByDescending(log => log.Timestamp);     // 최신순 정렬
 
-        // --- INotifyPropertyChanged 구현 ---
+            // 2. 화면 리스트 초기화 후 결과만 다시 담기
+            FilteredLogs.Clear();
+            foreach (var item in result)
+            {
+                FilteredLogs.Add(item);
+            }
+        }
+
+        // [초기화] 모든 로그 다시 보여주기
+        public void ResetFilter()
+        {
+            FilteredLogs.Clear();
+            foreach (var item in _allLogs)
+            {
+                FilteredLogs.Add(item);
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

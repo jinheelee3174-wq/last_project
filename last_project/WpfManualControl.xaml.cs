@@ -3,169 +3,164 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.ComponentModel;
-// --- ▼▼▼ [1. 추가!] 네트워크 통신(HttpClient)을 위해 2줄 추가 ▼▼▼ ---
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Web.WebView2.Core;
 
-// (네임스페이스는 last_project가 맞습니다)
 namespace last_project
 {
-    /// <summary>
-    /// WpfManualControl.xaml에 대한 상호 작용 논리
-    /// </summary>
     public partial class WpfManualControl : System.Windows.Controls.UserControl
     {
-        // --- ▼▼▼ [2. 수정!] 'testcar' 샘플의 설정값으로 변경 ▼▼▼ ---
-        // -----------------------------------------------------------------
-        // [설정] (testcar 샘플의 IP와 포트)
         private const string ESP01_IP = "192.168.0.7";
         private const string ESP01_PORT = "80";
-        // -----------------------------------------------------------------
+        private const string CAM_SERVER_IP = "192.168.0.72";
+        private const string STREAM_NAME = "mystream";
+        private const string WEBRTC_URL = $"http://{CAM_SERVER_IP}:8889/{STREAM_NAME}";
 
-        // --- ▼▼▼ [3. 수정!] 'static readonly'를 제거하고 'instance' 변수로 변경 ▼▼▼ ---
         private readonly HttpClient client;
-        // --- ▲▲▲ ---
 
         public WpfManualControl()
         {
             InitializeComponent();
 
-            // --- ▼▼▼ [4. 수정!] 디자이너 모드가 아닐 때 'instance'로 초기화 ▼▼▼ ---
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                // (이 컨트롤 전용 HttpClient 생성)
                 client = new HttpClient();
-                client.Timeout = TimeSpan.FromSeconds(3); // (testcar 샘플과 동일하게)
-            }
-            // --- ▲▲▲ ---
-        }
-
-        // ========== XAML에서 연결한 이벤트 핸들러들 ==========
-
-        // --- 차량 이동 (전진/후진: 누르고 있는 동안) ---
-        private async void ForwardButton_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            await SendCommandToCar("F"); // "FORWARD" -> "F"
-            AddLog("전진 명령 전송");
-        }
-
-        private async void ForwardButton_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            await SendCommandToCar("S"); // "STOP" -> "S" (마우스 떼면 정지)
-            AddLog("정지 (전진 버튼 뗌)");
-        }
-
-        private async void BackwardButton_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            await SendCommandToCar("B"); // "BACKWARD" -> "B"
-            AddLog("후진 명령 전송");
-        }
-
-        private async void BackwardButton_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            await SendCommandToCar("S"); // "STOP" -> "S" (마우스 떼면 정지)
-            AddLog("정지 (후진 버튼 뗌)");
-        }
-
-        // --- 차량 이동 (정지) ---
-        private async void StopButton_Click(object sender, RoutedEventArgs e)
-        {
-            await SendCommandToCar("S"); // "STOP" -> "S"
-            AddLog("정지 명령 전송 (수동)");
-        }
-
-        // --- 속도 조절 ---
-        private async void SpeedSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (SpeedValueText != null)
-            {
-                int newSpeed = (int)e.NewValue;
-                SpeedValueText.Text = newSpeed.ToString();
-
-                await SendCommandToCar("V");
+                client.Timeout = TimeSpan.FromSeconds(3);
+                InitializeCameraAsync();
             }
         }
 
-        // --- 보조 기능 ---
-        private async void HonkButton_Click(object sender, RoutedEventArgs e)
+        private async void InitializeCameraAsync()
         {
-            await SendCommandToCar("H");
-            AddLog("경적 울리기(H) 명령 전송");
-        }
-
-
-        // ========== 로그 및 통신을 위한 헬퍼(Helper) 함수 ==========
-
-        private void AddLog(string message)
-        {
-            if (LogTextBox == null) return;
-
-            // 비동기(async) 메서드에서 UI 컨트롤을 안전하게 업데이트
-            Dispatcher.Invoke(() =>
-            {
-                string logEntry = $"[{DateTime.Now.ToString("HH:mm:ss")}] {message}\n";
-                LogTextBox.AppendText(logEntry);
-                LogTextBox.ScrollToEnd();
-            });
-        }
-
-        /// <summary>
-        /// 'testcar' 샘플과 동일한 로직으로 ESP-01에 HTTP 명령 전송
-        /// </summary>
-        private async Task SendCommandToCar(string command)
-        {
-            // --- ▼▼▼ [5. 수정!] client가 null일 경우(디자이너 모드) 실행 방지 ▼▼▼ ---
-            if (client == null)
-            {
-                AddLog("[디자인 모드] 전송 스킵됨.");
-                return;
-            }
-            // --- ▲▲▲ ---
-
-            AddLog($"'{command}' 명령 전송 시도...");
-
-            string url = $"http://{ESP01_IP}:{ESP01_PORT}/?cmd={command}";
-
-            if ((command == "F" || command == "B" || command == "V") && this.SpeedSlider != null)
-            {
-                int speed = (int)this.SpeedSlider.Value;
-                url += $"&speed={speed}";
-            }
-
             try
             {
-                HttpResponseMessage response = await client.GetAsync(url);
-                response.EnsureSuccessStatusCode();
-                string responseBody = await response.Content.ReadAsStringAsync();
-
-                if (command != "V")
-                {
-                    AddLog($"성공: '{command}' (응답: {responseBody})");
-                }
-                System.Diagnostics.Debug.WriteLine($"[C#] Sent {command}. URL: {url}");
-            }
-            catch (HttpRequestException ex)
-            {
-                AddLog($"[Error] 연결 실패. IP({ESP01_IP}) 확인.");
-            }
-            catch (TaskCanceledException ex)
-            {
-                AddLog($"[Error] 타임아웃. ESP-01 응답 없음.");
+                await CameraWebView.EnsureCoreWebView2Async(null);
+                CameraWebView.CoreWebView2.NavigationCompleted += CoreWebView2_NavigationCompleted;
+                CameraWebView.CoreWebView2.Navigate(WEBRTC_URL);
+                AddLog($"[Camera] 연결 시도: {WEBRTC_URL}");
             }
             catch (Exception ex)
             {
-                AddLog($"[Error] 알 수 없는 오류: {ex.Message}");
+                AddLog($"[Error] 카메라 초기화 실패: {ex.Message}");
             }
         }
 
-        private async void ForwardButton_Click(object sender, RoutedEventArgs e)
+        private async void CoreWebView2_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
         {
-            await SendCommandToCar("F"); // "F" (방향+속도) 명령 전송
+            if (e.IsSuccess)
+            {
+                string css = @"
+                    video { object-fit: cover !important; width: 100% !important; height: 100% !important; position: absolute; top: 0; left: 0; }
+                    body { margin: 0 !important; padding: 0 !important; overflow: hidden !important; background-color: black !important; }";
+                string script = $"var style = document.createElement('style'); style.type = 'text/css'; style.innerHTML = `{css}`; document.body.appendChild(style);";
+                await CameraWebView.CoreWebView2.ExecuteScriptAsync(script);
+                AddLog("[Camera] 화면 최적화 완료.");
+            }
         }
 
-        private async void BackwardButton_Click(object sender, RoutedEventArgs e)
+        // =========================================================
+        //  [2] 차량 제어 버튼 이벤트 (Preview 사용)
+        // =========================================================
+
+        // ▲ 전진 (PreviewMouseDown 사용)
+        private async void ForwardButton_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            await SendCommandToCar("B"); // "B" (방향+속도) 명령 전송
+            AddLog("▲ 전진 버튼 눌림"); // 버튼 반응 확인용 로그
+            await SendCommandToCar("F");
+        }
+
+        // ▲ 전진 뗌 (PreviewMouseUp 사용)
+        private async void ForwardButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            await SendCommandToCar("S");
+            AddLog("■ 정지 (버튼 뗌)");
+        }
+
+        // ▼ 후진 (PreviewMouseDown 사용)
+        private async void BackwardButton_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            AddLog("▼ 후진 버튼 눌림");
+            await SendCommandToCar("B");
+        }
+
+        // ▼ 후진 뗌 (PreviewMouseUp 사용)
+        private async void BackwardButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            await SendCommandToCar("S");
+            AddLog("■ 정지 (버튼 뗌)");
+        }
+
+        // ■ 정지 (클릭)
+        private async void StopButton_Click(object sender, RoutedEventArgs e)
+        {
+            await SendCommandToCar("S");
+            AddLog("■ 강제 정지 명령 전송");
+        }
+
+        // 📢 경적 (클릭)
+        private async void HonkButton_Click(object sender, RoutedEventArgs e)
+        {
+            await SendCommandToCar("H");
+            AddLog("📢 빵빵!");
+        }
+
+        // =========================================================
+        //  [3] 로그 및 기타 기능
+        // =========================================================
+
+        private void BtnExpandLog_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                LogForm logForm = new LogForm();
+                logForm.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+                logForm.Show();
+                AddLog("[System] 로그 상세 창 열기");
+            }
+            catch (Exception ex) { AddLog($"[Error] 로그 창 열기 실패: {ex.Message}"); }
+        }
+
+        // 로그 출력 헬퍼 함수 (수정됨)
+        private void AddLog(string message)
+        {
+            // 1. [핵심] 전역 로그 매니저에 저장 (이 한 줄 덕분에 새 창에서도 보입니다!)
+            last_project.LogManager.Add(message);
+
+            // 2. 현재 화면(WpfManualControl)의 작은 로그창에 표시
+            if (LogTextBox == null) return;
+
+            Dispatcher.Invoke(() =>
+            {
+                // 화면에는 시간까지 찍어서 보여줌
+                string logEntry = $"[{DateTime.Now:HH:mm:ss}] {message}\r\n";
+                LogTextBox.AppendText(logEntry);
+                LogTextBox.ScrollToEnd(); // 항상 맨 아래로 스크롤
+            });
+        }
+
+        private async Task SendCommandToCar(string command)
+        {
+            if (client == null) return;
+
+            string url = $"http://{ESP01_IP}:{ESP01_PORT}/?cmd={command}&speed=200";
+
+            // ★ 통신 시도 로그 추가 (예전처럼)
+            AddLog($"[통신] '{command}' 명령 전송 중... ({url})");
+
+            try
+            {
+                using (var cts = new System.Threading.CancellationTokenSource(500))
+                {
+                    await client.GetAsync(url, cts.Token);
+                }
+                // ★ 성공 로그는 원하시면 주석 해제하세요 (너무 많아질까봐 기본은 끔)
+                // AddLog($"[통신] '{command}' 전송 완료.");
+            }
+            catch (Exception ex)
+            {
+                AddLog($"[오류] 통신 실패: {ex.Message}");
+            }
         }
     }
 }
