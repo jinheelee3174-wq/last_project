@@ -110,16 +110,19 @@
                 </DataGridTextColumn>
 
                 <DataGridTextColumn Header="발주처" Binding="{Binding Company}" Width="120" FontWeight="Bold"/>
-                <DataGridTextColumn Header="품목" Binding="{Binding ItemName}" Width="120"/>
+
+                <DataGridTextColumn Header="품목" Binding="{Binding ItemName}" Width="*"/>
+
                 <DataGridTextColumn Header="수량" Binding="{Binding Quantity}" Width="70"/>
-                <DataGridTextColumn Header="단가" Binding="{Binding Price, StringFormat={}{0:N0}원}" Width="90"/>
-                <DataGridTextColumn Header="총액" Binding="{Binding TotalPrice, StringFormat={}{0:N0}원}" Width="100" FontWeight="Bold"/>
 
-                <DataGridTextColumn Header="발주 일자" Binding="{Binding OrderDate}" Width="100"/>
-                <DataGridTextColumn Header="납기일" Binding="{Binding DueDate}" Width="100" Foreground="#FFFFAAAA"/>
+                <DataGridTextColumn Header="단가" Binding="{Binding Price, StringFormat={}{0:N0}원}" Width="100"/>
 
-                <DataGridTextColumn Header="연락처" Binding="{Binding Contact}" Width="110"/>
-                <DataGridTextColumn Header="비고" Binding="{Binding Note}" Width="200"/>
+                <DataGridTextColumn Header="총액" Binding="{Binding TotalPrice, StringFormat={}{0:N0}원}" Width="110" FontWeight="Bold"/>
+
+                <DataGridTextColumn Header="발주 일자" Binding="{Binding OrderDate}" Width="180"/>
+
+                <DataGridTextColumn Header="연락처" Binding="{Binding Contact}" Width="130"/>
+
             </DataGrid.Columns>
         </DataGrid>
 

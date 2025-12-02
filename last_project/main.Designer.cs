@@ -245,7 +245,7 @@ namespace last_project
             tabPage4.Name = "tabPage4";
             tabPage4.Size = new Size(741, 323);
             tabPage4.TabIndex = 3;
-            tabPage4.Text = "PI CAM";
+            tabPage4.Text = "CAM4";
             tabPage4.UseVisualStyleBackColor = true;
             // 
             // tabPage5
@@ -292,7 +292,6 @@ namespace last_project
         private TabPage tabPage2;
         private TabPage tabPage3;
         private TabPage tabPage4;
-        private TabPage tabPage5;
       
 
         private Label lblClock;
@@ -310,5 +309,6 @@ namespace last_project
         private DataGridViewTextBoxColumn Column5;
         private DataGridViewTextBoxColumn Column6;
         private DataGridViewTextBoxColumn Column7;
+        private TabPage tabPage5;
     }
 }

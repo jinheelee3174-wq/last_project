@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Newtonsoft.Json; // [필수] 이 부분이 없으면 추가하세요!
 
 namespace last_project
 {
@@ -9,25 +10,44 @@ namespace last_project
     {
         private string _status;
 
-        public int Id { get; set; }             // DB의 고유 ID
-        public string Company { get; set; }     // 발주처 (기업명)
+        // ▼▼▼ [핵심 수정] 서버(DB)의 이름표와 짝을 맞춰줍니다 ▼▼▼
+
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
+        [JsonProperty("company")]
+        public string Company { get; set; }     // 발주처
+
+        [JsonProperty("item_name")]             // ★ 서버는 item_name으로 보냄 -> C#은 ItemName으로 받음
         public string ItemName { get; set; }    // 품목명
+
+        [JsonProperty("quantity")]
         public int Quantity { get; set; }       // 수량
-        public string OrderDate { get; set; }   // 발주 일자 (String으로 관리하는 게 편함)
+
+        [JsonProperty("order_date")]
+        public string OrderDate { get; set; }   // 발주 일자
+
+        [JsonProperty("due_date")]
         public string DueDate { get; set; }     // 납기일
-        public string Contact { get; set; }     // 담당자 연락처
+
+        [JsonProperty("contact")]
+        public string Contact { get; set; }     // 연락처
+
+        [JsonProperty("price")]
         public int Price { get; set; }          // 단가
-        public string Note { get; set; }        // 비고
 
-        // 총액 (단가 * 수량) - 읽기 전용 속성
-        public int TotalPrice => Price * Quantity;
+        [JsonProperty("note")]
+        public string Note { get; set; }        // 비고dgh
 
-        // 진행 상태 (값이 바뀌면 UI 색상이 변하게 하려고 알림 설정)
+        [JsonProperty("status")]
         public string Status
         {
             get => _status;
             set { _status = value; OnPropertyChanged(); }
         }
+
+        // 총액 (단가 * 수량) - DB에 없어도 C#에서 계산해서 보여줌
+        public int TotalPrice => Price * Quantity;
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)
