@@ -46,9 +46,13 @@ namespace last_project
             tabPage1 = new TabPage();
             webViewCam1 = new Microsoft.Web.WebView2.WinForms.WebView2();
             tabPage2 = new TabPage();
+            webViewCam2 = new Microsoft.Web.WebView2.WinForms.WebView2();
             tabPage3 = new TabPage();
+            webViewCam3 = new Microsoft.Web.WebView2.WinForms.WebView2();
             tabPage4 = new TabPage();
+            webViewCam4 = new Microsoft.Web.WebView2.WinForms.WebView2();
             tabPage5 = new TabPage();
+            webViewAll = new Microsoft.Web.WebView2.WinForms.WebView2();
             timer1 = new System.Windows.Forms.Timer(components);
             bindingSource1 = new BindingSource(components);
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
@@ -60,6 +64,14 @@ namespace last_project
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)webViewCam1).BeginInit();
+            tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)webViewCam2).BeginInit();
+            tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)webViewCam3).BeginInit();
+            tabPage4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)webViewCam4).BeginInit();
+            tabPage5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)webViewAll).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
             SuspendLayout();
             // 
@@ -222,6 +234,7 @@ namespace last_project
             // 
             // tabPage2
             // 
+            tabPage2.Controls.Add(webViewCam2);
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
@@ -230,8 +243,20 @@ namespace last_project
             tabPage2.Text = "CAM2";
             tabPage2.UseVisualStyleBackColor = true;
             // 
+            // webViewCam2
+            // 
+            webViewCam2.AllowExternalDrop = true;
+            webViewCam2.CreationProperties = null;
+            webViewCam2.DefaultBackgroundColor = SysColor.White;
+            webViewCam2.Location = new Point(0, 0);
+            webViewCam2.Name = "webViewCam2";
+            webViewCam2.Size = new Size(741, 323);
+            webViewCam2.TabIndex = 0;
+            webViewCam2.ZoomFactor = 1D;
+            // 
             // tabPage3
             // 
+            tabPage3.Controls.Add(webViewCam3);
             tabPage3.Location = new Point(4, 24);
             tabPage3.Name = "tabPage3";
             tabPage3.Size = new Size(741, 323);
@@ -239,8 +264,20 @@ namespace last_project
             tabPage3.Text = "CAM3";
             tabPage3.UseVisualStyleBackColor = true;
             // 
+            // webViewCam3
+            // 
+            webViewCam3.AllowExternalDrop = true;
+            webViewCam3.CreationProperties = null;
+            webViewCam3.DefaultBackgroundColor = SysColor.White;
+            webViewCam3.Location = new Point(0, 0);
+            webViewCam3.Name = "webViewCam3";
+            webViewCam3.Size = new Size(741, 323);
+            webViewCam3.TabIndex = 0;
+            webViewCam3.ZoomFactor = 1D;
+            // 
             // tabPage4
             // 
+            tabPage4.Controls.Add(webViewCam4);
             tabPage4.Location = new Point(4, 24);
             tabPage4.Name = "tabPage4";
             tabPage4.Size = new Size(741, 323);
@@ -248,14 +285,37 @@ namespace last_project
             tabPage4.Text = "CAM4";
             tabPage4.UseVisualStyleBackColor = true;
             // 
+            // webViewCam4
+            // 
+            webViewCam4.AllowExternalDrop = true;
+            webViewCam4.CreationProperties = null;
+            webViewCam4.DefaultBackgroundColor = SysColor.White;
+            webViewCam4.Location = new Point(0, 0);
+            webViewCam4.Name = "webViewCam4";
+            webViewCam4.Size = new Size(741, 323);
+            webViewCam4.TabIndex = 0;
+            webViewCam4.ZoomFactor = 1D;
+            // 
             // tabPage5
             // 
+            tabPage5.Controls.Add(webViewAll);
             tabPage5.Location = new Point(4, 24);
             tabPage5.Name = "tabPage5";
             tabPage5.Size = new Size(741, 323);
             tabPage5.TabIndex = 4;
             tabPage5.Text = "All CAM";
             tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // webViewAll
+            // 
+            webViewAll.AllowExternalDrop = true;
+            webViewAll.CreationProperties = null;
+            webViewAll.DefaultBackgroundColor = SysColor.White;
+            webViewAll.Location = new Point(0, 0);
+            webViewAll.Name = "webViewAll";
+            webViewAll.Size = new Size(741, 323);
+            webViewAll.TabIndex = 0;
+            webViewAll.ZoomFactor = 1D;
             // 
             // timer1
             // 
@@ -280,6 +340,14 @@ namespace last_project
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)webViewCam1).EndInit();
+            tabPage2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)webViewCam2).EndInit();
+            tabPage3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)webViewCam3).EndInit();
+            tabPage4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)webViewCam4).EndInit();
+            tabPage5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)webViewAll).EndInit();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).EndInit();
             ResumeLayout(false);
         }
@@ -310,5 +378,9 @@ namespace last_project
         private DataGridViewTextBoxColumn Column6;
         private DataGridViewTextBoxColumn Column7;
         private TabPage tabPage5;
+        private Microsoft.Web.WebView2.WinForms.WebView2 webViewCam2;
+        private Microsoft.Web.WebView2.WinForms.WebView2 webViewCam3;
+        private Microsoft.Web.WebView2.WinForms.WebView2 webViewCam4;
+        private Microsoft.Web.WebView2.WinForms.WebView2 webViewAll;
     }
 }
