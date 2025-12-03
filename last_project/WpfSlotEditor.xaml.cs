@@ -17,7 +17,7 @@ namespace last_project
         // 라즈베리파이 스트림 주소 (main.cs와 맞게 수정)
         private const string CAM1_URL = "http://192.168.0.79:8000/stream.mjpg";
         private const string CAM2_URL = "http://192.168.0.112:8000/stream.mjpg";
-        private const string CAM3_URL = "http://192.168.0.28:8000/stream.mjpg";
+        private const string CAM3_URL = "http://192.168.0.34:8000/stream.mjpg";
 
         private WpfPoint startPoint;
         private WpfRectangle rect;

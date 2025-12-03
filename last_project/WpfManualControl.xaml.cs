@@ -11,11 +11,16 @@ namespace last_project
 {
     public partial class WpfManualControl : System.Windows.Controls.UserControl
     {
+        // =========================================================
+        // [설정 1] 차량 제어용 ESP-01 (기존 유지)
+        // =========================================================
         private const string ESP01_IP = "192.168.0.7";
         private const string ESP01_PORT = "80";
-        private const string CAM_SERVER_IP = "192.168.0.72";
-        private const string STREAM_NAME = "mystream";
-        private const string WEBRTC_URL = $"http://{CAM_SERVER_IP}:8889/{STREAM_NAME}";
+
+        // =========================================================
+        // [설정 2] 카메라 주소 변경 (WebRTC -> CAM3 MJPEG)
+        // =========================================================
+        private const string CAM3_URL = "http://192.168.0.34:8000/stream.mjpg";
 
         private readonly HttpClient client;
 
@@ -31,14 +36,48 @@ namespace last_project
             }
         }
 
+        // =========================================================
+        // [설정 3] 카메라 초기화 로직 변경 (Navigate -> NavigateToString)
+        // =========================================================
         private async void InitializeCameraAsync()
         {
             try
             {
+                // 1. WebView2 컨트롤 초기화 대기
                 await CameraWebView.EnsureCoreWebView2Async(null);
-                CameraWebView.CoreWebView2.NavigationCompleted += CoreWebView2_NavigationCompleted;
-                CameraWebView.CoreWebView2.Navigate(WEBRTC_URL);
-                AddLog($"[Camera] 연결 시도: {WEBRTC_URL}");
+
+                // 2. 화면에 꽉 차게 보여주는 HTML 생성 (main.cs의 방식 응용)
+                // 검은 배경에 이미지를 꽉 채우도록(object-fit: fill) 설정
+                string htmlContent = $@"
+                    <html>
+                    <head>
+                        <style>
+                            body {{ 
+                                margin: 0; 
+                                padding: 0; 
+                                background-color: black; 
+                                overflow: hidden; 
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                height: 100vh;
+                            }}
+                            img {{ 
+                                width: 100%; 
+                                height: 100%; 
+                                object-fit: fill; 
+                            }}
+                        </style>
+                    </head>
+                    <body>
+                        <img src='{CAM3_URL}' onerror=""this.style.display='none'; document.body.innerHTML='<h2 style=\'color:white\'>CAM3 연결 실패</h2>'"">
+                    </body>
+                    </html>";
+
+                // 3. 생성한 HTML을 로드하여 스트리밍 시작
+                CameraWebView.CoreWebView2.NavigateToString(htmlContent);
+
+                AddLog($"[Camera] CAM3 연결 시도: {CAM3_URL}");
             }
             catch (Exception ex)
             {
@@ -46,27 +85,20 @@ namespace last_project
             }
         }
 
-        private async void CoreWebView2_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
+        private void CoreWebView2_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
         {
-            if (e.IsSuccess)
-            {
-                string css = @"
-                    video { object-fit: cover !important; width: 100% !important; height: 100% !important; position: absolute; top: 0; left: 0; }
-                    body { margin: 0 !important; padding: 0 !important; overflow: hidden !important; background-color: black !important; }";
-                string script = $"var style = document.createElement('style'); style.type = 'text/css'; style.innerHTML = `{css}`; document.body.appendChild(style);";
-                await CameraWebView.CoreWebView2.ExecuteScriptAsync(script);
-                AddLog("[Camera] 화면 최적화 완료.");
-            }
+            // NavigateToString 방식을 사용하므로 별도의 스크립트 주입은 필요 없으나, 
+            // 이벤트 핸들러 구조 유지를 위해 남겨둡니다.
         }
 
         // =========================================================
-        //  [2] 차량 제어 버튼 이벤트 (Preview 사용)
+        //  [2] 차량 제어 버튼 이벤트 (기존 코드 유지)
         // =========================================================
 
         // ▲ 전진 (PreviewMouseDown 사용)
         private async void ForwardButton_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            AddLog("▲ 전진 버튼 눌림"); // 버튼 반응 확인용 로그
+            AddLog("▲ 전진 버튼 눌림");
             await SendCommandToCar("F");
         }
 
@@ -106,7 +138,7 @@ namespace last_project
         }
 
         // =========================================================
-        //  [3] 로그 및 기타 기능
+        //  [3] 로그 및 기타 기능 (기존 코드 유지)
         // =========================================================
 
         private void BtnExpandLog_Click(object sender, RoutedEventArgs e)
@@ -121,21 +153,20 @@ namespace last_project
             catch (Exception ex) { AddLog($"[Error] 로그 창 열기 실패: {ex.Message}"); }
         }
 
-        // 로그 출력 헬퍼 함수 (수정됨)
+        // 로그 출력 헬퍼 함수
         private void AddLog(string message)
         {
-            // 1. [핵심] 전역 로그 매니저에 저장 (이 한 줄 덕분에 새 창에서도 보입니다!)
+            // 1. 전역 로그 매니저에 저장
             last_project.LogManager.Add(message);
 
-            // 2. 현재 화면(WpfManualControl)의 작은 로그창에 표시
+            // 2. 현재 화면의 로그창에 표시
             if (LogTextBox == null) return;
 
             Dispatcher.Invoke(() =>
             {
-                // 화면에는 시간까지 찍어서 보여줌
                 string logEntry = $"[{DateTime.Now:HH:mm:ss}] {message}\r\n";
                 LogTextBox.AppendText(logEntry);
-                LogTextBox.ScrollToEnd(); // 항상 맨 아래로 스크롤
+                LogTextBox.ScrollToEnd();
             });
         }
 
@@ -144,9 +175,7 @@ namespace last_project
             if (client == null) return;
 
             string url = $"http://{ESP01_IP}:{ESP01_PORT}/?cmd={command}&speed=200";
-
-            // ★ 통신 시도 로그 추가 (예전처럼)
-            AddLog($"[통신] '{command}' 명령 전송 중... ({url})");
+            AddLog($"[통신] '{command}' 명령 전송 중...");
 
             try
             {
@@ -154,8 +183,6 @@ namespace last_project
                 {
                     await client.GetAsync(url, cts.Token);
                 }
-                // ★ 성공 로그는 원하시면 주석 해제하세요 (너무 많아질까봐 기본은 끔)
-                // AddLog($"[통신] '{command}' 전송 완료.");
             }
             catch (Exception ex)
             {

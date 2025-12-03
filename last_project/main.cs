@@ -23,7 +23,7 @@ namespace last_project
         // =================================================================================
         private const string CAM1_URL = "http://192.168.0.79:8000/stream.mjpg"; // 라파 1번 IP
         private const string CAM2_URL = "http://192.168.0.112:8000/stream.mjpg"; // 라파 2번 IP
-        private const string CAM3_URL = "http://192.168.0.28:8000/stream.mjpg"; // 라파 3번 IP
+        private const string CAM3_URL = "http://192.168.0.34:8000/stream.mjpg"; // 라파 3번 IP
         private const string CAM4_URL = "http://192.168.0.97:8000/stream.mjpg"; // 라파 4번 IP 
 
         // ★ 데이터 등을 가져올 Flask 서버 주소 (윈폼 PC 또는 별도 서버 IP)
@@ -215,7 +215,7 @@ namespace last_project
             orderForm.Controls.Add(host);
 
             await LoadOrderDataAsync(wpfOrder);
-            orderForm.Show();
+            orderForm.ShowDialog();
         }
 
         private async Task LoadOrderDataAsync(WpfOrderConfirmation wpfControl)
@@ -283,7 +283,7 @@ namespace last_project
             logForm.StartPosition = FormStartPosition.CenterScreen;
             logForm.BackColor = System.Drawing.Color.FromArgb(45, 45, 48);
             logForm.Controls.Add(host);
-            logForm.Show();
+            logForm.ShowDialog();
 
             LogManager.Add("Picture Log 폼을 열었습니다.");
 
@@ -316,7 +316,7 @@ namespace last_project
             statsForm.StartPosition = FormStartPosition.CenterScreen;
             statsForm.BackColor = System.Drawing.Color.FromArgb(30, 30, 30);
             statsForm.Controls.Add(host);
-            statsForm.Show();
+            statsForm.ShowDialog();
         }
 
         // =============================================================
@@ -435,7 +435,7 @@ namespace last_project
         {
             LogManager.Add("Log 버튼 클릭.");
             LogForm logForm = new LogForm();
-            logForm.Show();
+            logForm.ShowDialog();
         }
 
         // =============================================================
