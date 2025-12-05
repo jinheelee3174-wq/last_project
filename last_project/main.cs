@@ -61,7 +61,7 @@ namespace last_project
             // 2. 그리드 설정
             dataGridView1.AutoGenerateColumns = false;
             StyleDataGridView(dataGridView1); // 그리드 스타일 함수 호출
-
+             
             if (!this.DesignMode)
             {
                 // 제품 데이터 로드
@@ -90,88 +90,88 @@ namespace last_project
         // =============================================================
         //  [핵심] 카메라 초기화 및 연결 (WebView2 -> 라즈베리파이 직접 접속)
         // =============================================================
+        // 1. 기존 함수 자리에 덮어씌우세요.
         private async Task InitializeCameraWebViewAsync()
         {
             try
             {
                 // 1. 모든 WebView2 컨트롤 초기화 (비동기 대기)
-                // (Designer.cs에 webViewCam1~4, webViewAll이 선언되어 있어야 합니다)
                 if (webViewCam1 != null) await webViewCam1.EnsureCoreWebView2Async(null);
                 if (webViewCam2 != null) await webViewCam2.EnsureCoreWebView2Async(null);
                 if (webViewCam3 != null) await webViewCam3.EnsureCoreWebView2Async(null);
                 if (webViewCam4 != null) await webViewCam4.EnsureCoreWebView2Async(null);
                 if (webViewAll != null) await webViewAll.EnsureCoreWebView2Async(null);
 
-                // 2. 각 탭별로 라즈베리파이 스트리밍 주소에 접속
-                if (webViewCam1 != null) webViewCam1.CoreWebView2.Navigate(CAM1_URL);
-                if (webViewCam2 != null) webViewCam2.CoreWebView2.Navigate(CAM2_URL);
-                if (webViewCam3 != null) webViewCam3.CoreWebView2.Navigate(CAM3_URL);
-                if (webViewCam4 != null) webViewCam4.CoreWebView2.Navigate(CAM4_URL);
+                // 2. [수정됨] 개별 탭: HTML 헬퍼 함수를 사용해 화면 꽉 채우기 적용
+                if (webViewCam1 != null) webViewCam1.CoreWebView2.NavigateToString(MakeFullSizeHtml(CAM1_URL));
+                if (webViewCam2 != null) webViewCam2.CoreWebView2.NavigateToString(MakeFullSizeHtml(CAM2_URL));
+                if (webViewCam3 != null) webViewCam3.CoreWebView2.NavigateToString(MakeFullSizeHtml(CAM3_URL));
+                if (webViewCam4 != null) webViewCam4.CoreWebView2.NavigateToString(MakeFullSizeHtml(CAM4_URL));
 
-                // 3. [핵심] All CAM 탭 (4분할 화면) HTML 생성 및 로드
+                // 3. [유지/보완] All CAM 탭 (4분할 화면)
                 if (webViewAll != null)
                 {
-                    // 4개의 카메라 주소를 img 태그로 4분할 그리드에 배치하는 HTML
                     string fourSplitHtml = $@"
-                        <html>
-                        <head>
-                            <style>
-                                body {{ 
-                                    margin: 0; 
-                                    background-color: #111; 
-                                    display: grid; 
-                                    grid-template-columns: 50% 50%; 
-                                    grid-template-rows: 50% 50%; 
-                                    height: 100vh; 
-                                    overflow: hidden; 
-                                }}
-                                .cam-box {{ 
-                                    position: relative; 
-                                    width: 100%; 
-                                    height: 100%; 
-                                    border: 1px solid #333; 
-                                    box-sizing: border-box; 
-                                }}
-                                img {{ 
-                                    width: 100%; 
-                                    height: 100%; 
-                                    object-fit: fill; /* 비율 무시하고 꽉 채움 */
-                                    display: block; 
-                                }}
-                                .label {{ 
-                                    position: absolute; 
-                                    top: 5px; left: 5px; 
-                                    color: #00FF00; 
-                                    font-weight: bold; 
-                                    background: rgba(0, 0, 0, 0.5); 
-                                    padding: 2px 6px; 
-                                    font-family: sans-serif; 
-                                    font-size: 14px; 
-                                    border-radius: 4px;
-                                }}
-                            </style>
-                        </head>
-                        <body>
-                            <div class='cam-box'>
-                                <div class='label'>CAM 1 (고정)</div>
-                                <img src='{CAM1_URL}' onerror=""this.style.display='none'"">
-                            </div>
-                            <div class='cam-box'>
-                                <div class='label'>CAM 2 (고정)</div>
-                                <img src='{CAM2_URL}' onerror=""this.style.display='none'"">
-                            </div>
-                            <div class='cam-box'>
-                                <div class='label'>CAM 3 (고정)</div>
-                                <img src='{CAM3_URL}' onerror=""this.style.display='none'"">
-                            </div>
-                            <div class='cam-box'>
-                                <div class='label'>CAM 4 (이동형)</div>
-                                <img src='{CAM4_URL}' onerror=""this.style.display='none'"">
-                            </div>
-                        </body>
-                        </html>";
+                <html>
+                <head>
+                    <style>
+                        body {{ 
+                            margin: 0; 
+                            background-color: #111; 
+                            display: grid; 
+                            grid-template-columns: 50% 50%; 
+                            grid-template-rows: 50% 50%; 
+                            height: 100vh; 
+                            overflow: hidden; 
+                        }}
+                        .cam-box {{ 
+                            position: relative; 
+                            width: 100%; 
+                            height: 100%; 
+                            border: 1px solid #333; 
+                            box-sizing: border-box; 
+                            overflow: hidden;
+                        }}
+                        img {{ 
+                            width: 100%; 
+                            height: 100%; 
+                            object-fit: fill; /* 4분할 화면에서도 꽉 채우기 */
+                            display: block; 
+                        }}
+                        .label {{ 
+                            position: absolute; 
+                            top: 5px; left: 5px; 
+                            color: #00FF00; 
+                            font-weight: bold; 
+                            background: rgba(0, 0, 0, 0.5); 
+                            padding: 2px 6px; 
+                            font-family: sans-serif; 
+                            font-size: 14px; 
+                            border-radius: 4px;
+                            pointer-events: none; /* 라벨 클릭 방지 */
+                        }}
+                    </style>
+                </head>
+                <body>
+                    <div class='cam-box'>
+                        <div class='label'>CAM 1</div>
+                        <img src='{CAM1_URL}' onerror=""this.style.display='none'"">
+                    </div>
+                    <div class='cam-box'>
+                        <div class='label'>CAM 2</div>
+                        <img src='{CAM2_URL}' onerror=""this.style.display='none'"">
+                    </div>
+                    <div class='cam-box'>
+                        <div class='label'>CAM 3</div>
+                        <img src='{CAM3_URL}' onerror=""this.style.display='none'"">
+                    </div>
+                    <div class='cam-box'>
+                        <div class='label'>CAM 4</div>
+                        <img src='{CAM4_URL}' onerror=""this.style.display='none'"">
+                    </div>
+                </body>
+                </html>";
 
-                    // HTML 문자열을 브라우저에 바로 렌더링
                     webViewAll.CoreWebView2.NavigateToString(fourSplitHtml);
                 }
             }
@@ -181,6 +181,38 @@ namespace last_project
             }
         }
 
+        // 2. 이 함수를 위 함수 바로 아래에 추가하세요. (필수!)
+        private string MakeFullSizeHtml(string streamUrl)
+        {
+            return $@"
+        <html>
+        <head>
+            <style>
+                body {{
+                    margin: 0;
+                    padding: 0;
+                    background-color: black;
+                    overflow: hidden; 
+                    height: 100vh;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }}
+                img {{
+                    width: 100%;
+                    height: 100%;
+                    object-fit: fill; /* 여기가 핵심: 비율 무시하고 꽉 채움 */
+                    display: block;
+                }}
+            </style>
+        </head>
+        <body>
+            <img src='{streamUrl}' onerror=""this.style.display='none'; document.body.innerHTML='<h2 style=\'color:white; text-align:center;\'>연결 실패</h2>'"">
+        </body>
+        </html>";
+        }
+
+       
         // =============================================================
         //  [2] 발주 관리 (Order Confirmation)
         // =============================================================

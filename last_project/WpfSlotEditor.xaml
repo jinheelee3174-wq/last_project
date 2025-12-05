@@ -15,21 +15,10 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- top: camera selector -->
-        <Border Grid.Row="0"
-                Padding="12"
-                Background="#FF1E1E1E"
-                CornerRadius="8">
-            <StackPanel Orientation="Horizontal"
-                        VerticalAlignment="Center">
-                <TextBlock Text="Camera:"
-                           Foreground="White"
-                           VerticalAlignment="Center"
-                           FontWeight="Bold"
-                           Margin="0,0,12,0" />
-                <ComboBox x:Name="CamSelector"
-                          Width="180"
-                          SelectionChanged="CamSelector_SelectionChanged">
+        <Border Grid.Row="0" Padding="12" Background="#FF1E1E1E" CornerRadius="8">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="Camera:" Foreground="White" VerticalAlignment="Center" FontWeight="Bold" Margin="0,0,12,0" />
+                <ComboBox x:Name="CamSelector" Width="180" SelectionChanged="CamSelector_SelectionChanged">
                     <ComboBoxItem Content="Camera 1" Tag="cam1" IsSelected="True" />
                     <ComboBoxItem Content="Camera 2" Tag="cam2" />
                     <ComboBoxItem Content="Camera 3" Tag="cam3" />
@@ -37,26 +26,9 @@
             </StackPanel>
         </Border>
 
-        <!-- bottom: WebView2 + overlay canvas -->
-        <Border Grid.Row="1"
-                Margin="0,12,0,0"
-                BorderBrush="#FF3A3A3A"
-                BorderThickness="2"
-                CornerRadius="10"
-                Background="#FF0A0A0A">
+        <Border Grid.Row="1" Margin="0,12,0,0" BorderBrush="#FF3A3A3A" BorderThickness="2" CornerRadius="10" Background="#FF0A0A0A">
             <Grid>
-
-                <!-- video -->
                 <wv2:WebView2 x:Name="SlotWebView" />
-
-                <!-- overlay for drawing (transparent) -->
-                <Canvas x:Name="DrawingCanvas"
-                        Background="Transparent"
-                        ClipToBounds="True"
-                        MouseLeftButtonDown="DrawingCanvas_MouseLeftButtonDown"
-                        MouseLeftButtonUp="DrawingCanvas_MouseLeftButtonUp"
-                        MouseMove="DrawingCanvas_MouseMove" />
-
             </Grid>
         </Border>
     </Grid>
