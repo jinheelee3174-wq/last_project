@@ -541,6 +541,7 @@ namespace last_project
                     MessageBox.Show("삭제되었습니다.");
                 }
                 else
+                
                 {
                     string errorMsg = await response.Content.ReadAsStringAsync();
                     MessageBox.Show($"삭제 실패 (서버 오류): {errorMsg}");
@@ -551,6 +552,7 @@ namespace last_project
                 MessageBox.Show($"통신 오류: {ex.Message}");
             }
         }
+
         private void StyleDataGridView(DataGridView grid)
         {
             grid.BorderStyle = BorderStyle.None;
