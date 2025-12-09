@@ -131,6 +131,7 @@
             <Border Width="20"/>
             <Button x:Name="BtnApprove" Content="주문 승인" Background="#FF2563EB" Click="BtnApprove_Click"/>
             <Button x:Name="BtnCancelOrder" Content="주문 취소" Background="#FFB91C1C" Click="BtnCancelOrder_Click"/>
+            <Button x:Name="BtnDelete" Content="내역 삭제" Background="#FFB91C1C" Margin="5,0,0,0" Click="BtnDelete_Click"/>
         </StackPanel>
     </Grid>
 </UserControl>

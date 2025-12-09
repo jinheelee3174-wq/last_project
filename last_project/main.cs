@@ -69,6 +69,17 @@ namespace last_project
 
                 // ★ 카메라(WebView2) 초기화 및 연결 함수 호출
                 await InitializeCameraWebViewAsync();
+
+                string myPath = "C:\\Users\\모블\\Desktop\\사진";
+                try
+                {
+                    // 프로그램 시작 시 한 번만 실행됨
+                    pictureLogViewModel.AddLog(myPath + "\\거누.jpg", "거누");
+                    pictureLogViewModel.AddLog(myPath + "\\모블FC.jpg", "모블FC");
+                    pictureLogViewModel.AddLog(myPath + "\\쏭이형.png", "씅이형");
+                    pictureLogViewModel.AddLog(myPath + "\\주엽이형.jpg", "주엽이형");
+                }
+                catch { }
             }
 
             // 3. WPF 메뉴(왼쪽) 설정
@@ -236,6 +247,15 @@ namespace last_project
                 await LoadOrderDataAsync(wpfOrder);
             };
 
+            wpfOrder.DeleteOrderClicked += async (s, orderId) =>
+            {
+                if (MessageBox.Show("정말 이 주문 내역을 삭제하시겠습니까?\n(복구할 수 없습니다)", "삭제 확인", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
+                    await DeleteOrderAsync(orderId);       // 삭제 API 호출
+                    await LoadOrderDataAsync(wpfOrder);    // 목록 새로고침
+                }
+            };
+
             host.Child = wpfOrder;
 
             // 새 창 띄우기
@@ -306,35 +326,32 @@ namespace last_project
         // =============================================================
         //  [3] Picture Log (사진 로그)
         // =============================================================
+        // main.cs
+
         private void WpfMenu_LogButtonClicked(object? sender, EventArgs e)
         {
+            // 1. 호스팅 컨테이너 설정
             ElementHost host = new ElementHost();
             host.Dock = DockStyle.Fill;
 
+            // 2. WPF 컨트롤 생성 및 데이터 연결
             WpfPictureLog wpfControl = new WpfPictureLog();
-            wpfControl.DataContext = this.pictureLogViewModel;
+            wpfControl.DataContext = this.pictureLogViewModel; // ★ ViewModel 연결 (필수)
             host.Child = wpfControl;
 
+            // 3. 윈도우 폼 생성
             Form logForm = new Form();
             logForm.Text = "Picture Log Viewer";
             logForm.Size = new System.Drawing.Size(503, 713);
             logForm.StartPosition = FormStartPosition.CenterScreen;
             logForm.BackColor = System.Drawing.Color.FromArgb(45, 45, 48);
             logForm.Controls.Add(host);
-            logForm.ShowDialog();
 
+            // 4. 로그 남기기 (창 띄우기 전에 실행)
             LogManager.Add("Picture Log 폼을 열었습니다.");
 
-            // (테스트용 샘플 데이터 추가)
-            string myPath = "C:\\Users\\모블\\Desktop\\사진";
-            try
-            {
-                pictureLogViewModel.AddLog(myPath + "\\거누.jpg", "거누");
-                pictureLogViewModel.AddLog(myPath + "\\모블FC.jpg", "모블FC");
-                pictureLogViewModel.AddLog(myPath + "\\쏭이형.png", "씅이형");
-                pictureLogViewModel.AddLog(myPath + "\\주엽이형.jpg", "주엽이형");
-            }
-            catch { }
+            // 5. 창 띄우기 (여기서 코드 실행이 멈춤)
+            logForm.ShowDialog();
         }
 
         // =============================================================
@@ -504,6 +521,36 @@ namespace last_project
             UpdateClock();
         }
 
+        // [추가] 주문 삭제 API 호출 함수
+        private async Task DeleteOrderAsync(string orderId)
+        {
+            // Flask 서버에 /api/order/delete 엔드포인트가 있어야 합니다.
+            string apiUrl = $"{FLASK_SERVER_URL}/api/order/delete";
+
+            try
+            {
+                var data = new { id = orderId };
+                string json = JsonConvert.SerializeObject(data);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await client.PostAsync(apiUrl, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    LogManager.Add($"주문 번호 {orderId} 삭제 완료.");
+                    MessageBox.Show("삭제되었습니다.");
+                }
+                else
+                {
+                    string errorMsg = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"삭제 실패 (서버 오류): {errorMsg}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"통신 오류: {ex.Message}");
+            }
+        }
         private void StyleDataGridView(DataGridView grid)
         {
             grid.BorderStyle = BorderStyle.None;
