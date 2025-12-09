@@ -25,21 +25,21 @@ namespace last_project
         private Size productTabSize = new Size(456, 581);
 
         // (WPF 컨트롤 3개를 클래스 변수로 선언)
-        private WpfSlotEditor wpfEditor;
-        private WpfSlotInfo wpfSlotInfo;
-        private WpfProductAdmin wpfProductAdmin;
+        private WpfSlotEditor wpfEditor = null!;
+        private WpfSlotInfo wpfSlotInfo = null!;
+        private WpfProductAdmin wpfProductAdmin = null!;
         private bool isManualControlLoaded = false; // (tabPage3용 '깃발')
         // --- ▲▲▲ 'isSlotEditorLoaded' 깃발은 이제 필요 없음 ▲▲▲ ---
-        private WpfLogoutControl wpfLogoutControl;
+        private WpfLogoutControl wpfLogoutControl = null!;
         private bool isLogoutLoaded = false;
-        private TabPage tabPageProfile; // 코드로 추가할 탭 페이지 객체
+        private TabPage tabPageProfile = null!; // 코드로 추가할 탭 페이지 객체
         private bool isMyInfoLoaded = false; // 내 정보 탭이 로드되었는지 확인하는 플래그
         public setting()
         {
             InitializeComponent();
         }
 
-        private void WpfLogoutControl_LogoutClicked(object sender, EventArgs e)
+        private void WpfLogoutControl_LogoutClicked(object? sender, EventArgs e)
         {
             LogManager.Add("로그아웃 버튼 클릭됨. 확인창 표시.");
 
@@ -62,7 +62,7 @@ namespace last_project
         }
 
         // --- ▼▼▼ [추가!] 폼이 "처음 켜질 때" 실행되는 Load 이벤트 ▼▼▼ ---
-        private async void setting_Load(object sender, EventArgs e)
+        private async void setting_Load(object? sender, EventArgs e)
         {
             // --- 1. 왼쪽 패널 (WPF 카메라/그리기) 설정 ---
             if (tabPageProfile == null)
@@ -136,11 +136,11 @@ namespace last_project
 
 
         // (기존 이벤트 핸들러 - 내용은 비어있음)
-        private void label4_Click(object sender, EventArgs e) { }
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e) { }
+        private void label4_Click(object? sender, EventArgs e) { }
+        private void comboBox1_SelectedIndexChanged(object? sender, EventArgs e) { }
 
         // --- ▼▼▼ [수정] 탭 변경 이벤트 (WPF 로드 기능 추가) ▼▼▼ ---
-        private async void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        private async void tabControl1_SelectedIndexChanged(object? sender, EventArgs e)
         {
             // 0번 인덱스 ("슬롯 상세 설정")
             if (tabControl1.SelectedIndex == 0)
@@ -264,7 +264,7 @@ namespace last_project
         }
 
         // --- "좌표 받기" 함수 (WpfEditor_SlotDrawn) ---
-        private void WpfEditor_SlotDrawn(object sender, SlotDrawnEventArgs e)
+        private void WpfEditor_SlotDrawn(object? sender, SlotDrawnEventArgs e)
         {
             if (wpfSlotInfo == null) return;
 
@@ -305,7 +305,13 @@ namespace last_project
                     string jsonResponse = await response.Content.ReadAsStringAsync();
 
                     // (정렬을 위해 'DataTable'로 변환)
-                    DataTable slotTable = JsonConvert.DeserializeObject<DataTable>(jsonResponse);
+                    DataTable? slotTable = JsonConvert.DeserializeObject<DataTable>(jsonResponse);
+                    if (slotTable == null)
+                    {
+                        MessageBox.Show("슬롯 데이터를 불러오지 못했습니다.");
+                        return;
+                    }
+
                     targetGrid.DataSource = slotTable;
                 }
                 else
@@ -386,7 +392,13 @@ namespace last_project
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonResponse = await response.Content.ReadAsStringAsync();
-                    DataTable productTable = JsonConvert.DeserializeObject<DataTable>(jsonResponse);
+                    DataTable? productTable = JsonConvert.DeserializeObject<DataTable>(jsonResponse);
+                    if (productTable == null)
+                    {
+                        MessageBox.Show("제품 데이터를 불러오지 못했습니다.");
+                        return;
+                    }
+
                     targetGrid.DataSource = productTable;
                 }
                 else
@@ -430,22 +442,26 @@ namespace last_project
         // (private void dataGridView2_DataBindingComplete(...) 함수는 삭제했습니다)
 
         // (이벤트 핸들러 - 비어있음)
-        private void dataGridView2_CellClick(object sender, DataGridViewCellEventArgs e) { }
-        private void dataGridView2_CellClick_1(object sender, DataGridViewCellEventArgs e) { }
-        private void dataGridView2_DataBindingComplete_1(object sender, DataGridViewBindingCompleteEventArgs e) { }
-        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
+        private void dataGridView2_CellClick(object? sender, DataGridViewCellEventArgs e) { }
+        private void dataGridView2_CellClick_1(object? sender, DataGridViewCellEventArgs e) { }
+        private void dataGridView2_DataBindingComplete_1(object? sender, DataGridViewBindingCompleteEventArgs e) { }
+        private void dataGridView2_CellContentClick(object? sender, DataGridViewCellEventArgs e) { }
 
         // --- "수정" 버튼 클릭 이벤트 (button3) ---
-        private async void button3_Click(object sender, EventArgs e)
+        private async void button3_Click(object? sender, EventArgs e)
         {
             var targetGrid = dataGridView2;
-            string stockColumnName = "Column12";
             string itemCodeColumnName = "Column13";
 
             if (targetGrid.SelectedRows.Count > 0)
             {
                 DataGridViewRow selectedRow = targetGrid.SelectedRows[0];
-                string itemCode = selectedRow.Cells[itemCodeColumnName].Value.ToString();
+                string? itemCode = selectedRow.Cells[itemCodeColumnName].Value?.ToString();
+                if (string.IsNullOrWhiteSpace(itemCode))
+                {
+                    MessageBox.Show("삭제할 제품의 코드가 비어 있습니다.");
+                    return;
+                }
 
                 try
                 {
@@ -463,7 +479,7 @@ namespace last_project
         }
 
         // --- "새로고침" 버튼 클릭 이벤트 (btnRefresh) ---
-        private async void btnRefresh_Click(object sender, EventArgs e)
+        private async void btnRefresh_Click(object? sender, EventArgs e)
         {
             if (wpfProductAdmin != null) wpfProductAdmin.ClearTextBoxes();
             await LoadProductDataAsync();
@@ -496,7 +512,7 @@ namespace last_project
         }
 
         // --- "신규등록" 버튼 클릭 이벤트 (btnRegister) ---
-        private async void btnRegister_Click(object sender, EventArgs e)
+        private async void btnRegister_Click(object? sender, EventArgs e)
         {
             if (wpfProductAdmin == null) return;
 
@@ -559,7 +575,7 @@ namespace last_project
         }
 
         // --- "삭제" 버튼 클릭 이벤트 (btnDelete) ---
-        private async void btnDelete_Click(object sender, EventArgs e)
+        private async void btnDelete_Click(object? sender, EventArgs e)
         {
             var targetGrid = dataGridView2;
             string itemCodeColumnName = "Column13";
@@ -567,10 +583,17 @@ namespace last_project
             if (targetGrid.SelectedRows.Count > 0)
             {
                 DataGridViewRow selectedRow = targetGrid.SelectedRows[0];
-                string itemCode = selectedRow.Cells[itemCodeColumnName].Value.ToString();
+                string? itemCode = selectedRow.Cells[itemCodeColumnName].Value?.ToString();
+                if (string.IsNullOrWhiteSpace(itemCode))
+                {
+                    MessageBox.Show("삭제할 제품의 코드가 비어 있습니다.");
+                    return;
+                }
+
+                string confirmedItemCode = itemCode;
 
                 DialogResult result = MessageBox.Show(
-                    $"정말 '{itemCode}' 제품을 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.",
+                    $"정말 '{confirmedItemCode}' 제품을 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.",
                     "삭제 확인",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning
@@ -580,7 +603,7 @@ namespace last_project
                 {
                     try
                     {
-                        await DeleteProductAsync(itemCode);
+                        await DeleteProductAsync(confirmedItemCode);
                         await LoadProductDataAsync();
                     }
                     catch (Exception ex)
@@ -596,7 +619,7 @@ namespace last_project
         }
 
         // ▼▼▼ [신규 추가] 그리드 행 클릭 시 상세 정보창에 데이터 채우기 ▼▼▼
-        private void DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridView1_CellClick(object? sender, DataGridViewCellEventArgs e)
         {
             // 헤더 클릭이나 빈 공간 클릭 방지
             if (e.RowIndex < 0 || wpfSlotInfo == null) return;
@@ -631,7 +654,7 @@ namespace last_project
                 else if (activeVal != null)
                 {
                     // 1, "True", "true" 문자열 처리
-                    string sVal = activeVal.ToString().ToLower();
+                    string sVal = (activeVal.ToString() ?? string.Empty).ToLower();
                     wpfSlotInfo.IsSlotActive = (sVal == "1" || sVal == "true");
                 }
             }

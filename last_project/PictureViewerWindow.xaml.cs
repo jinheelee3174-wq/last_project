@@ -38,7 +38,7 @@ namespace last_project
         /// <summary>
         /// (추가) XAML의 Grid에서 연결한 클릭 이벤트입니다.
         /// </summary>
-        private void Close_Click(object sender, MouseButtonEventArgs e)
+        private void Close_Click(object? sender, MouseButtonEventArgs e)
         {
             this.Close(); // 창 닫기
         }

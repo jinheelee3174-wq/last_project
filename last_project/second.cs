@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Net.Http;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,7 +12,7 @@ namespace last_project
 {
     public partial class second : Form
     {
-        private WpfLogin wpfLoginControl;
+        private WpfLogin wpfLoginControl = null!;
 
         public second()
         {
@@ -39,7 +40,7 @@ namespace last_project
         }
 
         // [수정됨] 로그인 처리 함수 (프로필 사진 정보 받기 추가)
-        private async void WpfLoginControl_LoginClicked(object sender, EventArgs e)
+        private async void WpfLoginControl_LoginClicked(object? sender, EventArgs e)
         {
             string inputId = wpfLoginControl.UserId;
             string inputPw = wpfLoginControl.UserPw;
@@ -60,18 +61,19 @@ namespace last_project
                         string responseJson = await response.Content.ReadAsStringAsync();
                         try
                         {
-                            dynamic result = JsonConvert.DeserializeObject(responseJson);
+                            JObject result = JObject.Parse(responseJson);
+                            JObject? userInfo = result["userInfo"] as JObject;
 
                             // 서버에서 받은 사용자 정보 파싱
-                            string name = result.userInfo?.name ?? "관리자";
-                            string nickname = result.userInfo?.nickname ?? "Admin";
-                            string role = result.userInfo?.role ?? "ADMIN";
-                            string email = result.userInfo?.email ?? "";
-                            string phone = result.userInfo?.phone ?? "";
-                            string birthdate = result.userInfo?.birthdate ?? "";
+                            string name = userInfo?["name"]?.ToString() ?? "관리자";
+                            string nickname = userInfo?["nickname"]?.ToString() ?? "Admin";
+                            string role = userInfo?["role"]?.ToString() ?? "ADMIN";
+                            string email = userInfo?["email"]?.ToString() ?? string.Empty;
+                            string phone = userInfo?["phone"]?.ToString() ?? string.Empty;
+                            string birthdate = userInfo?["birthdate"]?.ToString() ?? string.Empty;
 
                             // ★ [핵심] 프로필 이미지 경로 받기
-                            string profileImg = result.userInfo?.profile_image ?? "";
+                            string profileImg = userInfo?["profile_image"]?.ToString() ?? string.Empty;
 
                             // Session에 저장 (이미지 경로 포함)
                             Session.SetUser(inputId, name, nickname, role, email, phone, birthdate, profileImg);
@@ -102,7 +104,7 @@ namespace last_project
             }
         }
 
-        private void WpfLoginControl_RegisterClicked(object sender, EventArgs e)
+        private void WpfLoginControl_RegisterClicked(object? sender, EventArgs e)
         {
             OpenRegisterForm();
         }
@@ -179,9 +181,9 @@ namespace last_project
         }
 
         // 레거시 코드 (삭제하지 않음)
-        private void btnLogin_Click(object sender, EventArgs e) { }
-        private void btnRegister_Click(object sender, EventArgs e) { }
-        private void txtId_TextChanged(object sender, EventArgs e) { }
-        private void pictureBox1_Click(object sender, EventArgs e) { }
+        private void btnLogin_Click(object? sender, EventArgs e) { }
+        private void btnRegister_Click(object? sender, EventArgs e) { }
+        private void txtId_TextChanged(object? sender, EventArgs e) { }
+        private void pictureBox1_Click(object? sender, EventArgs e) { }
     }
 }

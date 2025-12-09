@@ -10,10 +10,10 @@ namespace last_project
     public partial class WpfProductAdmin : System.Windows.Controls.UserControl
     {
         // --- 1. main.cs로 "신호"를 보낼 4개의 이벤트를 정의 ---
-        public event EventHandler RegisterClicked;
-        public event EventHandler UpdateClicked; // "수정"
-        public event EventHandler DeleteClicked;
-        public event EventHandler RefreshClicked;
+        public event EventHandler? RegisterClicked;
+        public event EventHandler? UpdateClicked; // "수정"
+        public event EventHandler? DeleteClicked;
+        public event EventHandler? RefreshClicked;
 
         // --- 2. main.cs가 텍스트박스 값을 '읽고/쓸' 수 있도록 '속성' 정의 ---
         // (이것들이 '정의'되면서 setting.cs의 오류가 사라집니다)
@@ -77,19 +77,19 @@ namespace last_project
         }
 
         // --- 4. XAML의 버튼 클릭 시, "신호" 발생 ---
-        private void BtnRegister_Click(object sender, RoutedEventArgs e)
+        private void BtnRegister_Click(object? sender, RoutedEventArgs e)
         {
             RegisterClicked?.Invoke(this, EventArgs.Empty);
         }
-        private void BtnUpdate_Click(object sender, RoutedEventArgs e)
+        private void BtnUpdate_Click(object? sender, RoutedEventArgs e)
         {
             UpdateClicked?.Invoke(this, EventArgs.Empty);
         }
-        private void BtnDelete_Click(object sender, RoutedEventArgs e)
+        private void BtnDelete_Click(object? sender, RoutedEventArgs e)
         {
             DeleteClicked?.Invoke(this, EventArgs.Empty);
         }
-        private void BtnRefresh_Click(object sender, RoutedEventArgs e)
+        private void BtnRefresh_Click(object? sender, RoutedEventArgs e)
         {
             RefreshClicked?.Invoke(this, EventArgs.Empty);
         }

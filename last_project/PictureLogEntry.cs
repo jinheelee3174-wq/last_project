@@ -10,9 +10,9 @@ namespace last_project
     /// </summary>
     public class PictureLogEntry : INotifyPropertyChanged
     {
-        private string _imagePath;
+        private string _imagePath = string.Empty;
         private DateTime _timestamp;
-        private string _description;
+        private string _description = string.Empty;
 
         /// <summary>
         /// (필수) 캡처된 이미지의 파일 경로 (예: "C:\\Logs\\capture_001.jpg")
@@ -42,8 +42,8 @@ namespace last_project
         }
 
         // --- INotifyPropertyChanged 구현 ---
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

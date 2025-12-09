@@ -12,7 +12,7 @@ namespace last_project
         private const string CAM2_URL = "http://192.168.0.112:8000/stream.mjpg";
         private const string CAM3_URL = "http://192.168.0.34:8000/stream.mjpg";
 
-        public event EventHandler<SlotDrawnEventArgs> SlotDrawn;
+        public event EventHandler<SlotDrawnEventArgs>? SlotDrawn;
 
         public WpfSlotEditor()
         {
@@ -137,11 +137,16 @@ namespace last_project
             await SlotWebView.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(script);
         }
 
-        private void CoreWebView2_WebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs e)
+        private void CoreWebView2_WebMessageReceived(object? sender, CoreWebView2WebMessageReceivedEventArgs e)
         {
             try
             {
                 var jsonString = e.TryGetWebMessageAsString();
+                if (string.IsNullOrWhiteSpace(jsonString))
+                {
+                    return;
+                }
+
                 using (JsonDocument doc = JsonDocument.Parse(jsonString))
                 {
                     JsonElement root = doc.RootElement;
@@ -159,13 +164,13 @@ namespace last_project
             }
         }
 
-        private void CamSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CamSelector_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
             if (SlotWebView?.CoreWebView2 == null) return;
             if (CamSelector.SelectedItem is ComboBoxItem item)
             {
                 string url = CAM1_URL;
-                string tag = item.Tag as string;
+                string? tag = item.Tag as string;
                 if (tag == "cam2") url = CAM2_URL;
                 else if (tag == "cam3") url = CAM3_URL;
                 SlotWebView.CoreWebView2.Navigate(url);

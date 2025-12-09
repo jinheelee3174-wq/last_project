@@ -33,7 +33,7 @@ namespace last_project
         }
 
         // [검색] 버튼 클릭
-        private void BtnSearch_Click(object sender, RoutedEventArgs e)
+        private void BtnSearch_Click(object? sender, RoutedEventArgs e)
         {
             // 1. ViewModel 가져오기
             var vm = this.DataContext as PictureLogViewModel;
@@ -48,10 +48,12 @@ namespace last_project
             DateTime selectedDate = DtPicker.SelectedDate.Value;
 
             // 3. 시간 확인
-            if (CmbStartHour.SelectedItem == null || CmbEndHour.SelectedItem == null) return;
-
-            int start = int.Parse(CmbStartHour.SelectedItem.ToString());
-            int end = int.Parse(CmbEndHour.SelectedItem.ToString());
+            if (!int.TryParse(CmbStartHour.SelectedItem?.ToString(), out int start) ||
+                !int.TryParse(CmbEndHour.SelectedItem?.ToString(), out int end))
+            {
+                System.Windows.MessageBox.Show("시간 범위를 다시 선택해주세요.");
+                return;
+            }
 
             if (start > end)
             {
@@ -64,7 +66,7 @@ namespace last_project
         }
 
         // [전체] 버튼 클릭 (초기화)
-        private void BtnReset_Click(object sender, RoutedEventArgs e)
+        private void BtnReset_Click(object? sender, RoutedEventArgs e)
         {
             var vm = this.DataContext as PictureLogViewModel;
             if (vm == null) return;
@@ -78,7 +80,7 @@ namespace last_project
         }
 
         // 이미지 클릭 (확대 보기) - 기존 코드 유지
-        private void SmallImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void SmallImage_MouseLeftButtonDown(object? sender, MouseButtonEventArgs e)
         {
             var imageControl = sender as FrameworkElement;
             if (imageControl == null) return;

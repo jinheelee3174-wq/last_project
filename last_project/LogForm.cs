@@ -23,7 +23,7 @@ namespace last_project // (네임스페이스는 실제 프로젝트와 동일�
         /// <summary>
         /// 폼이 "처음 켜질 때" 딱 한 번 실행되는 함수입니다.
         /// </summary>
-        private void LogForm_Load(object sender, EventArgs e)
+        private void LogForm_Load(object? sender, EventArgs e)
         {
             try
             {

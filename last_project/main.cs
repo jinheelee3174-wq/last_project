@@ -39,12 +39,12 @@ namespace last_project
             splitContainer1.BackColor = System.Drawing.Color.Black;
         }
 
-        private void groupBox1_Enter(object sender, EventArgs e) { }
+        private void groupBox1_Enter(object? sender, EventArgs e) { }
 
         // =============================================================
         //  [1] 폼 로드 & 초기화 (카메라 연결 포함)
         // =============================================================
-        private async void main_Load(object sender, EventArgs e)
+        private async void main_Load(object? sender, EventArgs e)
         {
             // 1. 시계 UI 설정
             lblClock.AutoSize = false;
@@ -216,7 +216,7 @@ namespace last_project
         // =============================================================
         //  [2] 발주 관리 (Order Confirmation)
         // =============================================================
-        private async void WpfMenu_BaljuButtonClicked(object sender, EventArgs e)
+        private async void WpfMenu_BaljuButtonClicked(object? sender, EventArgs e)
         {
             ElementHost host = new ElementHost();
             host.Dock = DockStyle.Fill;
@@ -261,6 +261,12 @@ namespace last_project
                 {
                     string json = await response.Content.ReadAsStringAsync();
                     var orders = JsonConvert.DeserializeObject<List<OrderModel>>(json);
+                    if (orders == null)
+                    {
+                        MessageBox.Show("주문 데이터를 불러올 수 없습니다.");
+                        return;
+                    }
+
                     wpfControl.SetOrderData(orders);
                 }
             }
@@ -300,7 +306,7 @@ namespace last_project
         // =============================================================
         //  [3] Picture Log (사진 로그)
         // =============================================================
-        private void WpfMenu_LogButtonClicked(object sender, EventArgs e)
+        private void WpfMenu_LogButtonClicked(object? sender, EventArgs e)
         {
             ElementHost host = new ElementHost();
             host.Dock = DockStyle.Fill;
@@ -334,7 +340,7 @@ namespace last_project
         // =============================================================
         //  [4] 통계 (Statistics)
         // =============================================================
-        private void WpfMenu_TonggyeButtonClicked(object sender, EventArgs e)
+        private void WpfMenu_TonggyeButtonClicked(object? sender, EventArgs e)
         {
             ElementHost host = new ElementHost();
             host.Dock = DockStyle.Fill;
@@ -365,7 +371,13 @@ namespace last_project
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonResponse = await response.Content.ReadAsStringAsync();
-                    DataTable productTable = JsonConvert.DeserializeObject<DataTable>(jsonResponse);
+                    DataTable? productTable = JsonConvert.DeserializeObject<DataTable>(jsonResponse);
+                    if (productTable == null)
+                    {
+                        MessageBox.Show("제품 데이터를 불러올 수 없습니다.");
+                        return;
+                    }
+
                     targetGrid.DataSource = productTable;
                 }
                 else
@@ -379,7 +391,7 @@ namespace last_project
             }
         }
 
-        private void dataGridView1_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        private void dataGridView1_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
         {
             try
             {
@@ -425,13 +437,13 @@ namespace last_project
         // =============================================================
         //  [6] 검색바 및 기타 이벤트
         // =============================================================
-        private void WpfSearch_SearchButtonClicked(object sender, EventArgs e)
+        private void WpfSearch_SearchButtonClicked(object? sender, EventArgs e)
         {
-            WpfSearchBar wpfSearch = elementHost2.Child as WpfSearchBar;
+            WpfSearchBar? wpfSearch = elementHost2.Child as WpfSearchBar;
             if (wpfSearch == null) return;
 
             string searchTerm = wpfSearch.SearchTerm.Trim();
-            DataTable table = dataGridView1.DataSource as DataTable;
+            DataTable? table = dataGridView1.DataSource as DataTable;
             if (table == null) return;
 
             if (string.IsNullOrWhiteSpace(searchTerm))
@@ -448,22 +460,22 @@ namespace last_project
             }
         }
 
-        private async void WpfSearch_RefreshButtonClicked(object sender, EventArgs e)
+        private async void WpfSearch_RefreshButtonClicked(object? sender, EventArgs e)
         {
-            WpfSearchBar wpfSearch = elementHost2.Child as WpfSearchBar;
-            DataTable table = dataGridView1.DataSource as DataTable;
+            WpfSearchBar? wpfSearch = elementHost2.Child as WpfSearchBar;
+            DataTable? table = dataGridView1.DataSource as DataTable;
             if (table != null) table.DefaultView.RowFilter = string.Empty;
             if (wpfSearch != null) wpfSearch.SearchTerm = "";
             await LoadProductDataAsync();
         }
 
-        private void btnSetting_Click(object sender, EventArgs e)
+        private void btnSetting_Click(object? sender, EventArgs e)
         {
             setting settingForm = new setting();
             settingForm.ShowDialog();
         }
 
-        private void btnAppLog_Click(object sender, EventArgs e)
+        private void btnAppLog_Click(object? sender, EventArgs e)
         {
             LogManager.Add("Log 버튼 클릭.");
             LogForm logForm = new LogForm();
@@ -487,7 +499,7 @@ namespace last_project
             // Clock label click handler kept for future use.
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void timer1_Tick(object? sender, EventArgs e)
         {
             UpdateClock();
         }
@@ -513,12 +525,12 @@ namespace last_project
         }
 
         // 빈 이벤트 핸들러 (디자이너 연결용)
-        private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e) { }
-        private void splitContainer1_Panel1_DoubleClick(object sender, EventArgs e) { }
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
-        private void tabPage1_Click(object sender, EventArgs e) { }
-        private void tabPage1_Click_1(object sender, EventArgs e) { }
-        private void button2_Click(object sender, EventArgs e) { }
+        private void splitContainer1_Panel1_Paint(object? sender, PaintEventArgs e) { }
+        private void splitContainer1_Panel1_DoubleClick(object? sender, EventArgs e) { }
+        private void dataGridView1_CellContentClick(object? sender, DataGridViewCellEventArgs e) { }
+        private void tabPage1_Click(object? sender, EventArgs e) { }
+        private void tabPage1_Click_1(object? sender, EventArgs e) { }
+        private void button2_Click(object? sender, EventArgs e) { }
 
     } // class main 끝
 
@@ -526,12 +538,12 @@ namespace last_project
     public class Product
     {
         public int id { get; set; }
-        public string item_code { get; set; }
-        public string product_name { get; set; }
-        public string brand { get; set; }
-        public string category { get; set; }
-        public string color { get; set; }
-        public string size { get; set; }
+        public string item_code { get; set; } = string.Empty;
+        public string product_name { get; set; } = string.Empty;
+        public string brand { get; set; } = string.Empty;
+        public string category { get; set; } = string.Empty;
+        public string color { get; set; } = string.Empty;
+        public string size { get; set; } = string.Empty;
         public int stock { get; set; }
     }
 }

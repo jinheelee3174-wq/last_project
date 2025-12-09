@@ -8,8 +8,8 @@ namespace last_project
     public partial class WpfLogin : System.Windows.Controls.UserControl
     {
         // 부모(second.cs)에게 보낼 신호
-        public event EventHandler LoginClicked;
-        public event EventHandler RegisterClicked;
+        public event EventHandler? LoginClicked;
+        public event EventHandler? RegisterClicked;
 
         // 입력값 속성
         public string UserId => TxtUserId.Text;
@@ -20,7 +20,7 @@ namespace last_project
             InitializeComponent();
         }
 
-        private void BtnLogin_Click(object sender, RoutedEventArgs e)
+        private void BtnLogin_Click(object? sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(UserId) || string.IsNullOrWhiteSpace(UserPw))
             {
@@ -32,7 +32,7 @@ namespace last_project
             LoginClicked?.Invoke(this, EventArgs.Empty);
         }
 
-        private void BtnGoRegister_Click(object sender, RoutedEventArgs e)
+        private void BtnGoRegister_Click(object? sender, RoutedEventArgs e)
         {
             // 회원가입 신호 보내기
             RegisterClicked?.Invoke(this, EventArgs.Empty);

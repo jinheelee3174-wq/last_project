@@ -22,7 +22,7 @@ namespace last_project
         // =========================================================
         private const string CAM3_URL = "http://192.168.0.34:8000/stream.mjpg";
 
-        private readonly HttpClient client;
+        private readonly HttpClient client = new HttpClient();
 
         public WpfManualControl()
         {
@@ -30,7 +30,6 @@ namespace last_project
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                client = new HttpClient();
                 client.Timeout = TimeSpan.FromSeconds(3);
                 InitializeCameraAsync();
             }
@@ -85,7 +84,7 @@ namespace last_project
             }
         }
 
-        private void CoreWebView2_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
+        private void CoreWebView2_NavigationCompleted(object? sender, CoreWebView2NavigationCompletedEventArgs e)
         {
             // NavigateToString 방식을 사용하므로 별도의 스크립트 주입은 필요 없으나, 
             // 이벤트 핸들러 구조 유지를 위해 남겨둡니다.
@@ -96,42 +95,42 @@ namespace last_project
         // =========================================================
 
         // ▲ 전진 (PreviewMouseDown 사용)
-        private async void ForwardButton_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private async void ForwardButton_PreviewMouseDown(object? sender, MouseButtonEventArgs e)
         {
             AddLog("▲ 전진 버튼 눌림");
             await SendCommandToCar("F");
         }
 
         // ▲ 전진 뗌 (PreviewMouseUp 사용)
-        private async void ForwardButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        private async void ForwardButton_PreviewMouseUp(object? sender, MouseButtonEventArgs e)
         {
             await SendCommandToCar("S");
             AddLog("■ 정지 (버튼 뗌)");
         }
 
         // ▼ 후진 (PreviewMouseDown 사용)
-        private async void BackwardButton_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private async void BackwardButton_PreviewMouseDown(object? sender, MouseButtonEventArgs e)
         {
             AddLog("▼ 후진 버튼 눌림");
             await SendCommandToCar("B");
         }
 
         // ▼ 후진 뗌 (PreviewMouseUp 사용)
-        private async void BackwardButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        private async void BackwardButton_PreviewMouseUp(object? sender, MouseButtonEventArgs e)
         {
             await SendCommandToCar("S");
             AddLog("■ 정지 (버튼 뗌)");
         }
 
         // ■ 정지 (클릭)
-        private async void StopButton_Click(object sender, RoutedEventArgs e)
+        private async void StopButton_Click(object? sender, RoutedEventArgs e)
         {
             await SendCommandToCar("S");
             AddLog("■ 강제 정지 명령 전송");
         }
 
         // 📢 경적 (클릭)
-        private async void HonkButton_Click(object sender, RoutedEventArgs e)
+        private async void HonkButton_Click(object? sender, RoutedEventArgs e)
         {
             await SendCommandToCar("H");
             AddLog("📢 빵빵!");
@@ -141,7 +140,7 @@ namespace last_project
         //  [3] 로그 및 기타 기능 (기존 코드 유지)
         // =========================================================
 
-        private void BtnExpandLog_Click(object sender, RoutedEventArgs e)
+        private void BtnExpandLog_Click(object? sender, RoutedEventArgs e)
         {
             try
             {

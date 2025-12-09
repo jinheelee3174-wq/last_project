@@ -6,13 +6,14 @@ using System.Windows.Threading;
 using System.Net.Http;
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Text;
 
 namespace last_project
 {
     public partial class WpfMyProfile : System.Windows.Controls.UserControl
     {
-        private DispatcherTimer timer;
+        private DispatcherTimer timer = null!;
         private static readonly HttpClient client = new HttpClient();
         private const string API_BASE = "http://127.0.0.1:5000/api";
         public WpfMyProfile()
@@ -24,7 +25,7 @@ namespace last_project
 
 
         // WpfMyProfile.xaml.cs 파일 안에 추가하세요
-        private void ProfileImage_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void ProfileImage_Click(object? sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             // 세션에서 이미지 경로 가져오기
             string imagePath = Session.ProfileImagePath;
@@ -88,7 +89,7 @@ namespace last_project
         }
 
         // [기능 1] 프로필 사진 업로드 및 저장
-        private async void BtnUploadPhoto_Click(object sender, RoutedEventArgs e)
+        private async void BtnUploadPhoto_Click(object? sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             dlg.Filter = "Image Files|*.jpg;*.png;*.jpeg";
@@ -112,11 +113,17 @@ namespace last_project
                         if (response.IsSuccessStatusCode)
                         {
                             string json = await response.Content.ReadAsStringAsync();
-                            dynamic result = JsonConvert.DeserializeObject(json);
+                            JObject result = JObject.Parse(json);
 
-                            if (result.success == true)
+                            if (result["success"]?.Value<bool>() == true)
                             {
-                                string newUrl = result.url;
+                                string? newUrl = result["url"]?.ToString();
+                                if (string.IsNullOrWhiteSpace(newUrl))
+                                {
+                                    System.Windows.MessageBox.Show("이미지 URL을 가져오지 못했습니다.");
+                                    return;
+                                }
+
                                 Session.ProfileImagePath = newUrl; // 세션 갱신
 
                                 var bitmap = new BitmapImage();
@@ -138,9 +145,9 @@ namespace last_project
         }
 
         // [기능 2] 정보 수정 (비밀번호 포함)
-        private async void BtnSave_Click(object sender, RoutedEventArgs e)
+        private async void BtnSave_Click(object? sender, RoutedEventArgs e)
         {
-            string newPassword = null;
+            string? newPassword = null;
 
             // 비밀번호 변경 시도 시
             if (!string.IsNullOrEmpty(PwNew.Password))

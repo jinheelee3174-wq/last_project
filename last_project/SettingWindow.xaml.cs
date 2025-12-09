@@ -3,7 +3,6 @@ using System.IO.Ports;     // (필수) 아두이노 통신(SerialPort)을 위해
 using System.Windows;      // (필수) Window, RoutedEventArgs 등을 사용하기 위해
 using System.Windows.Controls; // (필수) Slider, TextBlock 등을 사용하기 위해
 using System.Windows.Input;  // (필수) MouseButtonEventArgs 등을 사용하기 위해
-using System.IO.Ports;
 // (중요) setting.xaml의 x:Class="last_project.SettingWindow"와 일치해야 합니다.
 namespace last_project
 {
@@ -26,40 +25,40 @@ namespace last_project
         // ========== XAML에서 연결한 이벤트 핸들러들 ==========
 
         // --- 차량 이동 ---
-        private void ForwardButton_MouseDown(object sender, MouseButtonEventArgs e)
+        private void ForwardButton_MouseDown(object? sender, MouseButtonEventArgs e)
         {
             SendSerialCommand("FORWARD");
             AddLog("전진 명령 전송");
         }
 
-        private void ForwardButton_MouseUp(object sender, MouseButtonEventArgs e)
+        private void ForwardButton_MouseUp(object? sender, MouseButtonEventArgs e)
         {
             // 마우스 버튼을 떼면 정지
             SendSerialCommand("STOP");
             AddLog("정지 (전진 버튼 뗌)");
         }
 
-        private void BackwardButton_MouseDown(object sender, MouseButtonEventArgs e)
+        private void BackwardButton_MouseDown(object? sender, MouseButtonEventArgs e)
         {
             SendSerialCommand("BACKWARD");
             AddLog("후진 명령 전송");
         }
 
-        private void BackwardButton_MouseUp(object sender, MouseButtonEventArgs e)
+        private void BackwardButton_MouseUp(object? sender, MouseButtonEventArgs e)
         {
             // 마우스 버튼을 떼면 정지
             SendSerialCommand("STOP");
             AddLog("정지 (후진 버튼 뗌)");
         }
 
-        private void StopButton_Click(object sender, RoutedEventArgs e)
+        private void StopButton_Click(object? sender, RoutedEventArgs e)
         {
             SendSerialCommand("STOP");
             AddLog("정지 명령 전송 (수동)");
         }
 
         // --- 속도 조절 ---
-        private void SpeedSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void SpeedSlider_ValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e)
         {
             // (중요) SpeedValueText가 null이 아닐 때만 실행 (프로그램 시작 시 오류 방지)
             if (SpeedValueText != null)
@@ -79,7 +78,7 @@ namespace last_project
         }
 
         // --- 보조 기능 ---
-        private void HonkButton_Click(object sender, RoutedEventArgs e)
+        private void HonkButton_Click(object? sender, RoutedEventArgs e)
         {
             SendSerialCommand("HONK");
             AddLog("경적 울리기 명령 전송");
