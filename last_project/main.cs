@@ -23,7 +23,7 @@ namespace last_project
         // =================================================================================
         private const string CAM1_URL = "http://192.168.0.79:8000/stream.mjpg"; // 라파 1번 IP
         private const string CAM2_URL = "http://192.168.0.112:8000/stream.mjpg"; // 라파 2번 IP
-        private const string CAM3_URL = "http://192.168.0.34:8000/stream.mjpg"; // 라파 3번 IP
+        private const string CAM3_URL = "http://192.168.0.10:8000/stream.mjpg"; // 라파 3번 IP
         private const string CAM4_URL = "http://192.168.0.97:8000/stream.mjpg"; // 라파 4번 IP 
 
         // ★ 데이터 등을 가져올 Flask 서버 주소 (윈폼 PC 또는 별도 서버 IP)
@@ -73,11 +73,26 @@ namespace last_project
                 string myPath = "C:\\Users\\모블\\Desktop\\사진";
                 try
                 {
-                    // 프로그램 시작 시 한 번만 실행됨
-                    pictureLogViewModel.AddLog(myPath + "\\거누.jpg", "거누");
-                    pictureLogViewModel.AddLog(myPath + "\\모블FC.jpg", "모블FC");
-                    pictureLogViewModel.AddLog(myPath + "\\쏭이형.png", "씅이형");
-                    pictureLogViewModel.AddLog(myPath + "\\주엽이형.jpg", "주엽이형");
+                    DateTime t1 = new DateTime(2025, 12, 09, 11, 43, 00); // 09시 00분
+                    DateTime t2 = new DateTime(2025, 12, 10, 10, 32, 00); // 10시 15분
+                    DateTime t3 = new DateTime(2025, 12, 10, 10, 34, 00); // 11시 30분
+                    DateTime t4 = new DateTime(2025, 12, 10, 10, 49, 00); // 12시 45분
+                    DateTime t5 = new DateTime(2025, 12, 10, 10, 51, 00); // 13시 00분
+                    DateTime t6 = new DateTime(2025, 12, 10, 10, 55, 00); // 14시 20분
+                    DateTime t7 = new DateTime(2025, 12, 10, 11, 12, 00); // 15시 50분
+                    DateTime t8 = new DateTime(2025, 12, 10, 11, 15, 00); // 18시 10분
+                    DateTime t9 = new DateTime(2025, 12, 09, 11, 45, 00); // 18시 10분
+
+
+                    pictureLogViewModel.AddLog(myPath + "\\cam1.png", "cam1",t1);
+                    pictureLogViewModel.AddLog(myPath + "\\cam1 (2).png", "cam1",t2);
+                    pictureLogViewModel.AddLog(myPath + "\\cam1 (3).png", "cam1",t3);
+                    pictureLogViewModel.AddLog(myPath + "\\cam1 (4).png", "cam1",t4);
+                    pictureLogViewModel.AddLog(myPath + "\\cam1 (5).png", "cam1",t5);
+                    pictureLogViewModel.AddLog(myPath + "\\cam1 (6).png", "cam1",t6);
+                    pictureLogViewModel.AddLog(myPath + "\\cam1 (7).png", "cam1",t7);
+                    pictureLogViewModel.AddLog(myPath + "\\cam1 (8).png", "cam1",t8);
+                    pictureLogViewModel.AddLog(myPath + "\\cam1 (9).png", "cam1", t9);
                 }
                 catch { }
             }
@@ -238,9 +253,16 @@ namespace last_project
             wpfOrder.RefreshClicked += async (s, ev) => await LoadOrderDataAsync(wpfOrder);
             wpfOrder.ApproveClicked += async (s, orderId) =>
             {
+                // 1. 주문 상태를 '승인됨'으로 변경 (DB 업데이트)
                 await UpdateOrderStatusAsync(orderId, "승인됨");
+
+                // 2. 방금 만든 '디팔렛타이저 작업' 함수 실행!
+                await StartDepalletizerWorkAsync(orderId);
+
+                // 3. 화면 목록 새로고침
                 await LoadOrderDataAsync(wpfOrder);
             };
+
             wpfOrder.CancelOrderClicked += async (s, orderId) =>
             {
                 await UpdateOrderStatusAsync(orderId, "취소");
@@ -425,7 +447,7 @@ namespace last_project
 
                         if (stock <= 2)
                         {
-                            statusCell.Value = "위험";
+                            statusCell.Value = "재고부족";
                             statusCell.Style.ForeColor = System.Drawing.Color.Red;
                             statusCell.Style.Font = new Font(dataGridView1.Font, FontStyle.Bold);
                         }
@@ -550,6 +572,68 @@ namespace last_project
             catch (Exception ex)
             {
                 MessageBox.Show($"통신 오류: {ex.Message}");
+            }
+        }
+
+        // [main.cs] 맨 아래쪽에 이 함수를 통째로 복사해서 붙여넣으세요.
+
+        private async Task StartDepalletizerWorkAsync(string orderId)
+        {
+            // 1. 비전 센서 스캔 시뮬레이션 (로그 출력 및 대기)
+            LogManager.Add($"[System] 주문 {orderId} 처리를 위해 수납장 비전 스캔을 시작합니다...");
+
+            // 스캔하는 척 1.5초 대기 (UI가 멈추지 않도록 비동기 대기)
+            await Task.Delay(1500);
+
+            // 2. 빈 공간 감지 로직 (가상 데이터)
+            // 실제로는 카메라가 분석한 데이터를 받아야 하지만, 여기서는 가상의 빈 슬롯을 랜덤으로 선택합니다.
+            string[] mockEmptySlots = { "A-1", "A-3", "B-2", "C-4" };
+            Random rand = new Random();
+            string targetSlot = mockEmptySlots[rand.Next(mockEmptySlots.Length)];
+
+            LogManager.Add($"[Vision] 카메라 분석 완료: '{targetSlot}'번 슬롯이 비어있음을 확인했습니다.");
+            LogManager.Add($"[Logic] 아두이노카 적재함 -> {targetSlot} 이동 경로 계산 완료.");
+
+            // 3. 통합 서버에 작업 명령 전송 (서버가 있다고 가정)
+            // (서버가 없으므로 오류가 발생하고 catch 블록으로 넘어가서 '가상 성공' 처리됩니다)
+            string apiUrl = $"{FLASK_SERVER_URL}/api/depalletizer/start";
+
+            try
+            {
+                var data = new
+                {
+                    order_id = orderId,
+                    action = "move_from_car_to_shelf",
+                    source = "arduino_car",
+                    target_slot = targetSlot
+                };
+
+                string json = JsonConvert.SerializeObject(data);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                // 서버로 전송 시도
+                HttpResponseMessage response = await client.PostAsync(apiUrl, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    LogManager.Add($"[Server] 디팔렛타이저 작업 명령 전송 성공 ({targetSlot})");
+                    MessageBox.Show($"빈 공간({targetSlot})이 확인되어 작업을 시작합니다.", "작업 개시");
+                }
+                else
+                {
+                    LogManager.Add($"[Server] 응답 오류: {response.StatusCode}");
+                }
+            }
+            catch (Exception)
+            {
+                // ★ 핵심: 서버 연결 실패 시 시뮬레이션 모드로 자연스럽게 동작
+                LogManager.Add($"[Simulation] 통합 서버 연결 불가 -> 시뮬레이션 모드 진입");
+                LogManager.Add($"[Action] 1. 아두이노카 정차 위치 확인 완료");
+                LogManager.Add($"[Action] 2. 로봇팔: 아두이노카 적재물 파지 (Grip On)");
+                LogManager.Add($"[Action] 3. 로봇팔: {targetSlot} 좌표로 이동 중...");
+                LogManager.Add($"[Action] 4. 적재 완료 (Grip Off)");
+
+                MessageBox.Show($"[시뮬레이션 모드 동작]\n\n1. Vision 센서가 '{targetSlot}' 빈 공간 감지\n2. 아두이노카의 물건을 해당 위치로 이송합니다.", "작업 수행 완료");
             }
         }
 

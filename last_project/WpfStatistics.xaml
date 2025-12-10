@@ -316,7 +316,7 @@
 
                                       TooltipTextPaint="{Binding TooltipTextPaint}"/>
 
-                        <TextBlock Text="92.5%" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                        <TextBlock Text="98.5%" VerticalAlignment="Center" HorizontalAlignment="Center" 
 
                                    FontSize="28" FontWeight="Bold" Foreground="#FF00E676"
 

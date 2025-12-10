@@ -202,9 +202,9 @@ namespace last_project
 
                 new PieSeries<double> {
 
-                    Values = new double[] { 1 },
+                    Values = new double[] { 0 },
 
-                    Name = "퓨마",
+                    Name = "엄브로",
 
                     InnerRadius = 40,
 
@@ -222,7 +222,7 @@ namespace last_project
 
                     Values = new double[] { 1 },
 
-                    Name = "데상트",
+                    Name = "퓨마",
 
                     InnerRadius = 40,
 
@@ -240,7 +240,7 @@ namespace last_project
 
                     Values = new double[] { 1}, // 수량이 적으므로 크기가 제일 작아짐
 
-                    Name = "엄브로",
+                    Name = "데상트",
 
                     InnerRadius = 40,
 
@@ -264,13 +264,13 @@ namespace last_project
 
             InOutSeries = new ISeries[] {
 
-                new LineSeries<double> { Values = new double[] { 10, 18, 12, 25, 20 }, Name = "입고", Stroke = new SolidColorPaint(SKColors.Cyan) { StrokeThickness = 3 }, Fill = null, GeometrySize = 10 },
+                new LineSeries<double> { Values = new double[] { 1,5 }, Name = "입고", Stroke = new SolidColorPaint(SKColors.Cyan) { StrokeThickness = 3 }, Fill = null, GeometrySize = 10 },
 
-                new LineSeries<double> { Values = new double[] { 5, 10, 8, 15, 12 }, Name = "출고", Stroke = new SolidColorPaint(SKColors.Orange) { StrokeThickness = 3 }, Fill = null, GeometrySize = 10 }
+                new LineSeries<double> { Values = new double[] { 1,4 }, Name = "출고", Stroke = new SolidColorPaint(SKColors.Orange) { StrokeThickness = 3 }, Fill = null, GeometrySize = 10 }
 
             };
 
-            DateXAxes = new Axis[] { new Axis { Labels = new[] { "11/15", "11/16", "11/17", "11/18", "11/19" }, LabelsPaint = grayTextPaint } };
+            DateXAxes = new Axis[] { new Axis { Labels = new[] {  "12/9", "12/10" }, LabelsPaint = grayTextPaint } };
 
 
 
@@ -278,9 +278,9 @@ namespace last_project
 
             AiGaugeSeries = new ISeries[] {
 
-                new PieSeries<double> { Values = new double[] { 92.5 }, Name = "성공", InnerRadius = 80, Fill = new SolidColorPaint(SKColors.SpringGreen) },
+                new PieSeries<double> { Values = new double[] { 98.5 }, Name = "성공", InnerRadius = 80, Fill = new SolidColorPaint(SKColors.SpringGreen) },
 
-                new PieSeries<double> { Values = new double[] { 7.5 }, Name = "실패", InnerRadius = 80, Fill = new SolidColorPaint(new SKColor(40, 40, 40)) }
+                new PieSeries<double> { Values = new double[] { 1.5 }, Name = "실패", InnerRadius = 80, Fill = new SolidColorPaint(new SKColor(40, 40, 40)) }
 
             };
 
@@ -288,7 +288,7 @@ namespace last_project
 
             // 7. 평균 작업 시간
 
-            TimeSeries = new ISeries[] { new ColumnSeries<double> { Values = new double[] { 45, 30 }, Name = "시간(초)", Fill = new SolidColorPaint(SKColors.MediumSlateBlue) } };
+            TimeSeries = new ISeries[] { new ColumnSeries<double> { Values = new double[] { 45, 42 }, Name = "시간(초)", Fill = new SolidColorPaint(SKColors.MediumSlateBlue) } };
 
             TaskXAxes = new Axis[] { new Axis { Labels = new[] { "적재", "출고" }, LabelsPaint = grayTextPaint } };
 
@@ -297,7 +297,7 @@ namespace last_project
             // 8. 브랜드별 재고 (누적) - [수정됨]
             BrandSeries = new ISeries[] {
                 new StackedColumnSeries<double> {
-                    Values = new double[] { 1, 1, 0, 0 },
+                    Values = new double[] { 1, 0, 0, 0 },
                     Name = "창고 A",
                     StackGroup = 0,
                     Fill = new SolidColorPaint(SKColors.DodgerBlue),
@@ -306,7 +306,7 @@ namespace last_project
                     MaxBarWidth = double.PositiveInfinity
                 },
                 new StackedColumnSeries<double> {
-                    Values = new double[] { 0, 0, 1, 0 },
+                    Values = new double[] { 0, 0, 1, 1 },
                     Name = "창고 B",
                     StackGroup = 0,
                     Fill = new SolidColorPaint(SKColors.CornflowerBlue),
@@ -317,7 +317,7 @@ namespace last_project
             // [핵심 2] 회전을 끄고, 글자 크기를 조절하여 간격 확보
             BrandXAxes = new Axis[] {
                 new Axis {
-                    Labels = new[] { "빈폴", "퓨마", "데상트", "엄브로" },
+                    Labels = new[] { "빈폴", "엄브로", "퓨마", "데상트" },
                     LabelsPaint = grayTextPaint,
                     TextSize = 12,        // 글자 크기를 조금 줄임 (기본값 약 16 -> 12)
                     MinStep = 1,
@@ -339,24 +339,28 @@ namespace last_project
                 
                 // 2. 퓨마 (A: 1개, B: 0개)
                 new ColumnSeries<double> {
-                    Name = "퓨마",
-                    Values = new double[] { 1, 0 },
+                    Name = "엄브로",
+                    Values = new double[] { 0, 0 },
                     Fill = new SolidColorPaint(SKColors.Crimson)
                 },
 
                 // 3. 데상트 (A: 0개, B: 1개)
-                new ColumnSeries<double> {
+
+                 new ColumnSeries<double> {
+                    Name = "퓨마",
+                    Values = new double[] { 0, 1 },
+                    Fill = new SolidColorPaint(SKColors.RoyalBlue)
+                 },
+              
+
+                // 4. 엄브로 (A: 0개, B: 0개)
+
+                   new ColumnSeries<double> {
                     Name = "데상트",
                     Values = new double[] { 0, 1 },
                     Fill = new SolidColorPaint(SKColors.DimGray)
-                },
+                  },
 
-                // 4. 엄브로 (A: 0개, B: 0개)
-                new ColumnSeries<double> {
-                    Name = "엄브로",
-                    Values = new double[] { 0, 0 },
-                    Fill = new SolidColorPaint(SKColors.RoyalBlue)
-                }
             };
 
             // X축 라벨 설정 (그대로 유지)

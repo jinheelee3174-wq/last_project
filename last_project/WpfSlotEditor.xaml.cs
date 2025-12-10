@@ -10,7 +10,7 @@ namespace last_project
     {
         private const string CAM1_URL = "http://192.168.0.79:8000/stream.mjpg";
         private const string CAM2_URL = "http://192.168.0.112:8000/stream.mjpg";
-        private const string CAM3_URL = "http://192.168.0.34:8000/stream.mjpg";
+        private const string CAM3_URL = "http://192.168.0.10:8000/stream.mjpg";
 
         public event EventHandler<SlotDrawnEventArgs>? SlotDrawn;
 

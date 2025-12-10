@@ -22,24 +22,19 @@ namespace last_project
         }
 
         // 로그 추가 함수
-        public void AddLog(string imagePath, string description)
+        public void AddLog(string imagePath, string description, DateTime? customTime = null)
         {
             var newEntry = new PictureLogEntry
             {
                 ImagePath = imagePath,
                 Description = description,
-                Timestamp = DateTime.Now
+                // customTime(입력한 시간)이 있으면 그걸 쓰고, 없으면 현재 시간(DateTime.Now)을 씀
+                Timestamp = customTime ?? DateTime.Now
             };
 
-            // 원본 리스트에 추가
             _allLogs.Insert(0, newEntry);
-
-            // 화면 리스트에도 추가 (필터링 상태가 아닐 때 즉시 반영)
-            // 혹은 단순히 현재 필터 조건에 맞으면 추가할 수도 있으나, 
-            // 편의상 가장 최신은 바로 보여줍니다.
             FilteredLogs.Insert(0, newEntry);
         }
-
         // ★ [핵심 기능] 날짜와 시간대로 필터링하는 함수
         public void SearchLogs(DateTime selectedDate, int startHour, int endHour)
         {

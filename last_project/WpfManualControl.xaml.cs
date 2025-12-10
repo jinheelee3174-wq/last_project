@@ -20,7 +20,7 @@ namespace last_project
         // =========================================================
         // [설정 2] 카메라 주소 변경 (WebRTC -> CAM3 MJPEG)
         // =========================================================
-        private const string CAM3_URL = "http://192.168.0.34:8000/stream.mjpg";
+        private const string CAM4_URL = "http://192.168.0.97:8000/stream.mjpg";
 
         private readonly HttpClient client = new HttpClient();
 
@@ -69,14 +69,14 @@ namespace last_project
                         </style>
                     </head>
                     <body>
-                        <img src='{CAM3_URL}' onerror=""this.style.display='none'; document.body.innerHTML='<h2 style=\'color:white\'>CAM3 연결 실패</h2>'"">
+                        <img src='{CAM4_URL}' onerror=""this.style.display='none'; document.body.innerHTML='<h2 style=\'color:white\'>CAM3 연결 실패</h2>'"">
                     </body>
                     </html>";
 
                 // 3. 생성한 HTML을 로드하여 스트리밍 시작
                 CameraWebView.CoreWebView2.NavigateToString(htmlContent);
 
-                AddLog($"[Camera] CAM3 연결 시도: {CAM3_URL}");
+                AddLog($"[Camera] CAM3 연결 시도: {CAM4_URL}");
             }
             catch (Exception ex)
             {
